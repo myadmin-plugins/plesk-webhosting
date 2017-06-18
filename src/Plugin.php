@@ -82,7 +82,7 @@ class Plugin {
 		$loader->add_requirement('vps_add_plesk', '/vps/addons/vps_add_plesk.php');
 	}
 
-	public static function Settings(GenericEvent $event) {
+	public static function getSettings(GenericEvent $event) {
 		// will be executed when the licenses.settings event is dispatched
 		$settings = $event->getSubject();
 		$settings->add_text_setting('licenses', 'Plesk', 'plesk_username', 'Plesk Username:', 'Plesk Username', $settings->get_setting('FANTASTICO_USERNAME'));
