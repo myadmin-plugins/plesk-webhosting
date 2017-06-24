@@ -19,21 +19,21 @@ class Plugin {
 
 	public static function getHooks() {
 		return [
+			self::$module.'.settings' => [__CLASS__, 'getSettings'],
+			self::$module.'.activate' => [__CLASS__, 'getActivate'],
 		];
 	}
 
 	public static function getActivate(GenericEvent $event) {
 		$license = $event->getSubject();
-		if ($event['category'] == SERVICE_TYPES_FANTASTICO) {
+		if ($event['category'] == SERVICE_TYPES_WEB_PLESK) {
 			myadmin_log(self::$module, 'info', 'Plesk Activation', __LINE__, __FILE__);
-			function_requirements('activate_plesk');
-			activate_plesk($license->get_ip(), $event['field1']);
 			$event->stopPropagation();
 		}
 	}
 
 	public static function getChangeIp(GenericEvent $event) {
-		if ($event['category'] == SERVICE_TYPES_FANTASTICO) {
+		if ($event['category'] == SERVICE_TYPES_WEB_PLESK) {
 			$license = $event->getSubject();
 			$settings = get_module_settings(self::$module);
 			$plesk = new Plesk(FANTASTICO_USERNAME, FANTASTICO_PASSWORD);
@@ -80,9 +80,8 @@ class Plugin {
 
 	public static function getSettings(GenericEvent $event) {
 		$settings = $event->getSubject();
-		$settings->add_text_setting(self::$module, 'Plesk', 'plesk_username', 'Plesk Username:', 'Plesk Username', $settings->get_setting('FANTASTICO_USERNAME'));
-		$settings->add_text_setting(self::$module, 'Plesk', 'plesk_password', 'Plesk Password:', 'Plesk Password', $settings->get_setting('FANTASTICO_PASSWORD'));
-		$settings->add_dropdown_setting(self::$module, 'Plesk', 'outofstock_licenses_plesk', 'Out Of Stock Plesk Licenses', 'Enable/Disable Sales Of This Type', $settings->get_setting('OUTOFSTOCK_LICENSES_FANTASTICO'), array('0', '1'), array('No', 'Yes',));
+		$settings->add_select_master(self::$module, 'Default Servers', self::$module, 'new_website_plesk_server', 'Default Plesk Setup Server', NEW_WEBSITE_PLESK_SERVER, SERVICE_TYPES_WEB_PLESK);
+		$settings->add_dropdown_setting(self::$module, 'Out of Stock', 'outofstock_webhosting_plesk', 'Out Of Stock Plesk Webhosting', 'Enable/Disable Sales Of This Type', $settings->get_setting('OUTOFSTOCK_WEBHOSTING_PLESK'), array('0', '1'), array('No', 'Yes', ));
 	}
 
 }
