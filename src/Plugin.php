@@ -25,7 +25,7 @@ class Plugin {
 	public static function getActivate(GenericEvent $event) {
 		$license = $event->getSubject();
 		if ($event['category'] == SERVICE_TYPES_FANTASTICO) {
-			myadmin_log('licenses', 'info', 'Plesk Activation', __LINE__, __FILE__);
+			myadmin_log(self::$module, 'info', 'Plesk Activation', __LINE__, __FILE__);
 			function_requirements('activate_plesk');
 			activate_plesk($license->get_ip(), $event['field1']);
 			$event->stopPropagation();
@@ -35,12 +35,12 @@ class Plugin {
 	public static function getChangeIp(GenericEvent $event) {
 		if ($event['category'] == SERVICE_TYPES_FANTASTICO) {
 			$license = $event->getSubject();
-			$settings = get_module_settings('licenses');
+			$settings = get_module_settings(self::$module);
 			$plesk = new Plesk(FANTASTICO_USERNAME, FANTASTICO_PASSWORD);
-			myadmin_log('licenses', 'info', "IP Change - (OLD:".$license->get_ip().") (NEW:{$event['newip']})", __LINE__, __FILE__);
+			myadmin_log(self::$module, 'info', "IP Change - (OLD:".$license->get_ip().") (NEW:{$event['newip']})", __LINE__, __FILE__);
 			$result = $plesk->editIp($license->get_ip(), $event['newip']);
 			if (isset($result['faultcode'])) {
-				myadmin_log('licenses', 'error', 'Plesk editIp('.$license->get_ip().', '.$event['newip'].') returned Fault '.$result['faultcode'].': '.$result['fault'], __LINE__, __FILE__);
+				myadmin_log(self::$module, 'error', 'Plesk editIp('.$license->get_ip().', '.$event['newip'].') returned Fault '.$result['faultcode'].': '.$result['fault'], __LINE__, __FILE__);
 				$event['status'] = 'error';
 				$event['status_text'] = 'Error Code '.$result['faultcode'].': '.$result['fault'];
 			} else {
@@ -55,11 +55,10 @@ class Plugin {
 
 	public static function getMenu(GenericEvent $event) {
 		$menu = $event->getSubject();
-		$module = 'licenses';
 		if ($GLOBALS['tf']->ima == 'admin') {
-			$menu->add_link($module, 'choice=none.reusable_plesk', 'icons/database_warning_48.png', 'ReUsable Plesk Licenses');
-			$menu->add_link($module, 'choice=none.plesk_list', 'icons/database_warning_48.png', 'Plesk Licenses Breakdown');
-			$menu->add_link($module.'api', 'choice=none.plesk_licenses_list', 'whm/createacct.gif', 'List all Plesk Licenses');
+			$menu->add_link(self::$module, 'choice=none.reusable_plesk', 'icons/database_warning_48.png', 'ReUsable Plesk Licenses');
+			$menu->add_link(self::$module, 'choice=none.plesk_list', 'icons/database_warning_48.png', 'Plesk Licenses Breakdown');
+			$menu->add_link(self::$module.'api', 'choice=none.plesk_licenses_list', 'whm/createacct.gif', 'List all Plesk Licenses');
 		}
 	}
 
@@ -81,9 +80,9 @@ class Plugin {
 
 	public static function getSettings(GenericEvent $event) {
 		$settings = $event->getSubject();
-		$settings->add_text_setting('licenses', 'Plesk', 'plesk_username', 'Plesk Username:', 'Plesk Username', $settings->get_setting('FANTASTICO_USERNAME'));
-		$settings->add_text_setting('licenses', 'Plesk', 'plesk_password', 'Plesk Password:', 'Plesk Password', $settings->get_setting('FANTASTICO_PASSWORD'));
-		$settings->add_dropdown_setting('licenses', 'Plesk', 'outofstock_licenses_plesk', 'Out Of Stock Plesk Licenses', 'Enable/Disable Sales Of This Type', $settings->get_setting('OUTOFSTOCK_LICENSES_FANTASTICO'), array('0', '1'), array('No', 'Yes',));
+		$settings->add_text_setting(self::$module, 'Plesk', 'plesk_username', 'Plesk Username:', 'Plesk Username', $settings->get_setting('FANTASTICO_USERNAME'));
+		$settings->add_text_setting(self::$module, 'Plesk', 'plesk_password', 'Plesk Password:', 'Plesk Password', $settings->get_setting('FANTASTICO_PASSWORD'));
+		$settings->add_dropdown_setting(self::$module, 'Plesk', 'outofstock_licenses_plesk', 'Out Of Stock Plesk Licenses', 'Enable/Disable Sales Of This Type', $settings->get_setting('OUTOFSTOCK_LICENSES_FANTASTICO'), array('0', '1'), array('No', 'Yes',));
 	}
 
 }
