@@ -30,7 +30,7 @@ class Plugin {
 		if ($event['category'] == SERVICE_TYPES_WEB_PLESK) {
 			myadmin_log(self::$module, 'info', 'Plesk Activation', __LINE__, __FILE__);
 			$data = $GLOBALS['tf']->accounts->read($service[$settings['PREFIX'].'_custid']);
-			$debug_calls = FALSE;
+			$debugCalls = FALSE;
 			if (!is_array($extra))
 				$extra = [];
 			$plesk = get_webhosting_plesk_instance($serverdata);
@@ -40,15 +40,15 @@ class Plugin {
 			$result = $plesk->list_ip_addresses();
 			if ((!isset($result['ips'][0]['ip_address']) && !isset($result['ips']['ip_address'])) || $result['status'] == 'error')
 				throw new Exception('Failed getting server information.'.(isset($result['errtext']) ? ' Error message was: '.$result['errtext'].'.' : ''));
-			if ($debug_calls == TRUE)
+			if ($debugCalls == TRUE)
 				echo "plesk->list_ip_adddresses() = ".var_export($result, TRUE)."\n";
 			if (isset($result['ips']['ip_address']))
-				$shared_ip = $result['ips']['ip_address'];
+				$sharedIp = $result['ips']['ip_address'];
 			else
 				foreach ($result['ips'] as $idx => $ip_data)
-					if (trim($ip_data['type']) == 'shared' && (!isset($shared_ip) || $ip_data['is_default']))
-						$shared_ip = $ip_data['ip_address'];
-			if (!isset($shared_ip)) {
+					if (trim($ip_data['type']) == 'shared' && (!isset($sharedIp) || $ip_data['is_default']))
+						$sharedIp = $ip_data['ip_address'];
+			if (!isset($sharedIp)) {
 				myadmin_log(self::$module, 'critical', 'Plesk Could not find any shared IP addresses', __LINE__, __FILE__);
 				return FALSE;
 			}
@@ -61,7 +61,7 @@ class Plugin {
 				myadmin_log(self::$module, 'info', 'list_service_plans Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 				return FALSE;
 			}
-			if ($debug_calls == TRUE)
+			if ($debugCalls == TRUE)
 				echo "plesk->list_service_plans() = ".var_export($result, TRUE)."\n";
 			foreach ($result as $idx => $plan) {
 				if ($plan['name'] == 'ASP.NET plan') {
@@ -92,9 +92,9 @@ class Plugin {
 				myadmin_log(self::$module, 'info', 'create_client Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 			}
 			if (!isset($result['id'])) {
-				$cant_fix = FALSE;
+				$cantFix = FALSE;
 				$password_updated = FALSE;
-				while ($cant_fix == FALSE && !isset($result['id'])) {
+				while ($cantFix == FALSE && !isset($result['id'])) {
 					if (mb_strpos($error, 'The password should') !== FALSE) {
 						// Error #2204 System user setting was failed. Error: The password should be  4 - 255 characters long and should not contain the username. Do not use quotes, spaces, and national alphabetic characters in the password.
 						$password_updated = TRUE;
@@ -110,7 +110,7 @@ class Plugin {
 						}
 					} elseif (mb_strpos($error, 'Error #1007') !== FALSE) {
 						// Error #1007 User account  already exists.
-						$username_updated = TRUE;
+						$usernameUpdated = TRUE;
 						$username = mb_substr($username, 0, 7).strtolower(Plesk::random_string(1));
 						$request['username'] = $username;
 						myadmin_log(self::$module, 'info', "Generated '{$request['username']}' for a replacement username and trying again", __LINE__, __FILE__);
@@ -122,7 +122,7 @@ class Plugin {
 							myadmin_log(self::$module, 'info', 'create_client Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 						}
 					} else
-						$cant_fix = TRUE;
+						$cantFix = TRUE;
 				}
 				if ($password_updated == TRUE) {
 					$GLOBALS['tf']->history->add($settings['PREFIX'], 'password', $id, $options['password']);
@@ -153,7 +153,7 @@ class Plugin {
 			$db->query("update {$settings['TABLE']} set {$settings['PREFIX']}_ip='{$ip}', {$settings['PREFIX']}_extra='{$ser_extra}' where {$settings['PREFIX']}_id='{$id}'", __LINE__, __FILE__);
 			myadmin_log(self::$module, 'info', "create_client got client id {$account_id}", __LINE__, __FILE__);
 			//$plesk->debug = TRUE;
-			//$debug_calls = TRUE;
+			//$debugCalls = TRUE;
 			$request = array(
 				'domain' => $hostname,
 				'owner_id' => $account_id,
@@ -181,12 +181,12 @@ class Plugin {
 			}
 
 			if (!isset($result['id'])) {
-				$cant_fix = FALSE;
-				$username_updated = FALSE;
-				while ($cant_fix == FALSE && !isset($result['id'])) {
+				$cantFix = FALSE;
+				$usernameUpdated = FALSE;
+				while ($cantFix == FALSE && !isset($result['id'])) {
 					// Error #1007 User account  already exists.
 					if (mb_strpos($error, 'Error #1007') !== FALSE) {
-						$username_updated = TRUE;
+						$usernameUpdated = TRUE;
 						$username = mb_substr($username, 0, 7).strtolower(Plesk::random_string(1));
 						$request['ftp_login'] = $username;
 						myadmin_log(self::$module, 'info', "Generated '{$request['ftp_login']}' for a replacement username and trying again", __LINE__, __FILE__);
@@ -198,7 +198,7 @@ class Plugin {
 							myadmin_log(self::$module, 'info', 'create_client Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 						}
 					} else
-						$cant_fix = TRUE;
+						$cantFix = TRUE;
 				}
 			}
 			request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'plesk', 'create_subscription', $request, $result);
@@ -206,14 +206,14 @@ class Plugin {
 				myadmin_log(self::$module, 'info', 'create_subscription did not return the expected id information: '.$e->getMessage(), __LINE__, __FILE__);
 				return FALSE;
 			}
-			$subscription_id = $result['id'];
-			$extra[1] = $subscription_id;
+			$subscriptoinId = $result['id'];
+			$extra[1] = $subscriptoinId;
 			$ser_extra = $db->real_escape(myadmin_stringify($extra));
 			$db->query("update {$settings['TABLE']} set {$settings['PREFIX']}_ip='{$ip}', {$settings['PREFIX']}_extra='{$ser_extra}', {$settings['PREFIX']}_username='{$username}' where {$settings['PREFIX']}_id='{$id}'", __LINE__, __FILE__);
-			if ($debug_calls == TRUE)
+			if ($debugCalls == TRUE)
 				echo "plesk->create_subscription(".var_export($request, TRUE).") = ".var_export($result, TRUE)."\n";
-			myadmin_log(self::$module, 'info', "create_subscription got Subscription ID {$subscription_id}\n", __LINE__, __FILE__);
-			if (is_numeric($subscription_id)) {
+			myadmin_log(self::$module, 'info', "create_subscription got Subscription ID {$subscriptoinId}\n", __LINE__, __FILE__);
+			if (is_numeric($subscriptoinId)) {
 				website_welcome_email($id);
 			}
 			$event->stopPropagation();
@@ -231,7 +231,7 @@ class Plugin {
 			$extra = run_event('parse_service_extra', $serviceInfo[$settings['PREFIX'].'_extra'], self::$module);
 			function_requirements('get_webhosting_plesk_instance');
 			$plesk = get_webhosting_plesk_instance($serverdata);
-			list($user_id, $subscription_id) = $extra;
+			list($user_id, $subscriptoinId) = $extra;
 			$request = ['username' => $serviceInfo[$settings['PREFIX'].'_username'], 'status' => 0];
 			try {
 				$result = $plesk->update_client($request);
