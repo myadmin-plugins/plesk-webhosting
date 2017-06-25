@@ -29,6 +29,193 @@ class Plugin {
 		$license = $event->getSubject();
 		if ($event['category'] == SERVICE_TYPES_WEB_PLESK) {
 			myadmin_log(self::$module, 'info', 'Plesk Activation', __LINE__, __FILE__);
+			$data = $GLOBALS['tf']->accounts->read($service[$settings['PREFIX'].'_custid']);
+			$debug_calls = false;
+			if (!is_array($extra))
+				$extra = [];
+			$plesk = get_webhosting_plesk_instance($serverdata);
+			/**
+			 * Gets the Shared IP Address
+			 */
+			$result = $plesk->list_ip_addresses();
+			if ((!isset($result['ips'][0]['ip_address']) && !isset($result['ips']['ip_address'])) || $result['status'] == 'error')
+				throw new Exception('Failed getting server information.' . (isset($result['errtext']) ? ' Error message was: ' . $result['errtext'] . '.' : ''));
+			if ($debug_calls == true)
+				echo "plesk->list_ip_adddresses() = ".var_export($result, true). "\n";
+			if (isset($result['ips']['ip_address']))
+				$shared_ip = $result['ips']['ip_address'];
+			else
+				foreach ($result['ips'] as $idx => $ip_data)
+					if (trim($ip_data['type']) == 'shared' && (!isset($shared_ip) || $ip_data['is_default']))
+						$shared_ip = $ip_data['ip_address'];
+			if (!isset($shared_ip)) {
+				myadmin_log(self::$module, 'critical', 'Plesk Could not find any shared IP addresses', __LINE__, __FILE__);
+				return false;
+			}
+			/**
+			 * Gets the Service Plans and finds the one matching the desired parameters
+			 */
+			try {
+				$result = $plesk->list_service_plans();
+			} catch (ApiRequestException $e) {
+				myadmin_log(self::$module, 'info', 'list_service_plans Caught exception: ' . $e->getMessage(), __LINE__, __FILE__);
+				return false;
+			}
+			if ($debug_calls == true)
+				echo "plesk->list_service_plans() = ".var_export($result, true). "\n";
+			foreach ($result as $idx => $plan) {
+				if ($plan['name'] == 'ASP.NET plan') {
+					$plan_id = $plan['id'];
+					break;
+				}
+			}
+			if (!isset($plan_id)) {
+				myadmin_log(self::$module, 'critical', 'Plesk Could not find the appropriate service plan');
+				return false;
+			}
+			/**
+			 * Creates a Client in with Plesk
+			 */
+			if (!isset($data['name']) || trim($data['name']) == '') {
+				$data['name'] = str_replace('@', ' ', $data['account_lid']);
+			}
+			$request = [
+				'name' => $data['name'],
+				'username' => $username,
+				'password' => $password
+			];
+			try {
+				myadmin_log(self::$module, 'DEBUG', 'create_client called with ' . json_encode($request), __LINE__, __FILE__);
+				$result = $plesk->create_client($request);
+			} catch (ApiRequestException $e) {
+				$error = $e->getMessage();
+				myadmin_log(self::$module, 'info', 'create_client Caught exception: ' . $e->getMessage(), __LINE__, __FILE__);
+			}
+			if (!isset($result['id'])) {
+				$cant_fix = false;
+				$password_updated = false;
+				while ($cant_fix == false && !isset($result['id'])) {
+					if (mb_strpos($error, 'The password should') !== false) {
+						// Error #2204 System user setting was failed. Error: The password should be  4 - 255 characters long and should not contain the username. Do not use quotes, spaces, and national alphabetic characters in the password.
+						$password_updated = true;
+						$password = Plesk::random_string(16);
+						$request['password'] = $password;
+						myadmin_log(self::$module, 'info', "Generated '{$request['password']}' for a replacement password and trying again", __LINE__, __FILE__);
+						try {
+							myadmin_log(self::$module, 'DEBUG', 'create_client called with ' . json_encode($request), __LINE__, __FILE__);
+							$result = $plesk->create_client($request);
+						} catch (ApiRequestException $e) {
+							$error = $e->getMessage();
+							myadmin_log(self::$module, 'info', 'create_client Caught exception: ' . $e->getMessage(), __LINE__, __FILE__);
+						}
+					} elseif (mb_strpos($error, 'Error #1007') !== false) {
+						// Error #1007 User account  already exists.
+						$username_updated = true;
+						$username = mb_substr($username, 0, 7) . strtolower(Plesk::random_string(1));
+						$request['username'] = $username;
+						myadmin_log(self::$module, 'info', "Generated '{$request['username']}' for a replacement username and trying again", __LINE__, __FILE__);
+						try {
+							myadmin_log(self::$module, 'DEBUG', 'create_client called with ' . json_encode($request), __LINE__, __FILE__);
+							$result = $plesk->create_client($request);
+						} catch (ApiRequestException $e) {
+							$error = $e->getMessage();
+							myadmin_log(self::$module, 'info', 'create_client Caught exception: ' . $e->getMessage(), __LINE__, __FILE__);
+						}
+					} else
+						$cant_fix = true;
+				}
+				if ($password_updated == true) {
+					$GLOBALS['tf']->history->add($settings['PREFIX'], 'password', $id, $options['password']);
+				}
+			}
+			request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'plesk', 'create_client', $request, $result);
+			if (!isset($result['id'])) {
+				//myadmin_log(self::$module, 'info', 'create_client did not return the expected id information: ' . $e->getMessage(), __LINE__, __FILE__);
+				myadmin_log(self::$module, 'info', 'create_client did not return the expected id', __LINE__, __FILE__);
+				if (is_array($extra) && isset($extra[0]) && is_numeric($extra[0]) && $extra[0] > 0) {
+					myadmin_log(self::$module, 'info', 'continuing using pre-existing client id', __LINE__, __FILE__);
+					$account_id = $extra[0];
+				} else {
+					return false;
+				}
+			} else {
+				$account_id = $result['id'];
+			}
+			//$ftp_login = 'ftpuser'.$id;
+			$ftp_login = 'ftp'.Plesk::random_string(9);
+			//$ftp_login = 'ftp'.str_replace('.',''), array('',''), $hostname);
+			//$ftp_password = Plesk::random_string(16);
+			$ftp_password = generateRandomString(10, 2, 1, 1, 1);
+			while (mb_strpos($ftp_password, '&') !== false)
+				$ftp_password = generateRandomString(10, 2, 1, 1, 1);
+			$extra[0] = $account_id;
+			$ser_extra = $db->real_escape(myadmin_stringify($extra));
+			$db->query("update {$settings['TABLE']} set {$settings['PREFIX']}_ip='{$ip}', {$settings['PREFIX']}_extra='{$ser_extra}' where {$settings['PREFIX']}_id='{$id}'", __LINE__, __FILE__);
+			myadmin_log(self::$module, 'info', "create_client got client id {$account_id}", __LINE__, __FILE__);
+			//$plesk->debug = true;
+			//$debug_calls = true;
+			$request = array(
+				'domain' => $hostname,
+				'owner_id' => $account_id,
+				'htype' => 'vrt_hst',
+				'ftp_login' => $username,
+				'ftp_password' => $ftp_password,
+				'ip' => $ip,
+				'status' => 0,
+				'plan_id' => $plan_id,
+			);
+			$result = [];
+			try {
+				myadmin_log(self::$module, 'info', 'create_subscription called with ' . json_encode($request), __LINE__, __FILE__);
+				$result = $plesk->create_subscription($request);
+			} catch (ApiRequestException $e) {
+				myadmin_log(self::$module, 'warning', ' create_subscription Caught exception: ' . $e->getMessage(), __LINE__, __FILE__);
+				try {
+					myadmin_log(self::$module, 'info', 'delete_client called with ' . json_encode($request), __LINE__, __FILE__);
+					$result = $plesk->delete_client(['login' => $username]);
+				} catch (ApiRequestException $e) {
+					$error = $e->getMessage();
+					myadmin_log(self::$module, 'warning', 'delete_client Caught exception: ' . $e->getMessage(), __LINE__, __FILE__);
+				}
+				return false;
+			}
+
+			if (!isset($result['id'])) {
+				$cant_fix = false;
+				$username_updated = false;
+				while ($cant_fix == false && !isset($result['id'])) {
+					// Error #1007 User account  already exists.
+					if (mb_strpos($error, 'Error #1007') !== false) {
+						$username_updated = true;
+						$username = mb_substr($username, 0, 7) . strtolower(Plesk::random_string(1));
+						$request['ftp_login'] = $username;
+						myadmin_log(self::$module, 'info', "Generated '{$request['ftp_login']}' for a replacement username and trying again", __LINE__, __FILE__);
+						try {
+							myadmin_log(self::$module, 'DEBUG', 'create_subscription called with ' . json_encode($request), __LINE__, __FILE__);
+							$result = $plesk->create_subscription($request);
+						} catch (ApiRequestException $e) {
+							$error = $e->getMessage();
+							myadmin_log(self::$module, 'info', 'create_client Caught exception: ' . $e->getMessage(), __LINE__, __FILE__);
+						}
+					} else
+						$cant_fix = true;
+				}
+			}
+			request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'plesk', 'create_subscription', $request, $result);
+			if (!isset($result['id'])) {
+				myadmin_log(self::$module, 'info', 'create_subscription did not return the expected id information: ' . $e->getMessage(), __LINE__, __FILE__);
+				return false;
+			}
+			$subscription_id = $result['id'];
+			$extra[1] = $subscription_id;
+			$ser_extra = $db->real_escape(myadmin_stringify($extra));
+			$db->query("update {$settings['TABLE']} set {$settings['PREFIX']}_ip='{$ip}', {$settings['PREFIX']}_extra='{$ser_extra}', {$settings['PREFIX']}_username='{$username}' where {$settings['PREFIX']}_id='{$id}'", __LINE__, __FILE__);
+			if ($debug_calls == true)
+				echo "plesk->create_subscription(".var_export($request, true).") = ".var_export($result, true). "\n";
+			myadmin_log(self::$module, 'info', "create_subscription got Subscription ID {$subscription_id}\n", __LINE__, __FILE__);
+			if (is_numeric($subscription_id)) {
+				website_welcome_email($id);
+			}
 			$event->stopPropagation();
 		}
 	}
