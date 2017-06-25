@@ -21,6 +21,7 @@ class Plugin {
 		return [
 			self::$module.'.settings' => [__CLASS__, 'getSettings'],
 			self::$module.'.activate' => [__CLASS__, 'getActivate'],
+			self::$module.'.reactivate' => [__CLASS__, 'getReactivate'],
 		];
 	}
 
@@ -28,6 +29,30 @@ class Plugin {
 		$license = $event->getSubject();
 		if ($event['category'] == SERVICE_TYPES_WEB_PLESK) {
 			myadmin_log(self::$module, 'info', 'Plesk Activation', __LINE__, __FILE__);
+			$event->stopPropagation();
+		}
+	}
+
+	public static function getReactivate(GenericEvent $event) {
+		$service = $event->getSubject();
+		if ($event['category'] == SERVICE_TYPES_WEB_PLESK) {
+			$serviceInfo = $service->getServiceInfo();
+			$settings = get_module_settings(self::$module);
+			$serverdata = get_service_master($serviceInfo[$settings['PREFIX'].'_server'], self::$module);
+			$hash = $serverdata[$settings['PREFIX'].'_key'];
+			$ip = $serverdata[$settings['PREFIX'].'_ip'];
+			$success = true;
+			$extra = run_event('parse_service_extra', $serviceInfo[$settings['PREFIX'] . '_extra'], self::$module);
+			function_requirements('get_webhosting_plesk_instance');
+			$plesk = get_webhosting_plesk_instance($serverdata);
+			list($user_id, $subscription_id) = $extra;
+			$request = ['username' => $serviceInfo[$settings['PREFIX'].'_username'], 'status' => 0];
+			try {
+				$result = $plesk->update_client($request);
+			} catch (\Exception $e) {
+				echo 'Caught exception: ' . $e->getMessage() . "\n";
+			}
+			myadmin_log(self::$module, 'info', 'update_client Called got ' . json_encode($result), __LINE__, __FILE__);
 			$event->stopPropagation();
 		}
 	}
