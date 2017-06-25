@@ -87,7 +87,7 @@ class Plesk {
 		curl_close($this->curl);
 		//var_dump($result);
 		if ($this->debug === TRUE) {
-			$tempXml = new SimpleXMLElement($packet);
+			$tempXml = new \SimpleXMLElement($packet);
 			$tempXml = json_decode(json_encode($tempXml), TRUE);
 			if (isset($tempXml['@attributes']))
 				unset($tempXml['@attributes']);
@@ -104,11 +104,11 @@ class Plesk {
 	 * Looks if API responded with correct data
 	 *
 	 * @param string $responseString
-	 * @return SimpleXMLElement
+	 * @return \SimpleXMLElement
 	 * @throws Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function parseResponse($responseString) {
-		$xml = new SimpleXMLElement($responseString);
+		$xml = new \SimpleXMLElement($responseString);
 		if (!is_a($xml, 'SimpleXMLElement'))
 			throw new ApiRequestException("Can not parse server response: {$responseString}");
 		if ($this->debug === TRUE) {
@@ -126,10 +126,10 @@ class Plesk {
 	/**
 	 * Check data in API response
 	 *
-	 * @param SimpleXMLElement $response
+	 * @param \SimpleXMLElement $response
 	 * @throws Detain\MyAdminPlesk\ApiRequestException
 	 */
-	public function checkResponse(SimpleXMLElement $response) {
+	public function checkResponse(\SimpleXMLElement $response) {
 		$resultNode = $response->domain->get->result;
 		// check if request was successful
 		if ('error' == (string) $resultNode->status)
