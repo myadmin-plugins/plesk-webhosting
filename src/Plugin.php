@@ -50,9 +50,9 @@ class Plugin {
 			try {
 				$result = $plesk->update_client($request);
 			} catch (\Exception $e) {
-				echo 'Caught exception: ' . $e->getMessage() . "\n";
+				echo 'Caught exception: '.$e->getMessage() . "\n";
 			}
-			myadmin_log(self::$module, 'info', 'update_client Called got ' . json_encode($result), __LINE__, __FILE__);
+			myadmin_log(self::$module, 'info', 'update_client Called got '.json_encode($result), __LINE__, __FILE__);
 			$event->stopPropagation();
 		}
 	}
