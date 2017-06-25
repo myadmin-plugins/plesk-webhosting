@@ -2,7 +2,7 @@
 
 namespace Detain\MyAdminPlesk;
 
-use Detain\Plesk\Plesk;
+use Detain\MyAdminPlesk\Plesk;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
 class Plugin {
