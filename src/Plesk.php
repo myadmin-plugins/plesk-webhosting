@@ -103,7 +103,7 @@ class Plesk {
 	/**
 	 * Looks if API responded with correct data
 	 *
-	 * @param type $response_string
+	 * @param string $response_string
 	 * @return SimpleXMLElement
 	 * @throws Detain\MyAdminPlesk\ApiRequestException
 	 */
@@ -132,8 +132,8 @@ class Plesk {
 	public function checkResponse(SimpleXMLElement $response) {
 		$resultNode = $response->domain->get->result;
 		// check if request was successful
-		if ('error' == (string)$resultNode->status)
-			throw new ApiRequestException('Plesk API returned error: '.(string)$resultNode->result->errtext);
+		if ('error' == (string) $resultNode->status)
+			throw new ApiRequestException('Plesk API returned error: '.(string) $resultNode->result->errtext);
 		return $resultNode;
 	}
 
@@ -141,7 +141,7 @@ class Plesk {
 	 *  the reduced list of error codes which is supported by Plesk 8.0 for UNIX / Plesk 7.6 for Windows and later.
 	 *  @link http://docs.plesk.com/en-US/17.0/api-rpc/error-codes/reduced-list-of-error-codes.33765/
 	 *
-	 * @return array list of error codes
+	 * @return string[] list of error codes
 	 */
 	public function get_error_codes() {
 		return [
@@ -1063,7 +1063,7 @@ class Plesk {
 	 * frm_fwd - frame forwarding,
 	 * none. Data type: string. Allowed values: vrt_hst | std_fwd | frm_fwd | none.
 	 *
-	 * @return array an array of possible htype values
+	 * @return string[] an array of possible htype values
 	 */
 	public function get_htypes() {
 		return [

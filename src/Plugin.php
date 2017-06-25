@@ -41,7 +41,7 @@ class Plugin {
 			if ((!isset($result['ips'][0]['ip_address']) && !isset($result['ips']['ip_address'])) || $result['status'] == 'error')
 				throw new Exception('Failed getting server information.'.(isset($result['errtext']) ? ' Error message was: '.$result['errtext'].'.' : ''));
 			if ($debug_calls == TRUE)
-				echo "plesk->list_ip_adddresses() = ".var_export($result, TRUE). "\n";
+				echo "plesk->list_ip_adddresses() = ".var_export($result, TRUE)."\n";
 			if (isset($result['ips']['ip_address']))
 				$shared_ip = $result['ips']['ip_address'];
 			else
@@ -62,7 +62,7 @@ class Plugin {
 				return FALSE;
 			}
 			if ($debug_calls == TRUE)
-				echo "plesk->list_service_plans() = ".var_export($result, TRUE). "\n";
+				echo "plesk->list_service_plans() = ".var_export($result, TRUE)."\n";
 			foreach ($result as $idx => $plan) {
 				if ($plan['name'] == 'ASP.NET plan') {
 					$plan_id = $plan['id'];
@@ -111,7 +111,7 @@ class Plugin {
 					} elseif (mb_strpos($error, 'Error #1007') !== FALSE) {
 						// Error #1007 User account  already exists.
 						$username_updated = TRUE;
-						$username = mb_substr($username, 0, 7) . strtolower(Plesk::random_string(1));
+						$username = mb_substr($username, 0, 7).strtolower(Plesk::random_string(1));
 						$request['username'] = $username;
 						myadmin_log(self::$module, 'info', "Generated '{$request['username']}' for a replacement username and trying again", __LINE__, __FILE__);
 						try {
@@ -187,7 +187,7 @@ class Plugin {
 					// Error #1007 User account  already exists.
 					if (mb_strpos($error, 'Error #1007') !== FALSE) {
 						$username_updated = TRUE;
-						$username = mb_substr($username, 0, 7) . strtolower(Plesk::random_string(1));
+						$username = mb_substr($username, 0, 7).strtolower(Plesk::random_string(1));
 						$request['ftp_login'] = $username;
 						myadmin_log(self::$module, 'info', "Generated '{$request['ftp_login']}' for a replacement username and trying again", __LINE__, __FILE__);
 						try {
@@ -211,7 +211,7 @@ class Plugin {
 			$ser_extra = $db->real_escape(myadmin_stringify($extra));
 			$db->query("update {$settings['TABLE']} set {$settings['PREFIX']}_ip='{$ip}', {$settings['PREFIX']}_extra='{$ser_extra}', {$settings['PREFIX']}_username='{$username}' where {$settings['PREFIX']}_id='{$id}'", __LINE__, __FILE__);
 			if ($debug_calls == TRUE)
-				echo "plesk->create_subscription(".var_export($request, TRUE).") = ".var_export($result, TRUE). "\n";
+				echo "plesk->create_subscription(".var_export($request, TRUE).") = ".var_export($result, TRUE)."\n";
 			myadmin_log(self::$module, 'info', "create_subscription got Subscription ID {$subscription_id}\n", __LINE__, __FILE__);
 			if (is_numeric($subscription_id)) {
 				website_welcome_email($id);
@@ -236,7 +236,7 @@ class Plugin {
 			try {
 				$result = $plesk->update_client($request);
 			} catch (\Exception $e) {
-				echo 'Caught exception: '.$e->getMessage() . "\n";
+				echo 'Caught exception: '.$e->getMessage()."\n";
 			}
 			myadmin_log(self::$module, 'info', 'update_client Called got '.json_encode($result), __LINE__, __FILE__);
 			$event->stopPropagation();
