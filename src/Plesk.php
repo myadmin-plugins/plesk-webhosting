@@ -198,7 +198,7 @@ class Plesk {
 	 * @return \DomDocument
 	 */
 	public function createWebUser($params) {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 
 		$packet = $xmldoc->createElement('packet');
@@ -225,7 +225,7 @@ class Plesk {
 	 * @return \DomDocument
 	 */
 	public function createCustomer($username, $password, $data) {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 
 		$packet = $xmldoc->createElement('packet');
@@ -275,7 +275,7 @@ class Plesk {
 	 * @return \DomDocument
 	 */
 	public function createMailAccount($params) {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 
 		$packet = $xmldoc->createElement('packet');
@@ -383,7 +383,7 @@ class Plesk {
 	 * @throws \ApiRequestException
 	 */
 	public function get_server_info() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -414,7 +414,7 @@ class Plesk {
 	 * @throws \ApiRequestException
 	 */
 	public function create_session($user) {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -444,7 +444,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function get_customers() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -468,7 +468,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function get_domains() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -541,7 +541,7 @@ class Plesk {
 		];
 		$filters = $this->get_site_filters();
 		$datasets = $this->get_site_datasets();
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -623,7 +623,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function create_site($params) {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -717,7 +717,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function update_site($params) {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -768,7 +768,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function update_server($params) {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -796,7 +796,7 @@ class Plesk {
 	 * @return \DomDocument
 	 */
 	public function createSite($params) {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 
 		$packet = $xmldoc->createElement('packet');
@@ -834,7 +834,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function create_client($data) {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -887,7 +887,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function create_database() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -916,7 +916,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function create_database_user() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -945,7 +945,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function create_email_address() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -974,7 +974,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function create_secret_key() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -1003,7 +1003,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function create_site_alias() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -1032,7 +1032,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function create_subdomain() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -1154,7 +1154,7 @@ class Plesk {
 		$revMapping = [];
 		foreach ($mapping as $field => $value)
 			$revMapping[$value] = $field;
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -1228,7 +1228,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function delete_subscription($params) {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -1275,7 +1275,7 @@ class Plesk {
 			$params = [];
 		$datasets = $this->get_subscription_datasets();
 		$filters = $this->get_subscription_filters();
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -1323,7 +1323,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function delete_client($params) {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -1363,7 +1363,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function delete_database() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -1392,7 +1392,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function delete_email_address() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -1421,7 +1421,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function delete_secret_key() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -1450,7 +1450,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function delete_site_alias() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -1480,7 +1480,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function delete_site($params) {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -1516,7 +1516,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function delete_subdomain() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -1546,7 +1546,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function get_client($params) {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -1583,7 +1583,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function get_database_user() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -1612,7 +1612,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function get_service_plan() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -1641,7 +1641,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function get_subdomain() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -1680,7 +1680,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function get_traffic() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -1709,7 +1709,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function list_clients() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -1745,7 +1745,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function list_users() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -1777,7 +1777,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function list_database_servers() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -1803,7 +1803,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function list_databases() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -1832,7 +1832,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function list_dns_records() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -1861,7 +1861,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function list_email_addresses() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -1890,7 +1890,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function list_ip_addresses() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -1918,7 +1918,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function list_secret_keys() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -1947,7 +1947,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function list_service_plans() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -1973,7 +1973,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function list_site_aliases() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -2002,7 +2002,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function list_subdomains() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -2031,7 +2031,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function rename_subdomain() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -2061,7 +2061,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function update_client($params) {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -2119,7 +2119,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function update_email_password() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -2148,7 +2148,7 @@ class Plesk {
 	 * @return DOMDocument
 	 */
 	public function update_subdomain() {
-		$xmldoc = new DomDocument('1.0', 'UTF-8');
+		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
