@@ -133,7 +133,7 @@ class Plesk {
 		$resultNode = $response->domain->get->result;
 		// check if request was successful
 		if ('error' == (string)$resultNode->status)
-			throw new ApiRequestException('Plesk API returned error: ' . (string)$resultNode->result->errtext);
+			throw new ApiRequestException('Plesk API returned error: '.(string)$resultNode->result->errtext);
 		return $resultNode;
 	}
 
@@ -670,7 +670,7 @@ class Plesk {
 		$gen_setups = $this->get_site_gen_setups();
 		foreach ($required as $require)
 			if (!isset($params[$require]) && (isset($rev_mapping[$require]) && !isset($params[$rev_mapping[$require]])))
-				throw new ApiRequestException('Plesk API ' . __FUNCTION__ . '(' . json_decode(json_encode($params), true) . ') missing required parameter ' . $require);
+				throw new ApiRequestException('Plesk API '.__FUNCTION__.'('.json_decode(json_encode($params), true).') missing required parameter '.$require);
 		if (isset($params['htype'])) {
 			$get->appendChild($hosting);
 			$hosting->appendChild($vrt_hst);
@@ -1170,7 +1170,7 @@ class Plesk {
 		$htypes = $this->get_htypes();
 		foreach ($required as $require)
 			if ((isset($rev_mapping[$require]) && !isset($params[$rev_mapping[$require]])) && !isset($params[$require]))
-				throw new ApiRequestException('Plesk API ' . __FUNCTION__ . '(' . json_decode(json_encode($params), true) . ') missing required parameter ' . $require);
+				throw new ApiRequestException('Plesk API '.__FUNCTION__.'('.json_decode(json_encode($params), true).') missing required parameter '.$require);
 		$hosting_added = false;
 		if (isset($params['htype'])) {
 			$get->appendChild($hosting);
