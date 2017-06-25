@@ -15,7 +15,7 @@ class Plesk {
 	private $login;
 	private $password;
 	public $packet;
-	public $debug = false;
+	public $debug = FALSE;
 
 	/**
 	 * Plesk constructor.
@@ -55,10 +55,10 @@ class Plesk {
 	public function curl_init($host, $login, $password) {
 		$this->curl = curl_init();
 		curl_setopt($this->curl, CURLOPT_URL, "https://{$host}:8443/enterprise/control/agent.php");
-		curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($this->curl, CURLOPT_POST, true);
-		curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER, false);
-		curl_setopt($this->curl, CURLOPT_SSL_VERIFYHOST, false);
+		curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($this->curl, CURLOPT_POST, TRUE);
+		curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+		curl_setopt($this->curl, CURLOPT_SSL_VERIFYHOST, FALSE);
 		curl_setopt($this->curl, CURLOPT_HTTPHEADER, array(
 			"HTTP_AUTH_LOGIN: {$login}",
 			"HTTP_AUTH_PASSWD: {$password}", 'HTTP_PRETTY_PRINT: TRUE', 'Content-Type: text/xml'
@@ -86,9 +86,9 @@ class Plesk {
 		}
 		curl_close($this->curl);
 		//var_dump($result);
-		if ($this->debug === true) {
+		if ($this->debug === TRUE) {
 			$temp_xml = new SimpleXMLElement($packet);
-			$temp_xml = json_decode(json_encode($temp_xml), true);
+			$temp_xml = json_decode(json_encode($temp_xml), TRUE);
 			if (isset($temp_xml['@attributes']))
 				unset($temp_xml['@attributes']);
 			$function = array_keys($temp_xml)[0];
@@ -111,8 +111,8 @@ class Plesk {
 		$xml = new SimpleXMLElement($response_string);
 		if (!is_a($xml, 'SimpleXMLElement'))
 			throw new ApiRequestException("Can not parse server response: {$response_string}");
-		if ($this->debug === true) {
-			$temp_xml = json_decode(json_encode($xml), true);
+		if ($this->debug === TRUE) {
+			$temp_xml = json_decode(json_encode($xml), TRUE);
 			if (isset($temp_xml['@attributes']))
 				unset($temp_xml['@attributes']);
 			$function = array_keys($temp_xml)[0];
@@ -199,7 +199,7 @@ class Plesk {
 	 */
 	public function createWebUser($params) {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -226,7 +226,7 @@ class Plesk {
 	 */
 	public function createCustomer($username, $password, $data) {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 
 		$packet = $xmldoc->createElement('packet');
 		$geninfo = $xmldoc->appendChild($packet)->appendChild($xmldoc->createElement('customer'))->appendChild($xmldoc->createElement('add'))->appendChild($xmldoc->createElement('gen_info'));
@@ -276,7 +276,7 @@ class Plesk {
 	 */
 	public function createMailAccount($params) {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -343,7 +343,7 @@ class Plesk {
 	 * @return string the exported php code
 	 */
 	public function var_export($result) {
-		$export = var_export($result, true);
+		$export = var_export($result, TRUE);
 		$export = preg_replace("/^array\s*\(\s*$/m", '[', $export);
 		$export = preg_replace("/^\)\s*$/m", ']', $export);
 		$export = preg_replace("/=>\s*$\n\s*array\s*\(/m", "=> [", $export);
@@ -384,7 +384,7 @@ class Plesk {
 	 */
 	public function get_server_info() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'server';
@@ -398,7 +398,7 @@ class Plesk {
 				$get->appendChild($xmldoc->createElement($type));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
@@ -415,7 +415,7 @@ class Plesk {
 	 */
 	public function create_session($user) {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'server';
@@ -430,7 +430,7 @@ class Plesk {
 		$data->appendChild($xmldoc->createElement('source_server', base64_encode(DOMAIN)));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['create_session']['result'];
 		if ($result['status'] == 'error')
@@ -445,7 +445,7 @@ class Plesk {
 	 */
 	public function get_customers() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'customer';
@@ -469,7 +469,7 @@ class Plesk {
 	 */
 	public function get_domains() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'domain';
@@ -533,8 +533,8 @@ class Plesk {
 	 * @return array
 	 * @throws \ApiRequestException
 	 */
-	public function get_sites($params = false) {
-		if ($params === false)
+	public function get_sites($params = FALSE) {
+		if ($params === FALSE)
 			$params = [];
 		$mapping = [
 			'subscription_id' => 'parent-id',
@@ -542,7 +542,7 @@ class Plesk {
 		$filters = $this->get_site_filters();
 		$datasets = $this->get_site_datasets();
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'site';
@@ -566,7 +566,7 @@ class Plesk {
 		}
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		if (isset($result[$packet_name]['get']) && isset($result[$packet_name]['get']['result'])) {
 			$result = $result[$packet_name]['get']['result'];
@@ -590,7 +590,7 @@ class Plesk {
 	 * @return array
 	 * @throws \ApiRequestException
 	 */
-	public function get_site($params = false) {
+	public function get_site($params = FALSE) {
 		return $this->get_sites($params);
 	}
 
@@ -599,7 +599,7 @@ class Plesk {
 	 * @param bool|array $params
 	 * @return array
 	 */
-	public function list_sites($params = false) {
+	public function list_sites($params = FALSE) {
 		return $this->get_sites($params);
 	}
 
@@ -624,7 +624,7 @@ class Plesk {
 	 */
 	public function create_site($params) {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'site';
@@ -670,16 +670,16 @@ class Plesk {
 		$gen_setups = $this->get_site_gen_setups();
 		foreach ($required as $require)
 			if (!isset($params[$require]) && (isset($rev_mapping[$require]) && !isset($params[$rev_mapping[$require]])))
-				throw new ApiRequestException('Plesk API '.__FUNCTION__.'('.json_decode(json_encode($params), true).') missing required parameter '.$require);
+				throw new ApiRequestException('Plesk API '.__FUNCTION__.'('.json_decode(json_encode($params), TRUE).') missing required parameter '.$require);
 		if (isset($params['htype'])) {
 			$get->appendChild($hosting);
 			$hosting->appendChild($vrt_hst);
 		}
-		$found = false;
+		$found = FALSE;
 		foreach ($prefs_types as $pref)
 			if (isset($params[$pref]))
-				$found = true;
-		if ($found == true)
+				$found = TRUE;
+		if ($found == TRUE)
 			$get->appendChild($prefs);
 		foreach ($params as $field => $value) {
 			if (isset($mapping[$field]))
@@ -703,7 +703,7 @@ class Plesk {
 		}
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['add']['result'];
 		if ($result['status'] == 'error')
@@ -718,7 +718,7 @@ class Plesk {
 	 */
 	public function update_site($params) {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'site';
@@ -729,7 +729,7 @@ class Plesk {
 		$gen_setups = $this->get_site_gen_setups();
 		//$filters = $this->get_site_filters();
 		$values_values = $this->get_site_datasets();
-		$gen_setup_added = false;
+		$gen_setup_added = FALSE;
 		$filters = ['id'];
 		$filter = $xmldoc->createElement('filter');
 		$values = $xmldoc->createElement('values');
@@ -744,16 +744,16 @@ class Plesk {
 			if (in_array($real_field, $filters))
 				$filter->appendChild($xmldoc->createElement($real_field, $value));
 			if (in_array($real_field, $gen_setups)) {
-				if ($gen_setup_added == false) {
+				if ($gen_setup_added == FALSE) {
 					$values->appendChild($gen_setup);
-					$gen_setup_added = true;
+					$gen_setup_added = TRUE;
 				}
 				$gen_setup->appendChild($xmldoc->createElement($real_field, $value));
 			}
 		}
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['set']['result'];
 		if ($result['status'] == 'error')
@@ -769,7 +769,7 @@ class Plesk {
 	 */
 	public function update_server($params) {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'server';
@@ -783,7 +783,7 @@ class Plesk {
 				$get->appendChild($xmldoc->createElement($type));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
@@ -797,7 +797,7 @@ class Plesk {
 	 */
 	public function createSite($params) {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
@@ -835,7 +835,7 @@ class Plesk {
 	 */
 	public function create_client($data) {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'customer';
@@ -846,9 +846,9 @@ class Plesk {
 		$info = $xmldoc->createElement('gen_info');
 		$get->appendChild($info);
 		$default_params = [
-			'name' => null,
-			'username' => null,
-			'password' => null,
+			'name' => NULL,
+			'username' => NULL,
+			'password' => NULL,
 			'status' => 0,
 		];
 		$mapping = [
@@ -873,7 +873,7 @@ class Plesk {
 				$info->appendChild($xmldoc->createElement($real_field, $default_params[$field]));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['add']['result'];
 		if ($result['status'] == 'error')
@@ -888,7 +888,7 @@ class Plesk {
 	 */
 	public function create_database() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'server';
@@ -902,7 +902,7 @@ class Plesk {
 				$get->appendChild($xmldoc->createElement($type));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
@@ -917,7 +917,7 @@ class Plesk {
 	 */
 	public function create_database_user() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'server';
@@ -931,7 +931,7 @@ class Plesk {
 				$get->appendChild($xmldoc->createElement($type));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
@@ -946,7 +946,7 @@ class Plesk {
 	 */
 	public function create_email_address() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'server';
@@ -960,7 +960,7 @@ class Plesk {
 				$get->appendChild($xmldoc->createElement($type));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
@@ -975,7 +975,7 @@ class Plesk {
 	 */
 	public function create_secret_key() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'server';
@@ -989,7 +989,7 @@ class Plesk {
 				$get->appendChild($xmldoc->createElement($type));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
@@ -1004,7 +1004,7 @@ class Plesk {
 	 */
 	public function create_site_alias() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'server';
@@ -1018,7 +1018,7 @@ class Plesk {
 				$get->appendChild($xmldoc->createElement($type));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
@@ -1033,7 +1033,7 @@ class Plesk {
 	 */
 	public function create_subdomain() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'server';
@@ -1047,7 +1047,7 @@ class Plesk {
 				$get->appendChild($xmldoc->createElement($type));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
@@ -1155,7 +1155,7 @@ class Plesk {
 		foreach ($mapping as $field => $value)
 			$rev_mapping[$value] = $field;
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'webspace';
@@ -1170,12 +1170,12 @@ class Plesk {
 		$htypes = $this->get_htypes();
 		foreach ($required as $require)
 			if ((isset($rev_mapping[$require]) && !isset($params[$rev_mapping[$require]])) && !isset($params[$require]))
-				throw new ApiRequestException('Plesk API '.__FUNCTION__.'('.json_decode(json_encode($params), true).') missing required parameter '.$require);
-		$hosting_added = false;
+				throw new ApiRequestException('Plesk API '.__FUNCTION__.'('.json_decode(json_encode($params), TRUE).') missing required parameter '.$require);
+		$hosting_added = FALSE;
 		if (isset($params['htype'])) {
 			$get->appendChild($hosting);
 			$hosting->appendChild($vrt_hst);
-			$hosting_added = true;
+			$hosting_added = TRUE;
 		}
 		foreach ($params as $field => $value) {
 			if (isset($mapping[$field]))
@@ -1185,10 +1185,10 @@ class Plesk {
 			if (in_array($real_field, $gen_setups))
 				$gen_setup->appendChild($xmldoc->createElement($real_field, $value));
 			if (in_array($real_field, $vrt_hst_properties)) {
-				if ($hosting_added == false) {
+				if ($hosting_added == FALSE) {
 					$get->appendChild($hosting);
 					$hosting->appendChild($vrt_hst);
-					$hosting_added = true;
+					$hosting_added = TRUE;
 				}
 				$property = $xmldoc->createElement('property');
 				$vrt_hst->appendChild($property);
@@ -1199,10 +1199,10 @@ class Plesk {
 				$vrt_hst->appendChild($property);*/
 			}
 			if (in_array($real_field, $vrt_hsts)) {
-				if ($hosting_added == false) {
+				if ($hosting_added == FALSE) {
 					$get->appendChild($hosting);
 					$hosting->appendChild($vrt_hst);
-					$hosting_added = true;
+					$hosting_added = TRUE;
 				}
 				$vrt_hst->appendChild($xmldoc->createElement($real_field, $value));
 			}
@@ -1213,7 +1213,7 @@ class Plesk {
 		//print_r($xmldoc->saveXML());
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['add']['result'];
 		if ($result['status'] == 'error')
@@ -1229,7 +1229,7 @@ class Plesk {
 	 */
 	public function delete_subscription($params) {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'webspace';
@@ -1256,7 +1256,7 @@ class Plesk {
 		}
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['del']['result'];
 		if ($result['status'] == 'error')
@@ -1270,13 +1270,13 @@ class Plesk {
 	 * @param bool|array $params
 	 * @return DOMDocument
 	 */
-	public function list_subscriptions($params = false) {
-		if ($params === false)
+	public function list_subscriptions($params = FALSE) {
+		if ($params === FALSE)
 			$params = [];
 		$datasets = $this->get_subscription_datasets();
 		$filters = $this->get_subscription_filters();
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'webspace';
@@ -1302,7 +1302,7 @@ class Plesk {
 		}
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if (isset($result['status'])) {
@@ -1324,7 +1324,7 @@ class Plesk {
 	 */
 	public function delete_client($params) {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'customer';
@@ -1349,7 +1349,7 @@ class Plesk {
 		/*if (!isset($result[$packet_name]['del']['result'])) {
 			myadmin_log('webhosting', 'WARNING', json_encode($response), __LINE__, __FILE__);
 		}*/
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['del']['result'];
 		if ($result['status'] == 'error')
@@ -1364,7 +1364,7 @@ class Plesk {
 	 */
 	public function delete_database() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'server';
@@ -1378,7 +1378,7 @@ class Plesk {
 				$get->appendChild($xmldoc->createElement($type));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
@@ -1393,7 +1393,7 @@ class Plesk {
 	 */
 	public function delete_email_address() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'server';
@@ -1407,7 +1407,7 @@ class Plesk {
 				$get->appendChild($xmldoc->createElement($type));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
@@ -1422,7 +1422,7 @@ class Plesk {
 	 */
 	public function delete_secret_key() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'server';
@@ -1436,7 +1436,7 @@ class Plesk {
 				$get->appendChild($xmldoc->createElement($type));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
@@ -1451,7 +1451,7 @@ class Plesk {
 	 */
 	public function delete_site_alias() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'server';
@@ -1465,7 +1465,7 @@ class Plesk {
 				$get->appendChild($xmldoc->createElement($type));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
@@ -1481,7 +1481,7 @@ class Plesk {
 	 */
 	public function delete_site($params) {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'site';
@@ -1497,7 +1497,7 @@ class Plesk {
 				$filter->appendChild($xmldoc->createElement($field, $params[$field]));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['del']['result'];
 		if (isset($result['status'])) {
@@ -1517,7 +1517,7 @@ class Plesk {
 	 */
 	public function delete_subdomain() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'server';
@@ -1531,7 +1531,7 @@ class Plesk {
 				$get->appendChild($xmldoc->createElement($type));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
@@ -1547,7 +1547,7 @@ class Plesk {
 	 */
 	public function get_client($params) {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'customer';
@@ -1569,7 +1569,7 @@ class Plesk {
 		}
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
@@ -1584,7 +1584,7 @@ class Plesk {
 	 */
 	public function get_database_user() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'server';
@@ -1598,7 +1598,7 @@ class Plesk {
 				$get->appendChild($xmldoc->createElement($type));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
@@ -1613,7 +1613,7 @@ class Plesk {
 	 */
 	public function get_service_plan() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'server';
@@ -1627,7 +1627,7 @@ class Plesk {
 				$get->appendChild($xmldoc->createElement($type));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
@@ -1642,7 +1642,7 @@ class Plesk {
 	 */
 	public function get_subdomain() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'server';
@@ -1656,7 +1656,7 @@ class Plesk {
 				$get->appendChild($xmldoc->createElement($type));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
@@ -1681,7 +1681,7 @@ class Plesk {
 	 */
 	public function get_traffic() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'server';
@@ -1695,7 +1695,7 @@ class Plesk {
 				$get->appendChild($xmldoc->createElement($type));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
@@ -1710,7 +1710,7 @@ class Plesk {
 	 */
 	public function list_clients() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'customer';
@@ -1725,7 +1725,7 @@ class Plesk {
 		$get->appendChild($dataset);
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if (isset($result['status'])) {
@@ -1746,7 +1746,7 @@ class Plesk {
 	 */
 	public function list_users() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'user';
@@ -1763,7 +1763,7 @@ class Plesk {
 		$get->appendChild($dataset);
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
@@ -1778,7 +1778,7 @@ class Plesk {
 	 */
 	public function list_database_servers() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'db_server';
@@ -1790,7 +1790,7 @@ class Plesk {
 		$get->appendChild($xmldoc->createElement('filter'));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response->{$packet_name}->{$get_name}), true);
+		$result = json_decode(json_encode($response->{$packet_name}->{$get_name}), TRUE);
 		$result = $this->fix_result($result);
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk list_database_servers returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -1804,7 +1804,7 @@ class Plesk {
 	 */
 	public function list_databases() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'server';
@@ -1818,7 +1818,7 @@ class Plesk {
 				$get->appendChild($xmldoc->createElement($type));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
@@ -1833,7 +1833,7 @@ class Plesk {
 	 */
 	public function list_dns_records() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'server';
@@ -1847,7 +1847,7 @@ class Plesk {
 				$get->appendChild($xmldoc->createElement($type));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
@@ -1862,7 +1862,7 @@ class Plesk {
 	 */
 	public function list_email_addresses() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'server';
@@ -1876,7 +1876,7 @@ class Plesk {
 				$get->appendChild($xmldoc->createElement($type));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
@@ -1891,7 +1891,7 @@ class Plesk {
 	 */
 	public function list_ip_addresses() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'ip';
@@ -1901,7 +1901,7 @@ class Plesk {
 		$domain->appendChild($get);
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		$ips = $result['addresses']['ip_info'];
@@ -1919,7 +1919,7 @@ class Plesk {
 	 */
 	public function list_secret_keys() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'server';
@@ -1933,7 +1933,7 @@ class Plesk {
 				$get->appendChild($xmldoc->createElement($type));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
@@ -1948,7 +1948,7 @@ class Plesk {
 	 */
 	public function list_service_plans() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'service-plan';
@@ -1959,7 +1959,7 @@ class Plesk {
 		$get->appendChild($xmldoc->createElement('filter'));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result[0]['status'] == 'error')
@@ -1974,7 +1974,7 @@ class Plesk {
 	 */
 	public function list_site_aliases() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'server';
@@ -1988,7 +1988,7 @@ class Plesk {
 				$get->appendChild($xmldoc->createElement($type));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
@@ -2003,7 +2003,7 @@ class Plesk {
 	 */
 	public function list_subdomains() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'server';
@@ -2017,7 +2017,7 @@ class Plesk {
 				$get->appendChild($xmldoc->createElement($type));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
@@ -2032,7 +2032,7 @@ class Plesk {
 	 */
 	public function rename_subdomain() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'server';
@@ -2046,7 +2046,7 @@ class Plesk {
 				$get->appendChild($xmldoc->createElement($type));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
@@ -2062,7 +2062,7 @@ class Plesk {
 	 */
 	public function update_client($params) {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'customer';
@@ -2099,7 +2099,7 @@ class Plesk {
 		}
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['set']['result'];
 		if (isset($result['status'])) {
@@ -2120,7 +2120,7 @@ class Plesk {
 	 */
 	public function update_email_password() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'server';
@@ -2134,7 +2134,7 @@ class Plesk {
 				$get->appendChild($xmldoc->createElement($type));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
@@ -2149,7 +2149,7 @@ class Plesk {
 	 */
 	public function update_subdomain() {
 		$xmldoc = new DomDocument('1.0', 'UTF-8');
-		$xmldoc->formatOutput = true;
+		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
 		$packet_name = 'server';
@@ -2163,7 +2163,7 @@ class Plesk {
 				$get->appendChild($xmldoc->createElement($type));
 		$response_text = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($response_text);
-		$result = json_decode(json_encode($response), true);
+		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packet_name]['get']['result'];
 		if ($result['status'] == 'error')
