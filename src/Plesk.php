@@ -396,8 +396,8 @@ class Plesk {
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -428,8 +428,8 @@ class Plesk {
 		$get->appendChild($data);
 		$data->appendChild($xmldoc->createElement('user_ip', base64_encode($GLOBALS['tf']->session->getuser_ip())));
 		$data->appendChild($xmldoc->createElement('source_server', base64_encode(DOMAIN)));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['create_session']['result'];
@@ -558,14 +558,14 @@ class Plesk {
 			$dataset->appendChild($xmldoc->createElement($field));
 		foreach ($params as $field => $value) {
 			if (isset($mapping[$field]))
-				$real_field = $mapping[$field];
+				$realField = $mapping[$field];
 			else
-				$real_field = $field;
-			if (in_array($real_field, $filters))
-				$filter->appendChild($xmldoc->createElement($real_field, $value));
+				$realField = $field;
+			if (in_array($realField, $filters))
+				$filter->appendChild($xmldoc->createElement($realField, $value));
 		}
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		if (isset($result[$packetName]['get']) && isset($result[$packetName]['get']['result'])) {
@@ -683,26 +683,26 @@ class Plesk {
 			$get->appendChild($prefs);
 		foreach ($params as $field => $value) {
 			if (isset($mapping[$field]))
-				$real_field = $mapping[$field];
+				$realField = $mapping[$field];
 			else
-				$real_field = $field;
-			if (in_array($real_field, $gen_setups))
-				$gen_setup->appendChild($xmldoc->createElement($real_field, $value));
-			if (in_array($real_field, $prefs_types))
-				$prefs->appendChild($xmldoc->createElement($real_field, $value));
-			if (in_array($real_field, $vrt_hst_properties)) {
+				$realField = $field;
+			if (in_array($realField, $gen_setups))
+				$gen_setup->appendChild($xmldoc->createElement($realField, $value));
+			if (in_array($realField, $prefs_types))
+				$prefs->appendChild($xmldoc->createElement($realField, $value));
+			if (in_array($realField, $vrt_hst_properties)) {
 				$property = $xmldoc->createElement('property');
 				$vrt_hst->appendChild($property);
-				$property->appendChild($xmldoc->createElement('name', $real_field));
+				$property->appendChild($xmldoc->createElement('name', $realField));
 				$property->appendChild($xmldoc->createElement('value', $value));
 			}
-			if (in_array($real_field, $vrt_hsts))
-				$vrt_hst->appendChild($xmldoc->createElement($real_field, $value));
-			if (in_array($real_field, $extra))
-				$get->appendChild($xmldoc->createElement($real_field, $value));
+			if (in_array($realField, $vrt_hsts))
+				$vrt_hst->appendChild($xmldoc->createElement($realField, $value));
+			if (in_array($realField, $extra))
+				$get->appendChild($xmldoc->createElement($realField, $value));
 		}
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['add']['result'];
@@ -738,21 +738,21 @@ class Plesk {
 		$get->appendChild($values);
 		foreach ($params as $field => $value) {
 			if (isset($mapping[$field]))
-				$real_field = $mapping[$field];
+				$realField = $mapping[$field];
 			else
-				$real_field = $field;
-			if (in_array($real_field, $filters))
-				$filter->appendChild($xmldoc->createElement($real_field, $value));
-			if (in_array($real_field, $gen_setups)) {
+				$realField = $field;
+			if (in_array($realField, $filters))
+				$filter->appendChild($xmldoc->createElement($realField, $value));
+			if (in_array($realField, $gen_setups)) {
 				if ($gen_setup_added == FALSE) {
 					$values->appendChild($gen_setup);
 					$gen_setup_added = TRUE;
 				}
-				$gen_setup->appendChild($xmldoc->createElement($real_field, $value));
+				$gen_setup->appendChild($xmldoc->createElement($realField, $value));
 			}
 		}
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['set']['result'];
@@ -781,8 +781,8 @@ class Plesk {
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -866,13 +866,13 @@ class Plesk {
 			'zip' => 'pcode',
 			'country' => 'country',
 		];
-		foreach ($mapping as $field => $real_field)
+		foreach ($mapping as $field => $realField)
 			if (isset($data[$field]))
-				$info->appendChild($xmldoc->createElement($real_field, $data[$field]));
+				$info->appendChild($xmldoc->createElement($realField, $data[$field]));
 			elseif (isset($default_params[$field]))
-				$info->appendChild($xmldoc->createElement($real_field, $default_params[$field]));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+				$info->appendChild($xmldoc->createElement($realField, $default_params[$field]));
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['add']['result'];
@@ -900,8 +900,8 @@ class Plesk {
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -929,8 +929,8 @@ class Plesk {
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -958,8 +958,8 @@ class Plesk {
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -987,8 +987,8 @@ class Plesk {
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -1016,8 +1016,8 @@ class Plesk {
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -1045,8 +1045,8 @@ class Plesk {
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -1179,12 +1179,12 @@ class Plesk {
 		}
 		foreach ($params as $field => $value) {
 			if (isset($mapping[$field]))
-				$real_field = $mapping[$field];
+				$realField = $mapping[$field];
 			else
-				$real_field = $field;
-			if (in_array($real_field, $gen_setups))
-				$gen_setup->appendChild($xmldoc->createElement($real_field, $value));
-			if (in_array($real_field, $vrt_hst_properties)) {
+				$realField = $field;
+			if (in_array($realField, $gen_setups))
+				$gen_setup->appendChild($xmldoc->createElement($realField, $value));
+			if (in_array($realField, $vrt_hst_properties)) {
 				if ($hosting_added == FALSE) {
 					$get->appendChild($hosting);
 					$hosting->appendChild($vrt_hst);
@@ -1192,27 +1192,27 @@ class Plesk {
 				}
 				$property = $xmldoc->createElement('property');
 				$vrt_hst->appendChild($property);
-				$property->appendChild($xmldoc->createElement('name', $real_field));
+				$property->appendChild($xmldoc->createElement('name', $realField));
 				$property->appendChild($xmldoc->createElement('value', $value));
-				/*$property = $xmldoc->createAttribute($real_field);
+				/*$property = $xmldoc->createAttribute($realField);
 				$property->value = $value;
 				$vrt_hst->appendChild($property);*/
 			}
-			if (in_array($real_field, $vrt_hsts)) {
+			if (in_array($realField, $vrt_hsts)) {
 				if ($hosting_added == FALSE) {
 					$get->appendChild($hosting);
 					$hosting->appendChild($vrt_hst);
 					$hosting_added = TRUE;
 				}
-				$vrt_hst->appendChild($xmldoc->createElement($real_field, $value));
+				$vrt_hst->appendChild($xmldoc->createElement($realField, $value));
 			}
-			if (in_array($real_field, $extra)) {
-				$get->appendChild($xmldoc->createElement($real_field, $value));
+			if (in_array($realField, $extra)) {
+				$get->appendChild($xmldoc->createElement($realField, $value));
 			}
 		}
 		//print_r($xmldoc->saveXML());
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['add']['result'];
@@ -1248,14 +1248,14 @@ class Plesk {
 		$filters = $this->get_subscription_filters();
 		foreach ($params as $field => $value) {
 			if (isset($mapping[$field]))
-				$real_field = $mapping[$field];
+				$realField = $mapping[$field];
 			else
-				$real_field = $field;
-			if (in_array($real_field, $filters))
-				$filter->appendChild($xmldoc->createElement($real_field, $value));
+				$realField = $field;
+			if (in_array($realField, $filters))
+				$filter->appendChild($xmldoc->createElement($realField, $value));
 		}
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['del']['result'];
@@ -1292,16 +1292,16 @@ class Plesk {
 			$dataset->appendChild($xmldoc->createElement($field));
 		foreach ($filters as $field) {
 			if (isset($mapping[$field]))
-				$real_field = $mapping[$field];
+				$realField = $mapping[$field];
 			else
-				$real_field = $field;
-			if (isset($params[$real_field]))
-				$filter->appendChild($xmldoc->createElement($real_field, $params[$real_field]));
+				$realField = $field;
+			if (isset($params[$realField]))
+				$filter->appendChild($xmldoc->createElement($realField, $params[$realField]));
 			elseif (isset($params[$field]))
-				$filter->appendChild($xmldoc->createElement($real_field, $params[$field]));
+				$filter->appendChild($xmldoc->createElement($realField, $params[$field]));
 		}
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -1339,13 +1339,13 @@ class Plesk {
 		$get->appendChild($filter);
 		foreach ($params as $field => $value) {
 			if (isset($mapping[$field]))
-				$real_field = $mapping[$field];
+				$realField = $mapping[$field];
 			else
-				$real_field = $field;
-			$filter->appendChild($xmldoc->createElement($real_field, $value));
+				$realField = $field;
+			$filter->appendChild($xmldoc->createElement($realField, $value));
 		}
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		/*if (!isset($result[$packetName]['del']['result'])) {
 			myadmin_log('webhosting', 'WARNING', json_encode($response), __LINE__, __FILE__);
 		}*/
@@ -1376,8 +1376,8 @@ class Plesk {
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -1405,8 +1405,8 @@ class Plesk {
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -1434,8 +1434,8 @@ class Plesk {
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -1463,8 +1463,8 @@ class Plesk {
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -1495,8 +1495,8 @@ class Plesk {
 		foreach ($filters as $field)
 			if (isset($params[$field]))
 				$filter->appendChild($xmldoc->createElement($field, $params[$field]));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['del']['result'];
@@ -1529,8 +1529,8 @@ class Plesk {
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -1567,8 +1567,8 @@ class Plesk {
 		foreach ($params as $field => $value) {
 			$filter->appendChild($xmldoc->createElement((isset($mapping[$field]) ? $mapping[$field] : $field), $value));
 		}
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -1596,8 +1596,8 @@ class Plesk {
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -1625,8 +1625,8 @@ class Plesk {
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -1654,8 +1654,8 @@ class Plesk {
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -1693,8 +1693,8 @@ class Plesk {
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -1723,8 +1723,8 @@ class Plesk {
 		$dataset->appendChild($xmldoc->createElement('stat'));
 		$get->appendChild($xmldoc->createElement('filter'));
 		$get->appendChild($dataset);
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -1761,8 +1761,8 @@ class Plesk {
 		$get->appendChild($filter);
 		$filter->appendChild($xmldoc->createElement(('all')));
 		$get->appendChild($dataset);
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -1788,8 +1788,8 @@ class Plesk {
 		$get = $xmldoc->createElement($get_name);
 		$domain->appendChild($get);
 		$get->appendChild($xmldoc->createElement('filter'));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response->{$packetName}->{$get_name}), TRUE);
 		$result = $this->fix_result($result);
 		if ($result['status'] == 'error')
@@ -1816,8 +1816,8 @@ class Plesk {
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -1845,8 +1845,8 @@ class Plesk {
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -1874,8 +1874,8 @@ class Plesk {
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -1899,8 +1899,8 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -1931,8 +1931,8 @@ class Plesk {
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -1957,8 +1957,8 @@ class Plesk {
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
 		$get->appendChild($xmldoc->createElement('filter'));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -1986,8 +1986,8 @@ class Plesk {
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -2015,8 +2015,8 @@ class Plesk {
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -2044,8 +2044,8 @@ class Plesk {
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -2089,16 +2089,16 @@ class Plesk {
 		$values->appendChild($info);
 		foreach ($params as $field => $value) {
 			if (isset($mapping[$field]))
-				$real_field = $mapping[$field];
+				$realField = $mapping[$field];
 			else
-				$real_field = $field;
+				$realField = $field;
 			if (in_array($field, $filters))
-				$filter->appendChild($xmldoc->createElement($real_field, $value));
+				$filter->appendChild($xmldoc->createElement($realField, $value));
 			else
-				$info->appendChild($xmldoc->createElement($real_field, $value));
+				$info->appendChild($xmldoc->createElement($realField, $value));
 		}
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['set']['result'];
@@ -2132,8 +2132,8 @@ class Plesk {
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
@@ -2161,8 +2161,8 @@ class Plesk {
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
-		$response_text = $this->sendRequest($xmldoc->saveXML());
-		$response = $this->parseResponse($response_text);
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
