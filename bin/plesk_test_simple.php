@@ -130,7 +130,7 @@ try {
 } catch (Exception $e) {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
-//echo "Final Data: ".print_r($data, true)."\n";
+//echo "Final Data: ".print_r($data, true).PHP_EOL;
 if (isset($data['site_id'])) {
 	echo "Deleting Site {$data['site_id']}\n";
 	$request = array('id' => $data['site_id']);
