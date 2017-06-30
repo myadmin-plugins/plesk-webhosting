@@ -143,7 +143,7 @@ class Plesk {
 	 *
 	 * @return string[] list of error codes
 	 */
-	public function get_error_codes() {
+	public function getErrorCodes() {
 		return [
 			1001 => 'Authentication failed - wrong password.',
 			1002 => 'User account  already exists.',
@@ -187,7 +187,7 @@ class Plesk {
 	 * @return string the description of the error
 	 */
 	public function get_error($code) {
-		$codes = get_error_codes();
+		$codes = getErrorCodes();
 		return $codes[$code];
 	}
 
@@ -317,7 +317,7 @@ class Plesk {
 		return $xmldoc;
 	}
 
-	public function get_server_info_types() {
+	public function getServerInfoTypes() {
 		return [
 			'key' => 'It retrieves Plesk license key.',
 			'gen_info' => 'It retrieves general server information which is now presented by the server name.',
@@ -358,7 +358,7 @@ class Plesk {
 	 * @param array $result
 	 * @return array the result but compacted where possible
 	 */
-	public function fix_result($result) {
+	public function fixResult($result) {
 		if (is_array($result)) {
 			$tempResult = $result;
 			foreach ($tempResult as $key => $value) {
@@ -369,7 +369,7 @@ class Plesk {
 					unset($result[$key]);
 					$result[$value['name']] = $value['version'];
 				} elseif (is_array($value)) {
-					$result[$key] = $this->fix_result($value);
+					$result[$key] = $this->fixResult($value);
 				}
 			}
 		}
@@ -382,7 +382,7 @@ class Plesk {
 	 * @return \DOMDocument
 	 * @throws \ApiRequestException
 	 */
-	public function get_server_info() {
+	public function getServerInfo() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -392,17 +392,17 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
-		$types = $this->get_server_info_types();
+		$types = $this->getServerInfoTypes();
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk get_server_info returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk getServerInfo returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 
@@ -431,7 +431,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['create_session']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk createSession('.$user.') returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -567,7 +567,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		if (isset($result[$packetName]['get']) && isset($result[$packetName]['get']['result'])) {
 			$result = $result[$packetName]['get']['result'];
 			if (isset($result['status'])) {
@@ -704,7 +704,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['add']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk createSite returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -754,7 +754,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['set']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk updateSite returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -784,7 +784,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk updateSite returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -833,7 +833,7 @@ class Plesk {
 	 * @param array $data account data
 	 * @return DOMDocument
 	 */
-	public function create_client($data) {
+	public function createClient($data) {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -874,10 +874,10 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['add']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk create_client returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk createClient returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 
@@ -903,7 +903,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk create_database returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -932,7 +932,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk createDatabaseUser returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -961,7 +961,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk createEmailAddress returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -990,7 +990,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk createSecretKey returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -1019,7 +1019,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk createSiteAlias returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -1048,7 +1048,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk createSubdomain returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -1214,7 +1214,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['add']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk createSubscription returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -1257,7 +1257,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['del']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk deleteSubscription returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -1303,7 +1303,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if (isset($result['status'])) {
 			if ($result['status'] == 'error')
@@ -1350,7 +1350,7 @@ class Plesk {
 			myadmin_log('webhosting', 'WARNING', json_encode($response), __LINE__, __FILE__);
 		}*/
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['del']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk deleteClient returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -1379,7 +1379,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk deleteDatabase returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -1408,7 +1408,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk deleteEmailAddress returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -1437,7 +1437,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk deleteSecretKey returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -1466,7 +1466,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk deleteSiteAlias returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -1498,7 +1498,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['del']['result'];
 		if (isset($result['status'])) {
 			if ($result['status'] == 'error')
@@ -1532,7 +1532,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk deleteSubdomain returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -1545,7 +1545,7 @@ class Plesk {
 	 * @param array $params
 	 * @return DOMDocument
 	 */
-	public function get_client($params) {
+	public function getClient($params) {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -1570,10 +1570,10 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk get_client returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk getClient returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 
@@ -1599,7 +1599,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk getDatabaseUser returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -1628,7 +1628,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk getServicePlan returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -1657,7 +1657,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk getSubdomain returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -1679,7 +1679,7 @@ class Plesk {
 	 *
 	 * @return DOMDocument
 	 */
-	public function get_traffic() {
+	public function getTraffic() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -1689,17 +1689,17 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
-		$types = $this->get_traffic_types();
+		$types = $this->getTrafficTypes();
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk get_traffic returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk getTraffic returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 
@@ -1726,7 +1726,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if (isset($result['status'])) {
 			if ($result['status'] == 'error')
@@ -1764,7 +1764,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk list_clients returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -1791,7 +1791,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response->{$packetName}->{$get_name}), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk listDatabaseServers returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
@@ -1819,7 +1819,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk list_databases returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -1848,7 +1848,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk list_dns_records returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -1877,7 +1877,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk list_email_addresses returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -1902,7 +1902,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		$ips = $result['addresses']['ip_info'];
 		unset($result['addresses']);
@@ -1934,7 +1934,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk list_secret_keys returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -1960,7 +1960,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result[0]['status'] == 'error')
 			throw new ApiRequestException('Plesk list_service_plans returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -1989,7 +1989,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk list_site_aliases returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -2018,7 +2018,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk list_subdomains returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -2047,7 +2047,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk rename_subdomain returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -2100,7 +2100,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['set']['result'];
 		if (isset($result['status'])) {
 			if ($result['status'] == 'error')
@@ -2135,7 +2135,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk update_email_password returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -2164,7 +2164,7 @@ class Plesk {
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
-		$result = $this->fix_result($result);
+		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk update_subdomain returned Error #'.$result['errcode'].' '.$result['errtext']);

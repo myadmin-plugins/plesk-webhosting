@@ -96,11 +96,11 @@ class Plugin {
 				'password' => $password
 			];
 			try {
-				myadmin_log(self::$module, 'DEBUG', 'create_client called with '.json_encode($request), __LINE__, __FILE__);
-				$result = $plesk->create_client($request);
+				myadmin_log(self::$module, 'DEBUG', 'createClient called with '.json_encode($request), __LINE__, __FILE__);
+				$result = $plesk->createClient($request);
 			} catch (\ApiRequestException $e) {
 				$error = $e->getMessage();
-				myadmin_log(self::$module, 'info', 'create_client Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
+				myadmin_log(self::$module, 'info', 'createClient Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 			}
 			if (!isset($result['id'])) {
 				$cantFix = FALSE;
@@ -113,11 +113,11 @@ class Plugin {
 						$request['password'] = $password;
 						myadmin_log(self::$module, 'info', "Generated '{$request['password']}' for a replacement password and trying again", __LINE__, __FILE__);
 						try {
-							myadmin_log(self::$module, 'DEBUG', 'create_client called with '.json_encode($request), __LINE__, __FILE__);
-							$result = $plesk->create_client($request);
+							myadmin_log(self::$module, 'DEBUG', 'createClient called with '.json_encode($request), __LINE__, __FILE__);
+							$result = $plesk->createClient($request);
 						} catch (\ApiRequestException $e) {
 							$error = $e->getMessage();
-							myadmin_log(self::$module, 'info', 'create_client Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
+							myadmin_log(self::$module, 'info', 'createClient Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 						}
 					} elseif (mb_strpos($error, 'Error #1007') !== FALSE) {
 						// Error #1007 User account  already exists.
@@ -126,11 +126,11 @@ class Plugin {
 						$request['username'] = $username;
 						myadmin_log(self::$module, 'info', "Generated '{$request['username']}' for a replacement username and trying again", __LINE__, __FILE__);
 						try {
-							myadmin_log(self::$module, 'DEBUG', 'create_client called with '.json_encode($request), __LINE__, __FILE__);
-							$result = $plesk->create_client($request);
+							myadmin_log(self::$module, 'DEBUG', 'createClient called with '.json_encode($request), __LINE__, __FILE__);
+							$result = $plesk->createClient($request);
 						} catch (\ApiRequestException $e) {
 							$error = $e->getMessage();
-							myadmin_log(self::$module, 'info', 'create_client Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
+							myadmin_log(self::$module, 'info', 'createClient Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 						}
 					} else
 						$cantFix = TRUE;
@@ -139,10 +139,10 @@ class Plugin {
 					$GLOBALS['tf']->history->add($settings['PREFIX'], 'password', $serviceInfo[$settings['PREFIX'].'_id'], $options['password']);
 				}
 			}
-			request_log(self::$module, $serviceInfo[$settings['PREFIX'].'_custid'], __FUNCTION__, 'plesk', 'create_client', $request, $result);
+			request_log(self::$module, $serviceInfo[$settings['PREFIX'].'_custid'], __FUNCTION__, 'plesk', 'createClient', $request, $result);
 			if (!isset($result['id'])) {
-				//myadmin_log(self::$module, 'info', 'create_client did not return the expected id information: '.$e->getMessage(), __LINE__, __FILE__);
-				myadmin_log(self::$module, 'info', 'create_client did not return the expected id', __LINE__, __FILE__);
+				//myadmin_log(self::$module, 'info', 'createClient did not return the expected id information: '.$e->getMessage(), __LINE__, __FILE__);
+				myadmin_log(self::$module, 'info', 'createClient did not return the expected id', __LINE__, __FILE__);
 				if (is_array($extra) && isset($extra[0]) && is_numeric($extra[0]) && $extra[0] > 0) {
 					myadmin_log(self::$module, 'info', 'continuing using pre-existing client id', __LINE__, __FILE__);
 					$account_id = $extra[0];
@@ -162,7 +162,7 @@ class Plugin {
 			$extra[0] = $account_id;
 			$ser_extra = $db->real_escape(myadmin_stringify($extra));
 			$db->query("update {$settings['TABLE']} set {$settings['PREFIX']}_ip='{$ip}', {$settings['PREFIX']}_extra='{$ser_extra}' where {$settings['PREFIX']}_id='{$serviceInfo[$settings['PREFIX'].'_id']}'", __LINE__, __FILE__);
-			myadmin_log(self::$module, 'info', "create_client got client id {$account_id}", __LINE__, __FILE__);
+			myadmin_log(self::$module, 'info', "createClient got client id {$account_id}", __LINE__, __FILE__);
 			//$plesk->debug = TRUE;
 			//$debugCalls = TRUE;
 			$request = array(
@@ -206,7 +206,7 @@ class Plugin {
 							$result = $plesk->createSubscription($request);
 						} catch (ApiRequestException $e) {
 							$error = $e->getMessage();
-							myadmin_log(self::$module, 'info', 'create_client Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
+							myadmin_log(self::$module, 'info', 'createClient Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 						}
 					} else
 						$cantFix = TRUE;

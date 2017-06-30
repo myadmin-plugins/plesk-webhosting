@@ -57,16 +57,16 @@ $request = array(
 	'username' => $data['username'],
 	'password' => $data['password'],
 );
-$result = $plesk->create_client($request);
+$result = $plesk->createClient($request);
 if ($debugCalls == true)
-	echo "plesk->create_client(".var_export($request, true).") = ".var_export($result, true). "\n";
+	echo "plesk->createClient(".var_export($request, true).") = ".var_export($result, true). "\n";
 $data['client_id'] = $result['id'];
 echo "Got Client ID {$data['client_id']}\n";
 try {
 	$request = array('username' => $data['username']);
-	$result = $plesk->get_client($request);
+	$result = $plesk->getClient($request);
 	if ($debugCalls == true)
-		echo "plesk->get_client(".var_export($request, true).") = ".var_export($result, true). "\n";
+		echo "plesk->getClient(".var_export($request, true).") = ".var_export($result, true). "\n";
 	$request = array(
 		'username' => $data['username'],
 		'phone' => Plesk::random_string(),

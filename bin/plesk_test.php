@@ -86,14 +86,14 @@ if (!isset($data['unlimited_plan_id']))
 	throw new Exception("Couldn't find unlimited service plan");
 $data['client_username'] = strtolower(random_string());
 $plesk = new Plesk('162.246.20.210', 'admin', 'x0Bak5&0');
-$request = $plesk->create_client(array(
+$request = $plesk->createClient(array(
 	'name' => random_string(),
 	'username' => $data['client_username'],
 	'password' => random_string(16) . "1!",
 ));
 $data['client_id'] = $request->id;
 try {
-	$request = $plesk->get_client(array('username' => $data['client_username']));
+	$request = $plesk->getClient(array('username' => $data['client_username']));
 	$request = $plesk->update_client(array(
 		'username' => $data['client_username'],
 		'phone' => random_string(),
