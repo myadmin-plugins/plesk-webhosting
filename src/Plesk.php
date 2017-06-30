@@ -413,7 +413,7 @@ class Plesk {
 	 * @return \DOMDocument
 	 * @throws \ApiRequestException
 	 */
-	public function create_session($user) {
+	public function createSession($user) {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -434,7 +434,7 @@ class Plesk {
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['create_session']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk create_session('.$user.') returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk createSession('.$user.') returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 
