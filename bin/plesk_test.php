@@ -109,7 +109,7 @@ try {
 	);
 	$request = $plesk->createSubscription($params);
 	$data['subscription_id'] = $request->id;
-	$request = $plesk->list_subscriptions();
+	$request = $plesk->listSubscriptions();
 	$subscription_found = false;
 	foreach ($request as $subscription)
 		if ($subscription['id'] == $data['subscription_id'])
@@ -118,9 +118,9 @@ try {
 		throw new Exception("Couldn't find created subscription");
 	if ($runSiteTests) {
 		$data['domain'] = random_string().'.com';
-		$request = $plesk->create_site(array('domain' => $data['domain'], 'subscription_id' => $data['subscription_id']));
+		$request = $plesk->createSite(array('domain' => $data['domain'], 'subscription_id' => $data['subscription_id']));
 		$data['site_id'] = $request->id;
-		$request = $plesk->list_sites(array('subscription_id' => $data['subscription_id']));
+		$request = $plesk->listSites(array('subscription_id' => $data['subscription_id']));
 		$site_found = false;
 		foreach ($request as $site)
 			if ($site['id'] == $data['site_id'])
@@ -128,11 +128,11 @@ try {
 		if (!$site_found)
 			throw new Exception("Couldn't find created site");
 		$data['domain'] = random_string().'.com';
-		$request = $plesk->update_site(array('id' => $data['site_id'], 'domain' => $data['domain']));
+		$request = $plesk->updateSite(array('id' => $data['site_id'], 'domain' => $data['domain']));
 	}
 	if ($runSiteTests && $runEmailAddressTests) {
 		$data['email_address'] = random_string(4).'@'.$data['domain'];
-		$request = $plesk->create_email_address(array(
+		$request = $plesk->createEmailAddress(array(
 			'email' => $data['email_address'],
 			'password' => random_string() . "1!",
 		));
@@ -150,14 +150,14 @@ try {
 			'email' => $data['email_address'],
 			'password' => random_string(),
 		));
-		$request = $plesk->delete_email_address(array(
+		$request = $plesk->deleteEmailAddress(array(
 			'email' => $data['email_address'],
 		));
 	}
 	if ($runSiteTests && $runSiteAliasTests) {
 		$data['site_alias'] = random_string().'.'.$data['domain'];
 		$params = array('site_id' => $data['site_id'], 'alias' => $data['site_alias']);
-		$request = $plesk->create_site_alias($params);
+		$request = $plesk->createSiteAlias($params);
 		$data['site_alias_id'] = $request->id;
 		$request = $plesk->list_site_aliases(array('site_id' => $data['site_id']));
 		$alias_found = false;
@@ -166,11 +166,11 @@ try {
 				$alias_found = true;
 		if (!$alias_found)
 			throw new Exception("Couldn't find created site alias");
-		$request = $plesk->delete_site_alias(array('id' => $data['site_alias_id']));
+		$request = $plesk->deleteSiteAlias(array('id' => $data['site_alias_id']));
 	}
 	if ($runSiteTests && $runSubdomainTests) {
 		$data['subdomain'] = random_string();
-		$request = $plesk->create_subdomain(array(
+		$request = $plesk->createSubdomain(array(
 			'domain' => $data['domain'],
 			'subdomain' => $data['subdomain'],
 			'www_root' => '/subdomains/'.strtolower($data['subdomain']),
@@ -197,12 +197,12 @@ try {
 			'name' => $data['subdomain'],
 		));
 		$info = $request->process();
-		$request = $plesk->delete_subdomain(array(
+		$request = $plesk->deleteSubdomain(array(
 			'id' => $data['subdomain_id'],
 		));
 	}
 	if ($runDatabaseTests) {
-		$request = $plesk->list_database_servers();
+		$request = $plesk->listDatabaseServers();
 		$server_found = false;
 		foreach ($request as $server)
 			if ($server['type'] == 'mysql') {
@@ -229,13 +229,13 @@ try {
 		if (!$database_found)
 			throw new Exception("Couldn't find created database");
 		$data['db_user_username'] = random_string();
-		$request = $plesk->create_database_user(array(
+		$request = $plesk->createDatabaseUser(array(
 			'database_id' => $data['db_id'],
 			'username' => $data['db_user_username'],
 			'password' => random_string(),
 		));
 		$data['db_user_id'] = $request->id;
-		$request = $plesk->get_database_user(array(
+		$request = $plesk->getDatabaseUser(array(
 			'database_id' => $data['db_id'],
 		));
 		if ($data['db_user_id'] != $request->id)
@@ -245,10 +245,10 @@ try {
 		));*/
 	}
 	if ($runSiteTests) {
-		$request = $plesk->delete_site(array('id' => $data['site_id']));
+		$request = $plesk->deleteSite(array('id' => $data['site_id']));
 	}
 	$request = $plesk->deleteSubscription($data['subscription_id']);
-	$request = $plesk->create_secret_key(['ip_address' => file_get_contents('https://api.ipify.org')]);
+	$request = $plesk->createSecretKey(['ip_address' => file_get_contents('https://api.ipify.org')]);
 	$data['secret_key'] = $request->key;
 	$request = $plesk->list_secret_keys(['key' => $data['secret_key'], 'host' => $config['host']]);
 	$secret_key_found = false;
@@ -257,7 +257,7 @@ try {
 			$secret_key_found = true;
 	if (!$secret_key_found)
 		throw new Exception("Couldn't find created secret_key");
-	$request = $plesk->delete_secret_key(['key' => $data['secret_key']]);
+	$request = $plesk->deleteSecretKey(['key' => $data['secret_key']]);
 	$request = $plesk->list_secret_keys();
 	$secret_key_found = false;
 	foreach ($request as $key)
@@ -270,6 +270,6 @@ try {
 }
 $plesk = new Plesk('162.246.20.210', 'admin', 'x0Bak5&0');
 if (isset($data['client_id']))
-	$request = $plesk->delete_client(array('id' => $data['client_id']));
+	$request = $plesk->deleteClient(array('id' => $data['client_id']));
 else
-	echo "Skipping delete_client as we lack customer id\n";
+	echo "Skipping deleteClient as we lack customer id\n";

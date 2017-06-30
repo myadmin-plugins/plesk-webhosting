@@ -491,7 +491,7 @@ class Plesk {
 		return $xmldoc;
 	}
 
-	public function get_object_status_list() {
+	public function getObjectStatusList() {
 		return [
 			'0' => 'active',
 			'4' => 'under backup',
@@ -502,7 +502,7 @@ class Plesk {
 		];
 	}
 
-	public function get_site_filters() {
+	public function getSiteFilters() {
 		return [
 			'id',
 			'parent-id',
@@ -516,7 +516,7 @@ class Plesk {
 		];
 	}
 
-	public function get_site_datasets() {
+	public function getSiteDatasets() {
 		return [
 			'gen_info',
 			'hosting',
@@ -533,14 +533,14 @@ class Plesk {
 	 * @return array
 	 * @throws \ApiRequestException
 	 */
-	public function get_sites($params = FALSE) {
+	public function getSites($params = FALSE) {
 		if ($params === FALSE)
 			$params = [];
 		$mapping = [
 			'subscription_id' => 'parent-id',
 		];
-		$filters = $this->get_site_filters();
-		$datasets = $this->get_site_datasets();
+		$filters = $this->getSiteFilters();
+		$datasets = $this->getSiteDatasets();
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -572,11 +572,11 @@ class Plesk {
 			$result = $result[$packetName]['get']['result'];
 			if (isset($result['status'])) {
 				if ($result['status'] == 'error')
-					throw new ApiRequestException('Plesk get_sites returned Error #'.$result['errcode'].' '.$result['errtext']);
+					throw new ApiRequestException('Plesk getSites returned Error #'.$result['errcode'].' '.$result['errtext']);
 			} else {
 				foreach ($result as $idx => $result_data)
 					if ($result_data['status'] == 'error')
-						throw new ApiRequestException('Plesk get_sites returned Error #'.$result_data['errcode'].' '.$result_data['errtext']);
+						throw new ApiRequestException('Plesk getSites returned Error #'.$result_data['errcode'].' '.$result_data['errtext']);
 			}
 		}
 		return $result;
@@ -590,8 +590,8 @@ class Plesk {
 	 * @return array
 	 * @throws \ApiRequestException
 	 */
-	public function get_site($params = FALSE) {
-		return $this->get_sites($params);
+	public function getSite($params = FALSE) {
+		return $this->getSites($params);
 	}
 
 	/**
@@ -599,11 +599,11 @@ class Plesk {
 	 * @param bool|array $params
 	 * @return array
 	 */
-	public function list_sites($params = FALSE) {
-		return $this->get_sites($params);
+	public function listSites($params = FALSE) {
+		return $this->getSites($params);
 	}
 
-	public function get_site_gen_setups() {
+	public function getSiteGenSetups() {
 		return [
 			'name',
 			'htype',
@@ -622,7 +622,7 @@ class Plesk {
 	 * @param array $params
 	 * @return DOMDocument
 	 */
-	public function create_site($params) {
+	public function createSite($params) {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -637,7 +637,7 @@ class Plesk {
 		$hosting = $xmldoc->createElement('hosting');
 		$prefs = $xmldoc->createElement('prefs');
 		$vrt_hst = $xmldoc->createElement('vrt_hst');
-		$htype_types = $this->get_htypes();
+		$htype_types = $this->getHtypes();
 		$required = [
 			'name',
 		];
@@ -667,7 +667,7 @@ class Plesk {
 			'plan-guid',
 			'plan-external-id',
 		];
-		$gen_setups = $this->get_site_gen_setups();
+		$gen_setups = $this->getSiteGenSetups();
 		foreach ($required as $require)
 			if (!isset($params[$require]) && (isset($revMapping[$require]) && !isset($params[$revMapping[$require]])))
 				throw new ApiRequestException('Plesk API '.__FUNCTION__.'('.json_decode(json_encode($params), TRUE).') missing required parameter '.$require);
@@ -707,7 +707,7 @@ class Plesk {
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['add']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk create_site returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk createSite returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 
@@ -716,7 +716,7 @@ class Plesk {
 	 * @param array $params
 	 * @return DOMDocument
 	 */
-	public function update_site($params) {
+	public function updateSite($params) {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -726,9 +726,9 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('set');
 		$domain->appendChild($get);
-		$gen_setups = $this->get_site_gen_setups();
-		//$filters = $this->get_site_filters();
-		$values_values = $this->get_site_datasets();
+		$gen_setups = $this->getSiteGenSetups();
+		//$filters = $this->getSiteFilters();
+		$values_values = $this->getSiteDatasets();
 		$gen_setup_added = FALSE;
 		$filters = ['id'];
 		$filter = $xmldoc->createElement('filter');
@@ -757,7 +757,7 @@ class Plesk {
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['set']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk update_site returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk updateSite returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 
@@ -777,7 +777,7 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
-		$types = $this->update_site_types();
+		$types = $this->updateSiteTypes();
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
@@ -787,7 +787,7 @@ class Plesk {
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk update_site returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk updateSite returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 
@@ -915,7 +915,7 @@ class Plesk {
 	 *
 	 * @return DOMDocument
 	 */
-	public function create_database_user() {
+	public function createDatabaseUser() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -925,7 +925,7 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
-		$types = $this->create_database_user_types();
+		$types = $this->createDatabaseUserTypes();
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
@@ -935,7 +935,7 @@ class Plesk {
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk create_database_user returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk createDatabaseUser returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 
@@ -944,7 +944,7 @@ class Plesk {
 	 *
 	 * @return DOMDocument
 	 */
-	public function create_email_address() {
+	public function createEmailAddress() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -954,7 +954,7 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
-		$types = $this->create_email_address_types();
+		$types = $this->createEmailAddress_types();
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
@@ -964,7 +964,7 @@ class Plesk {
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk create_email_address returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk createEmailAddress returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 
@@ -973,7 +973,7 @@ class Plesk {
 	 *
 	 * @return DOMDocument
 	 */
-	public function create_secret_key() {
+	public function createSecretKey() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -983,7 +983,7 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
-		$types = $this->create_secret_key_types();
+		$types = $this->createSecretKey_types();
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
@@ -993,7 +993,7 @@ class Plesk {
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk create_secret_key returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk createSecretKey returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 
@@ -1002,7 +1002,7 @@ class Plesk {
 	 *
 	 * @return DOMDocument
 	 */
-	public function create_site_alias() {
+	public function createSiteAlias() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -1012,7 +1012,7 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
-		$types = $this->create_site_alias_types();
+		$types = $this->createSiteAliasTypes();
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
@@ -1022,7 +1022,7 @@ class Plesk {
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk create_site_alias returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk createSiteAlias returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 
@@ -1031,7 +1031,7 @@ class Plesk {
 	 *
 	 * @return DOMDocument
 	 */
-	public function create_subdomain() {
+	public function createSubdomain() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -1041,7 +1041,7 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
-		$types = $this->create_subdomain_types();
+		$types = $this->createSubdomainTypes();
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
@@ -1051,7 +1051,7 @@ class Plesk {
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk create_subdomain returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk createSubdomain returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 
@@ -1065,7 +1065,7 @@ class Plesk {
 	 *
 	 * @return string[] an array of possible htype values
 	 */
-	public function get_htypes() {
+	public function getHtypes() {
 		return [
 			'vrt_hst',
 			'std_fwd',
@@ -1167,7 +1167,7 @@ class Plesk {
 		$hosting = $xmldoc->createElement('hosting');
 		$vrt_hst = $xmldoc->createElement('vrt_hst');
 		$get->appendChild($gen_setup);
-		$htypes = $this->get_htypes();
+		$htypes = $this->getHtypes();
 		foreach ($required as $require)
 			if ((isset($revMapping[$require]) && !isset($params[$revMapping[$require]])) && !isset($params[$require]))
 				throw new ApiRequestException('Plesk API '.__FUNCTION__.'('.json_decode(json_encode($params), TRUE).') missing required parameter '.$require);
@@ -1270,7 +1270,7 @@ class Plesk {
 	 * @param bool|array $params
 	 * @return DOMDocument
 	 */
-	public function list_subscriptions($params = FALSE) {
+	public function listSubscriptions($params = FALSE) {
 		if ($params === FALSE)
 			$params = [];
 		$datasets = $this->getSubscriptionDatasets();
@@ -1307,11 +1307,11 @@ class Plesk {
 		$result = $result[$packetName]['get']['result'];
 		if (isset($result['status'])) {
 			if ($result['status'] == 'error')
-				throw new ApiRequestException('Plesk list_subscriptions returned Error #'.$result['errcode'].' '.$result['errtext']);
+				throw new ApiRequestException('Plesk listSubscriptions returned Error #'.$result['errcode'].' '.$result['errtext']);
 		} else {
 			foreach ($result as $idx => $result_data)
 				if ($result_data['status'] == 'error')
-					throw new ApiRequestException('Plesk list_subscriptions returned Error #'.$result_data['errcode'].' '.$result_data['errtext']);
+					throw new ApiRequestException('Plesk listSubscriptions returned Error #'.$result_data['errcode'].' '.$result_data['errtext']);
 		}
 		return $result;
 	}
@@ -1322,7 +1322,7 @@ class Plesk {
 	 * @param array $params
 	 * @return DOMDocument
 	 */
-	public function delete_client($params) {
+	public function deleteClient($params) {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -1353,7 +1353,7 @@ class Plesk {
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['del']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk delete_client returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk deleteClient returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 
@@ -1362,7 +1362,7 @@ class Plesk {
 	 *
 	 * @return DOMDocument
 	 */
-	public function delete_database() {
+	public function deleteDatabase() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -1372,7 +1372,7 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
-		$types = $this->delete_database_types();
+		$types = $this->deleteDatabase_types();
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
@@ -1382,7 +1382,7 @@ class Plesk {
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk delete_database returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk deleteDatabase returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 
@@ -1391,7 +1391,7 @@ class Plesk {
 	 *
 	 * @return DOMDocument
 	 */
-	public function delete_email_address() {
+	public function deleteEmailAddress() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -1401,7 +1401,7 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
-		$types = $this->delete_email_address_types();
+		$types = $this->deleteEmailAddress_types();
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
@@ -1411,7 +1411,7 @@ class Plesk {
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk delete_email_address returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk deleteEmailAddress returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 
@@ -1420,7 +1420,7 @@ class Plesk {
 	 *
 	 * @return DOMDocument
 	 */
-	public function delete_secret_key() {
+	public function deleteSecretKey() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -1430,7 +1430,7 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
-		$types = $this->delete_secret_key_types();
+		$types = $this->deleteSecretKey_types();
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
@@ -1440,7 +1440,7 @@ class Plesk {
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk delete_secret_key returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk deleteSecretKey returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 
@@ -1449,7 +1449,7 @@ class Plesk {
 	 *
 	 * @return DOMDocument
 	 */
-	public function delete_site_alias() {
+	public function deleteSiteAlias() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -1459,7 +1459,7 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
-		$types = $this->delete_site_alias_types();
+		$types = $this->deleteSiteAlias_types();
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
@@ -1469,7 +1469,7 @@ class Plesk {
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk delete_site_alias returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk deleteSiteAlias returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 
@@ -1479,7 +1479,7 @@ class Plesk {
 	 * @param array $params
 	 * @return DOMDocument
 	 */
-	public function delete_site($params) {
+	public function deleteSite($params) {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -1491,7 +1491,7 @@ class Plesk {
 		$domain->appendChild($get);
 		$filter = $xmldoc->createElement('filter');
 		$get->appendChild($filter);
-		$filters = $this->get_site_filters();
+		$filters = $this->getSiteFilters();
 		foreach ($filters as $field)
 			if (isset($params[$field]))
 				$filter->appendChild($xmldoc->createElement($field, $params[$field]));
@@ -1502,11 +1502,11 @@ class Plesk {
 		$result = $result[$packetName]['del']['result'];
 		if (isset($result['status'])) {
 			if ($result['status'] == 'error')
-				throw new ApiRequestException('Plesk delete_site returned Error #'.$result['errcode'].' '.$result['errtext']);
+				throw new ApiRequestException('Plesk deleteSite returned Error #'.$result['errcode'].' '.$result['errtext']);
 		} else {
 			foreach ($result as $idx => $result_data)
 				if ($result_data['status'] == 'error')
-					throw new ApiRequestException('Plesk delete_site returned Error #'.$result_data['errcode'].' '.$result_data['errtext']);
+					throw new ApiRequestException('Plesk deleteSite returned Error #'.$result_data['errcode'].' '.$result_data['errtext']);
 		}
 	}
 
@@ -1515,7 +1515,7 @@ class Plesk {
 	 *
 	 * @return DOMDocument
 	 */
-	public function delete_subdomain() {
+	public function deleteSubdomain() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -1525,7 +1525,7 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
-		$types = $this->delete_subdomain_types();
+		$types = $this->deleteSubdomain_types();
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
@@ -1535,7 +1535,7 @@ class Plesk {
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk delete_subdomain returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk deleteSubdomain returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 
@@ -1582,7 +1582,7 @@ class Plesk {
 	 *
 	 * @return DOMDocument
 	 */
-	public function get_database_user() {
+	public function getDatabaseUser() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -1592,7 +1592,7 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
-		$types = $this->get_database_user_types();
+		$types = $this->getDatabaseUser_types();
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
@@ -1602,7 +1602,7 @@ class Plesk {
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk get_database_user returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk getDatabaseUser returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 
@@ -1611,7 +1611,7 @@ class Plesk {
 	 *
 	 * @return DOMDocument
 	 */
-	public function get_service_plan() {
+	public function getServicePlan() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -1621,7 +1621,7 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
-		$types = $this->get_service_plan_types();
+		$types = $this->getServicePlan_types();
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
@@ -1631,7 +1631,7 @@ class Plesk {
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk get_service_plan returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk getServicePlan returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 
@@ -1640,7 +1640,7 @@ class Plesk {
 	 *
 	 * @return DOMDocument
 	 */
-	public function get_subdomain() {
+	public function getSubdomain() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -1650,7 +1650,7 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
-		$types = $this->get_subdomain_types();
+		$types = $this->getSubdomain_types();
 		foreach ($types as $type => $description)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
@@ -1660,7 +1660,7 @@ class Plesk {
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk get_subdomain returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk getSubdomain returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 
@@ -1670,8 +1670,8 @@ class Plesk {
 	 * @param array $params
 	 * @return DOMDocument
 	 */
-	public function get_subscription($params) {
-		return $this->list_subscriptions($params);
+	public function getSubscription($params) {
+		return $this->listSubscriptions($params);
 	}
 
 	/**
@@ -1776,7 +1776,7 @@ class Plesk {
 	 *
 	 * @return DOMDocument
 	 */
-	public function list_database_servers() {
+	public function listDatabaseServers() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -1793,7 +1793,7 @@ class Plesk {
 		$result = json_decode(json_encode($response->{$packetName}->{$get_name}), TRUE);
 		$result = $this->fix_result($result);
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk list_database_servers returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk listDatabaseServers returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 

@@ -182,11 +182,11 @@ class Plugin {
 			} catch (\ApiRequestException $e) {
 				myadmin_log(self::$module, 'warning', ' createSubscription Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 				try {
-					myadmin_log(self::$module, 'info', 'delete_client called with '.json_encode($request), __LINE__, __FILE__);
-					$result = $plesk->delete_client(['login' => $username]);
+					myadmin_log(self::$module, 'info', 'deleteClient called with '.json_encode($request), __LINE__, __FILE__);
+					$result = $plesk->deleteClient(['login' => $username]);
 				} catch (\ApiRequestException $e) {
 					$error = $e->getMessage();
-					myadmin_log(self::$module, 'warning', 'delete_client Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
+					myadmin_log(self::$module, 'warning', 'deleteClient Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 				}
 				return FALSE;
 			}

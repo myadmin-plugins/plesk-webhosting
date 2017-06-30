@@ -90,9 +90,9 @@ try {
 		echo "plesk->createSubscription(".var_export($request, true).") = ".var_export($result, true). "\n";
 	$data['subscription_id'] = $result['id'];
 	echo "Got Subscription ID {$data['subscription_id']}\n";
-	$result = $plesk->list_subscriptions();
+	$result = $plesk->listSubscriptions();
 	if ($debugCalls == true)
-		echo "plesk->list_subscriptions() = ".var_export($result, true). "\n";
+		echo "plesk->listSubscriptions() = ".var_export($result, true). "\n";
 	$subscription_found = false;
 	foreach ($result as $subscription)
 		if ($subscription['id'] == $data['subscription_id'])
@@ -103,15 +103,15 @@ try {
 		'domain' => $data['domain'],
 		'subscription_id' => $data['subscription_id'],
 	);
-	$result = $plesk->create_site($request);
+	$result = $plesk->createSite($request);
 	if ($debugCalls == true)
-		echo "plesk->create_site(".var_export($request, true).") = ".var_export($result, true). "\n";
+		echo "plesk->createSite(".var_export($request, true).") = ".var_export($result, true). "\n";
 	$data['site_id'] = $result['id'];
 	echo "Got Site ID {$data['site_id']}\n";
 	$request = array('subscription_id' => $data['subscription_id']);
-	$result = $plesk->list_sites($request);
+	$result = $plesk->listSites($request);
 	if ($debugCalls == true)
-		echo "plesk->list_sites(".var_export($request, true).") = ".var_export($result, true). "\n";
+		echo "plesk->listSites(".var_export($request, true).") = ".var_export($result, true). "\n";
 	$site_found = false;
 	if (isset($result['id']))
 		$result = array($result);
@@ -123,9 +123,9 @@ try {
 	$data['new_domain'] = 'detain-qa-'.Plesk::random_string().'.com';
 	echo "Changing Domain from {$data['domain']} to {$data['new_domain']}\n";
 	$request = array('id' => $data['site_id'], 'domain' => $data['new_domain']);
-	$result = $plesk->update_site($request);
+	$result = $plesk->updateSite($request);
 	if ($debugCalls == true)
-		echo "plesk->update_site(".var_export($request, true).") = ".var_export($result, true). "\n";
+		echo "plesk->updateSite(".var_export($request, true).") = ".var_export($result, true). "\n";
 	//echo "Got " . print_r($result, true) . "\n";
 } catch (Exception $e) {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
@@ -134,11 +134,11 @@ try {
 if (isset($data['site_id'])) {
 	echo "Deleting Site {$data['site_id']}\n";
 	$request = array('id' => $data['site_id']);
-	$result = $plesk->delete_site($request);
+	$result = $plesk->deleteSite($request);
 	if ($debugCalls == true)
-		echo "plesk->delete_site(".var_export($request, true).") = ".var_export($result, true). "\n";
+		echo "plesk->deleteSite(".var_export($request, true).") = ".var_export($result, true). "\n";
 } else
-	echo "Skipping delete_site as we lack site id\n";
+	echo "Skipping deleteSite as we lack site id\n";
 if (isset($data['subscription_id'])) {
 	echo "Deleting Subscription {$data['subscription_id']}\n";
 	$request = array('id' => $data['subscription_id']);
@@ -146,12 +146,12 @@ if (isset($data['subscription_id'])) {
 	if ($debugCalls == true)
 		echo "plesk->deleteSubscription(".var_export($request, true).") = ".var_export($result, true). "\n";
 } else
-	echo "Skipping delete_client as we lack subscription id\n";
+	echo "Skipping deleteClient as we lack subscription id\n";
 if (isset($data['client_id'])) {
 	echo "Deleting Client {$data['client_id']}\n";
 	$request = array('id' => $data['client_id']);
-	$result = $plesk->delete_client($request);
+	$result = $plesk->deleteClient($request);
 	if ($debugCalls == true)
-		echo "plesk->delete_client(".var_export($request, true).") = ".var_export($result, true). "\n";
+		echo "plesk->deleteClient(".var_export($request, true).") = ".var_export($result, true). "\n";
 } else
-	echo "Skipping delete_client as we lack customer id\n";
+	echo "Skipping deleteClient as we lack customer id\n";
