@@ -56,9 +56,9 @@ class Plugin {
 			if (isset($result['ips']['ip_address']))
 				$sharedIp = $result['ips']['ip_address'];
 			else
-				foreach ($result['ips'] as $idx => $ip_data)
-					if (trim($ip_data['type']) == 'shared' && (!isset($sharedIp) || $ip_data['is_default']))
-						$sharedIp = $ip_data['ip_address'];
+				foreach ($result['ips'] as $idx => $ipData)
+					if (trim($ipData['type']) == 'shared' && (!isset($sharedIp) || $ipData['is_default']))
+						$sharedIp = $ipData['ip_address'];
 			if (!isset($sharedIp)) {
 				myadmin_log(self::$module, 'critical', 'Plesk Could not find any shared IP addresses', __LINE__, __FILE__);
 				return FALSE;
@@ -104,11 +104,11 @@ class Plugin {
 			}
 			if (!isset($result['id'])) {
 				$cantFix = FALSE;
-				$password_updated = FALSE;
+				$passwordUpdated = FALSE;
 				while ($cantFix == FALSE && !isset($result['id'])) {
 					if (mb_strpos($error, 'The password should') !== FALSE) {
 						// Error #2204 System user setting was failed. Error: The password should be  4 - 255 characters long and should not contain the username. Do not use quotes, spaces, and national alphabetic characters in the password.
-						$password_updated = TRUE;
+						$passwordUpdated = TRUE;
 						$password = Plesk::randomString(16);
 						$request['password'] = $password;
 						myadmin_log(self::$module, 'info', "Generated '{$request['password']}' for a replacement password and trying again", __LINE__, __FILE__);
@@ -135,7 +135,7 @@ class Plugin {
 					} else
 						$cantFix = TRUE;
 				}
-				if ($password_updated == TRUE) {
+				if ($passwordUpdated == TRUE) {
 					$GLOBALS['tf']->history->add($settings['PREFIX'], 'password', $serviceInfo[$settings['PREFIX'].'_id'], $options['password']);
 				}
 			}
@@ -145,12 +145,12 @@ class Plugin {
 				myadmin_log(self::$module, 'info', 'createClient did not return the expected id', __LINE__, __FILE__);
 				if (is_array($extra) && isset($extra[0]) && is_numeric($extra[0]) && $extra[0] > 0) {
 					myadmin_log(self::$module, 'info', 'continuing using pre-existing client id', __LINE__, __FILE__);
-					$account_id = $extra[0];
+					$accountId = $extra[0];
 				} else {
 					return FALSE;
 				}
 			} else {
-				$account_id = $result['id'];
+				$accountId = $result['id'];
 			}
 			//$ftp_login = 'ftpuser'.$serviceInfo[$settings['PREFIX'].'_id'];
 			$ftp_login = 'ftp'.Plesk::randomString(9);
@@ -159,15 +159,15 @@ class Plugin {
 			$ftpPassword = generateRandomString(10, 2, 1, 1, 1);
 			while (mb_strpos($ftpPassword, '&') !== FALSE)
 				$ftpPassword = generateRandomString(10, 2, 1, 1, 1);
-			$extra[0] = $account_id;
+			$extra[0] = $accountId;
 			$serExtra = $db->real_escape(myadmin_stringify($extra));
 			$db->query("update {$settings['TABLE']} set {$settings['PREFIX']}_ip='{$ip}', {$settings['PREFIX']}_extra='{$serExtra}' where {$settings['PREFIX']}_id='{$serviceInfo[$settings['PREFIX'].'_id']}'", __LINE__, __FILE__);
-			myadmin_log(self::$module, 'info', "createClient got client id {$account_id}", __LINE__, __FILE__);
+			myadmin_log(self::$module, 'info', "createClient got client id {$accountId}", __LINE__, __FILE__);
 			//$plesk->debug = TRUE;
 			//$debugCalls = TRUE;
 			$request = array(
 				'domain' => $hostname,
-				'owner_id' => $account_id,
+				'owner_id' => $accountId,
 				'htype' => 'vrt_hst',
 				'ftp_login' => $username,
 				'ftp_password' => $ftpPassword,
@@ -242,7 +242,7 @@ class Plugin {
 			$extra = run_event('parse_service_extra', $serviceInfo[$settings['PREFIX'].'_extra'], self::$module);
 			function_requirements('get_webhosting_plesk_instance');
 			$plesk = get_webhosting_plesk_instance($serverdata);
-			list($user_id, $subscriptoinId) = $extra;
+			list($userId, $subscriptoinId) = $extra;
 			$request = ['username' => $serviceInfo[$settings['PREFIX'].'_username'], 'status' => 0];
 			try {
 				$result = $plesk->update_client($request);

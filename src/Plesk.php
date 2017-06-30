@@ -28,7 +28,7 @@ class Plesk {
 		$this->host = $host;
 		$this->login = $login;
 		$this->password = $password;
-		//$this->update_curl();
+		//$this->updateCurl();
 	}
 
 	/**
@@ -40,8 +40,8 @@ class Plesk {
 		return mb_substr(str_shuffle($chars), 0, $length);
 	}
 
-	public function update_curl() {
-		$this->curl_init($this->host, $this->login, $this->password);
+	public function updateCurl() {
+		$this->curlInit($this->host, $this->login, $this->password);
 	}
 
 	/**
@@ -52,7 +52,7 @@ class Plesk {
 	 * @param string $password the administrator password
 	 * @return resource
 	 */
-	public function curl_init($host, $login, $password) {
+	public function curlInit($host, $login, $password) {
 		$this->curl = curl_init();
 		curl_setopt($this->curl, CURLOPT_URL, "https://{$host}:8443/enterprise/control/agent.php");
 		curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, TRUE);
@@ -74,7 +74,7 @@ class Plesk {
 	 * @throws Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function sendRequest($packet) {
-		$this->update_curl();
+		$this->updateCurl();
 		$this->packet = $packet;
 		curl_setopt($this->curl, CURLOPT_POSTFIELDS, $packet);
 		$result = curl_exec($this->curl);
@@ -186,7 +186,7 @@ class Plesk {
 	 * @param int $code the error code
 	 * @return string the description of the error
 	 */
-	public function get_error($code) {
+	public function getError($code) {
 		$codes = getErrorCodes();
 		return $codes[$code];
 	}
@@ -729,7 +729,7 @@ class Plesk {
 		$genSetups = $this->getSiteGenSetups();
 		//$filters = $this->getSiteFilters();
 		$values_values = $this->getSiteDatasets();
-		$genSetup_added = FALSE;
+		$genSetupAdded = FALSE;
 		$filters = ['id'];
 		$filter = $xmldoc->createElement('filter');
 		$values = $xmldoc->createElement('values');
@@ -744,9 +744,9 @@ class Plesk {
 			if (in_array($realField, $filters))
 				$filter->appendChild($xmldoc->createElement($realField, $value));
 			if (in_array($realField, $genSetups)) {
-				if ($genSetup_added == FALSE) {
+				if ($genSetupAdded == FALSE) {
 					$values->appendChild($genSetup);
-					$genSetup_added = TRUE;
+					$genSetupAdded = TRUE;
 				}
 				$genSetup->appendChild($xmldoc->createElement($realField, $value));
 			}
@@ -845,7 +845,7 @@ class Plesk {
 		$domain->appendChild($get);
 		$info = $xmldoc->createElement('gen_info');
 		$get->appendChild($info);
-		$default_params = [
+		$defaultParams = [
 			'name' => NULL,
 			'username' => NULL,
 			'password' => NULL,
@@ -869,8 +869,8 @@ class Plesk {
 		foreach ($mapping as $field => $realField)
 			if (isset($data[$field]))
 				$info->appendChild($xmldoc->createElement($realField, $data[$field]));
-			elseif (isset($default_params[$field]))
-				$info->appendChild($xmldoc->createElement($realField, $default_params[$field]));
+			elseif (isset($defaultParams[$field]))
+				$info->appendChild($xmldoc->createElement($realField, $defaultParams[$field]));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
@@ -1171,11 +1171,11 @@ class Plesk {
 		foreach ($required as $require)
 			if ((isset($revMapping[$require]) && !isset($params[$revMapping[$require]])) && !isset($params[$require]))
 				throw new ApiRequestException('Plesk API '.__FUNCTION__.'('.json_decode(json_encode($params), TRUE).') missing required parameter '.$require);
-		$hosting_added = FALSE;
+		$hostingAdded = FALSE;
 		if (isset($params['htype'])) {
 			$get->appendChild($hosting);
 			$hosting->appendChild($vrtHst);
-			$hosting_added = TRUE;
+			$hostingAdded = TRUE;
 		}
 		foreach ($params as $field => $value) {
 			if (isset($mapping[$field]))
@@ -1185,10 +1185,10 @@ class Plesk {
 			if (in_array($realField, $genSetups))
 				$genSetup->appendChild($xmldoc->createElement($realField, $value));
 			if (in_array($realField, $vrtHstProperties)) {
-				if ($hosting_added == FALSE) {
+				if ($hostingAdded == FALSE) {
 					$get->appendChild($hosting);
 					$hosting->appendChild($vrtHst);
-					$hosting_added = TRUE;
+					$hostingAdded = TRUE;
 				}
 				$property = $xmldoc->createElement('property');
 				$vrtHst->appendChild($property);
@@ -1199,10 +1199,10 @@ class Plesk {
 				$vrtHst->appendChild($property);*/
 			}
 			if (in_array($realField, $vrtHsts)) {
-				if ($hosting_added == FALSE) {
+				if ($hostingAdded == FALSE) {
 					$get->appendChild($hosting);
 					$hosting->appendChild($vrtHst);
-					$hosting_added = TRUE;
+					$hostingAdded = TRUE;
 				}
 				$vrtHst->appendChild($xmldoc->createElement($realField, $value));
 			}
@@ -1784,13 +1784,13 @@ class Plesk {
 		$packetName = 'db_server';
 		$domain = $xmldoc->createElement($packetName);
 		$packet->appendChild($domain);
-		$get_name = 'get-local';
-		$get = $xmldoc->createElement($get_name);
+		$getName = 'get-local';
+		$get = $xmldoc->createElement($getName);
 		$domain->appendChild($get);
 		$get->appendChild($xmldoc->createElement('filter'));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
-		$result = json_decode(json_encode($response->{$packetName}->{$get_name}), TRUE);
+		$result = json_decode(json_encode($response->{$packetName}->{$getName}), TRUE);
 		$result = $this->fixResult($result);
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk listDatabaseServers returned Error #'.$result['errcode'].' '.$result['errtext']);
@@ -2070,7 +2070,7 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('set');
 		$domain->appendChild($get);
-		$default_params = [
+		$defaultParams = [
 			'status' => 0,
 		];
 		$filters = [
