@@ -85,9 +85,9 @@ try {
 		'status' => 0,
 		'plan_id' => $data['unlimited_plan_id'],
 	);
-	$result = $plesk->create_subscription($request);
+	$result = $plesk->createSubscription($request);
 	if ($debugCalls == true)
-		echo "plesk->create_subscription(".var_export($request, true).") = ".var_export($result, true). "\n";
+		echo "plesk->createSubscription(".var_export($request, true).") = ".var_export($result, true). "\n";
 	$data['subscription_id'] = $result['id'];
 	echo "Got Subscription ID {$data['subscription_id']}\n";
 	$result = $plesk->list_subscriptions();

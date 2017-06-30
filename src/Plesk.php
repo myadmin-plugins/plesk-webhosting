@@ -35,7 +35,7 @@ class Plesk {
 	 * @param int $length
 	 * @return string
 	 */
-	public static function random_string($length = 8) {
+	public static function randomString($length = 8) {
 		$chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		return mb_substr(str_shuffle($chars), 0, $length);
 	}
@@ -1114,7 +1114,7 @@ class Plesk {
 	 * @param array $params
 	 * @return DOMDocument
 	 */
-	public function create_subscription($params) {
+	public function createSubscription($params) {
 		$required = [
 			'name',
 			'ip_address'
@@ -1217,7 +1217,7 @@ class Plesk {
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['add']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk create_subscription returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk createSubscription returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 

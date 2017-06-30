@@ -109,7 +109,7 @@ class Plugin {
 					if (mb_strpos($error, 'The password should') !== FALSE) {
 						// Error #2204 System user setting was failed. Error: The password should be  4 - 255 characters long and should not contain the username. Do not use quotes, spaces, and national alphabetic characters in the password.
 						$password_updated = TRUE;
-						$password = Plesk::random_string(16);
+						$password = Plesk::randomString(16);
 						$request['password'] = $password;
 						myadmin_log(self::$module, 'info', "Generated '{$request['password']}' for a replacement password and trying again", __LINE__, __FILE__);
 						try {
@@ -122,7 +122,7 @@ class Plugin {
 					} elseif (mb_strpos($error, 'Error #1007') !== FALSE) {
 						// Error #1007 User account  already exists.
 						$usernameUpdated = TRUE;
-						$username = mb_substr($username, 0, 7).strtolower(Plesk::random_string(1));
+						$username = mb_substr($username, 0, 7).strtolower(Plesk::randomString(1));
 						$request['username'] = $username;
 						myadmin_log(self::$module, 'info', "Generated '{$request['username']}' for a replacement username and trying again", __LINE__, __FILE__);
 						try {
@@ -153,9 +153,9 @@ class Plugin {
 				$account_id = $result['id'];
 			}
 			//$ftp_login = 'ftpuser'.$serviceInfo[$settings['PREFIX'].'_id'];
-			$ftp_login = 'ftp'.Plesk::random_string(9);
+			$ftp_login = 'ftp'.Plesk::randomString(9);
 			//$ftp_login = 'ftp'.str_replace('.',''), array('',''), $hostname);
-			//$ftp_password = Plesk::random_string(16);
+			//$ftp_password = Plesk::randomString(16);
 			$ftp_password = generateRandomString(10, 2, 1, 1, 1);
 			while (mb_strpos($ftp_password, '&') !== FALSE)
 				$ftp_password = generateRandomString(10, 2, 1, 1, 1);
@@ -177,10 +177,10 @@ class Plugin {
 			);
 			$result = [];
 			try {
-				myadmin_log(self::$module, 'info', 'create_subscription called with '.json_encode($request), __LINE__, __FILE__);
-				$result = $plesk->create_subscription($request);
+				myadmin_log(self::$module, 'info', 'createSubscription called with '.json_encode($request), __LINE__, __FILE__);
+				$result = $plesk->createSubscription($request);
 			} catch (\ApiRequestException $e) {
-				myadmin_log(self::$module, 'warning', ' create_subscription Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
+				myadmin_log(self::$module, 'warning', ' createSubscription Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 				try {
 					myadmin_log(self::$module, 'info', 'delete_client called with '.json_encode($request), __LINE__, __FILE__);
 					$result = $plesk->delete_client(['login' => $username]);
@@ -198,12 +198,12 @@ class Plugin {
 					// Error #1007 User account  already exists.
 					if (mb_strpos($error, 'Error #1007') !== FALSE) {
 						$usernameUpdated = TRUE;
-						$username = mb_substr($username, 0, 7).strtolower(Plesk::random_string(1));
+						$username = mb_substr($username, 0, 7).strtolower(Plesk::randomString(1));
 						$request['ftp_login'] = $username;
 						myadmin_log(self::$module, 'info', "Generated '{$request['ftp_login']}' for a replacement username and trying again", __LINE__, __FILE__);
 						try {
-							myadmin_log(self::$module, 'DEBUG', 'create_subscription called with '.json_encode($request), __LINE__, __FILE__);
-							$result = $plesk->create_subscription($request);
+							myadmin_log(self::$module, 'DEBUG', 'createSubscription called with '.json_encode($request), __LINE__, __FILE__);
+							$result = $plesk->createSubscription($request);
 						} catch (ApiRequestException $e) {
 							$error = $e->getMessage();
 							myadmin_log(self::$module, 'info', 'create_client Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
@@ -212,9 +212,9 @@ class Plugin {
 						$cantFix = TRUE;
 				}
 			}
-			request_log(self::$module, $serviceInfo[$settings['PREFIX'].'_custid'], __FUNCTION__, 'plesk', 'create_subscription', $request, $result);
+			request_log(self::$module, $serviceInfo[$settings['PREFIX'].'_custid'], __FUNCTION__, 'plesk', 'createSubscription', $request, $result);
 			if (!isset($result['id'])) {
-				myadmin_log(self::$module, 'info', 'create_subscription did not return the expected id information: '.$e->getMessage(), __LINE__, __FILE__);
+				myadmin_log(self::$module, 'info', 'createSubscription did not return the expected id information: '.$e->getMessage(), __LINE__, __FILE__);
 				return FALSE;
 			}
 			$subscriptoinId = $result['id'];
@@ -222,8 +222,8 @@ class Plugin {
 			$ser_extra = $db->real_escape(myadmin_stringify($extra));
 			$db->query("update {$settings['TABLE']} set {$settings['PREFIX']}_ip='{$ip}', {$settings['PREFIX']}_extra='{$ser_extra}', {$settings['PREFIX']}_username='{$username}' where {$settings['PREFIX']}_id='{$serviceInfo[$settings['PREFIX'].'_id']}'", __LINE__, __FILE__);
 			if ($debugCalls == TRUE)
-				echo "plesk->create_subscription(".var_export($request, TRUE).") = ".var_export($result, TRUE).PHP_EOL;
-			myadmin_log(self::$module, 'info', "create_subscription got Subscription ID {$subscriptoinId}\n", __LINE__, __FILE__);
+				echo "plesk->createSubscription(".var_export($request, TRUE).") = ".var_export($result, TRUE).PHP_EOL;
+			myadmin_log(self::$module, 'info', "createSubscription got Subscription ID {$subscriptoinId}\n", __LINE__, __FILE__);
 			if (is_numeric($subscriptoinId)) {
 				website_welcome_email($serviceInfo[$settings['PREFIX'].'_id']);
 			}

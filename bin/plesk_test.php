@@ -107,7 +107,7 @@ try {
 		'owner_id' => $data['client_id'],
 		'service_plan_id' => $data['unlimited_plan_id'],
 	);
-	$request = $plesk->create_subscription($params);
+	$request = $plesk->createSubscription($params);
 	$data['subscription_id'] = $request->id;
 	$request = $plesk->list_subscriptions();
 	$subscription_found = false;
