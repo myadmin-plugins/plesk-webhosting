@@ -142,9 +142,9 @@ if (isset($data['site_id'])) {
 if (isset($data['subscription_id'])) {
 	echo "Deleting Subscription {$data['subscription_id']}\n";
 	$request = array('id' => $data['subscription_id']);
-	$result = $plesk->delete_subscription($request);
+	$result = $plesk->deleteSubscription($request);
 	if ($debugCalls == true)
-		echo "plesk->delete_subscription(".var_export($request, true).") = ".var_export($result, true). "\n";
+		echo "plesk->deleteSubscription(".var_export($request, true).") = ".var_export($result, true). "\n";
 } else
 	echo "Skipping delete_client as we lack subscription id\n";
 if (isset($data['client_id'])) {

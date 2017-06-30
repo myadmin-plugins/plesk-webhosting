@@ -16,7 +16,7 @@ try {
 	$value = $_SERVER['argv'][3];
 	if (trim($field) == '' || trim($value) == '')
 		die('this would delete all subscriptions');
-	$result = $plesk->delete_subscription(array($field => $value));
+	$result = $plesk->deleteSubscription(array($field => $value));
 } catch (ApiRequestException $e) {
 	echo "Exception Error: " . $e;
 	print_r($e);

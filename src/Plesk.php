@@ -1074,7 +1074,7 @@ class Plesk {
 		];
 	}
 
-	public function get_subscription_filters() {
+	public function getSubscriptionFilters() {
 		return [
 			'id',
 			'owner-id',
@@ -1087,7 +1087,7 @@ class Plesk {
 		];
 	}
 
-	public function get_subscription_datasets() {
+	public function getSubscriptionDatasets() {
 		return [
 			'gen_info',
 			'hosting',
@@ -1227,7 +1227,7 @@ class Plesk {
 	 * @param array $params
 	 * @return DOMDocument
 	 */
-	public function delete_subscription($params) {
+	public function deleteSubscription($params) {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -1245,7 +1245,7 @@ class Plesk {
 			'owner_login' => 'owner-login',
 			'ip' => 'ip_address',
 		];
-		$filters = $this->get_subscription_filters();
+		$filters = $this->getSubscriptionFilters();
 		foreach ($params as $field => $value) {
 			if (isset($mapping[$field]))
 				$realField = $mapping[$field];
@@ -1260,7 +1260,7 @@ class Plesk {
 		$result = $this->fix_result($result);
 		$result = $result[$packetName]['del']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk delete_subscription returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk deleteSubscription returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 
@@ -1273,8 +1273,8 @@ class Plesk {
 	public function list_subscriptions($params = FALSE) {
 		if ($params === FALSE)
 			$params = [];
-		$datasets = $this->get_subscription_datasets();
-		$filters = $this->get_subscription_filters();
+		$datasets = $this->getSubscriptionDatasets();
+		$filters = $this->getSubscriptionFilters();
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
