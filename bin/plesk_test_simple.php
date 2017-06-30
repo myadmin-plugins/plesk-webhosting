@@ -25,7 +25,7 @@ $data = [];
 $plesk = get_webhosting_plesk_instance((isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : false));
 $debugCalls = false;
 //$plesk->debug = true;
-$result = $plesk->list_ip_addresses();
+$result = $plesk->listIpAddresses();
 if (!isset($result['ips'][0]['ip_address']) || $result['status'] == 'error')
 	throw new Exception('Failed getting server information.'.(isset($result['errtext']) ? ' Error message was: '.$result['errtext'].'.' : ''));
 if ($debugCalls == true)
@@ -35,9 +35,9 @@ foreach ($result['ips'] as $idx => $ip_data)
 		$data['shared_ip_address'] = $ip_data['ip_address'];
 if (!isset($data['shared_ip_address']))
 	throw new Exception("Couldn't find any shared IP addresses");
-$result = $plesk->list_service_plans();
+$result = $plesk->listServicePlans();
 if ($debugCalls == true)
-	echo "plesk->list_service_plans() = ".var_export($result, true). "\n";
+	echo "plesk->listServicePlans() = ".var_export($result, true). "\n";
 foreach ($result as $idx => $plan)
 	//if (strtolower($plan['name']) == 'unlimited') {
 	if ($plan['name'] == 'Default Simple') {

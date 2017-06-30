@@ -67,7 +67,7 @@ function random_string($length = 8) {
 set_error_handler("exception_error_handler");
 $data = [];
 $plesk = new Plesk('162.246.20.210', 'admin', 'x0Bak5&0');
-$request = $plesk->list_ip_addresses();
+$request = $plesk->listIpAddresses();
 if (!isset($request['ips'][0]['ip_address']) || $request['status'] == 'error')
 	throw new Exception('Failed getting server information.'.(isset($request['errtext']) ? ' Error message was: '.$request['errtext'].'.' : ''));
 foreach ($request['ips'] as $idx => $ip_data)
@@ -76,7 +76,7 @@ foreach ($request['ips'] as $idx => $ip_data)
 if (!isset($data['shared_ip_address']))
 	throw new Exception("Couldn't find any shared IP addresses");
 $plesk = new Plesk('162.246.20.210', 'admin', 'x0Bak5&0');
-$request = $plesk->list_service_plans();
+$request = $plesk->listServicePlans();
 foreach ($request as $idx => $plan)
 	if (strtolower($plan['name']) == 'unlimited') {
 		$data['unlimited_plan_id'] = $plan['id'];
@@ -137,7 +137,7 @@ try {
 			'password' => random_string() . "1!",
 		));
 		$data['email_address_id'] = $request->id;
-		$request = $plesk->list_email_addresses(array(
+		$request = $plesk->listEmailAddresses(array(
 			'site_id' => $data['site_id'],
 		));
 		$email_address_found = false;
@@ -211,14 +211,14 @@ try {
 			}
 		if (!$server_found)
 			throw new Exception("Couldn't find mysql database server");
-		$request = $plesk->create_database(array(
+		$request = $plesk->createDatabase(array(
 			'name' => random_string(),
 			'subscription_id' => $data['subscription_id'],
 			'server_id' => $data['db_server_id'],
 			'type' => 'mysql',
 		));
 		$data['db_id'] = $request->id;
-		$request = $plesk->list_databases(array(
+		$request = $plesk->listDatabases(array(
 			'subscription_id' => $data['subscription_id'],
 		));
 		$databases = $request->process();
@@ -250,7 +250,7 @@ try {
 	$request = $plesk->deleteSubscription($data['subscription_id']);
 	$request = $plesk->createSecretKey(['ip_address' => file_get_contents('https://api.ipify.org')]);
 	$data['secret_key'] = $request->key;
-	$request = $plesk->list_secret_keys(['key' => $data['secret_key'], 'host' => $config['host']]);
+	$request = $plesk->listSecretKeys(['key' => $data['secret_key'], 'host' => $config['host']]);
 	$secret_key_found = false;
 	foreach ($request as $key)
 		if ($key['key'] == $data['secret_key'])
@@ -258,7 +258,7 @@ try {
 	if (!$secret_key_found)
 		throw new Exception("Couldn't find created secret_key");
 	$request = $plesk->deleteSecretKey(['key' => $data['secret_key']]);
-	$request = $plesk->list_secret_keys();
+	$request = $plesk->listSecretKeys();
 	$secret_key_found = false;
 	foreach ($request as $key)
 		if ($key['key'] == $data['secret_key'])

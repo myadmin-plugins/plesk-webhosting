@@ -48,7 +48,7 @@ class Plugin {
 			/**
 			 * Gets the Shared IP Address
 			 */
-			$result = $plesk->list_ip_addresses();
+			$result = $plesk->listIpAddresses();
 			if ((!isset($result['ips'][0]['ip_address']) && !isset($result['ips']['ip_address'])) || $result['status'] == 'error')
 				throw new Exception('Failed getting server information.'.(isset($result['errtext']) ? ' Error message was: '.$result['errtext'].'.' : ''));
 			if ($debugCalls == TRUE)
@@ -67,13 +67,13 @@ class Plugin {
 			 * Gets the Service Plans and finds the one matching the desired parameters
 			 */
 			try {
-				$result = $plesk->list_service_plans();
+				$result = $plesk->listServicePlans();
 			} catch (\ApiRequestException $e) {
-				myadmin_log(self::$module, 'info', 'list_service_plans Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
+				myadmin_log(self::$module, 'info', 'listServicePlans Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 				return FALSE;
 			}
 			if ($debugCalls == TRUE)
-				echo "plesk->list_service_plans() = ".var_export($result, TRUE).PHP_EOL;
+				echo "plesk->listServicePlans() = ".var_export($result, TRUE).PHP_EOL;
 			foreach ($result as $idx => $plan) {
 				if ($plan['name'] == 'ASP.NET plan') {
 					$planId = $plan['id'];
@@ -152,9 +152,9 @@ class Plugin {
 			} else {
 				$accountId = $result['id'];
 			}
-			//$ftp_login = 'ftpuser'.$serviceInfo[$settings['PREFIX'].'_id'];
-			$ftp_login = 'ftp'.Plesk::randomString(9);
-			//$ftp_login = 'ftp'.str_replace('.',''), array('',''), $hostname);
+			//$ftpLogin = 'ftpuser'.$serviceInfo[$settings['PREFIX'].'_id'];
+			$ftpLogin = 'ftp'.Plesk::randomString(9);
+			//$ftpLogin = 'ftp'.str_replace('.',''), array('',''), $hostname);
 			//$ftpPassword = Plesk::randomString(16);
 			$ftpPassword = generateRandomString(10, 2, 1, 1, 1);
 			while (mb_strpos($ftpPassword, '&') !== FALSE)
