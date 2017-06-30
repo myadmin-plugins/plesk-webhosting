@@ -56,7 +56,7 @@ class Plugin {
 			if (isset($result['ips']['ip_address']))
 				$sharedIp = $result['ips']['ip_address'];
 			else
-				foreach ($result['ips'] as $serviceInfo[$settings['PREFIX'].'_id']x => $ip_data)
+				foreach ($result['ips'] as $idx => $ip_data)
 					if (trim($ip_data['type']) == 'shared' && (!isset($sharedIp) || $ip_data['is_default']))
 						$sharedIp = $ip_data['ip_address'];
 			if (!isset($sharedIp)) {
