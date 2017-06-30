@@ -574,9 +574,9 @@ class Plesk {
 				if ($result['status'] == 'error')
 					throw new ApiRequestException('Plesk getSites returned Error #'.$result['errcode'].' '.$result['errtext']);
 			} else {
-				foreach ($result as $idx => $result_data)
-					if ($result_data['status'] == 'error')
-						throw new ApiRequestException('Plesk getSites returned Error #'.$result_data['errcode'].' '.$result_data['errtext']);
+				foreach ($result as $idx => $resultData)
+					if ($resultData['status'] == 'error')
+						throw new ApiRequestException('Plesk getSites returned Error #'.$resultData['errcode'].' '.$resultData['errtext']);
 			}
 		}
 		return $result;
@@ -632,12 +632,12 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('add');
 		$domain->appendChild($get);
-		$gen_setup = $xmldoc->createElement('gen_setup');
-		$get->appendChild($gen_setup);
+		$genSetup = $xmldoc->createElement('gen_setup');
+		$get->appendChild($genSetup);
 		$hosting = $xmldoc->createElement('hosting');
 		$prefs = $xmldoc->createElement('prefs');
-		$vrt_hst = $xmldoc->createElement('vrt_hst');
-		$htype_types = $this->getHtypes();
+		$vrtHst = $xmldoc->createElement('vrt_hst');
+		$htypeTypes = $this->getHtypes();
 		$required = [
 			'name',
 		];
@@ -649,16 +649,16 @@ class Plesk {
 		$revMapping = [];
 		foreach ($mapping as $field => $value)
 			$revMapping[$value] = $field;
-		$prefs_types = [
+		$prefTypes = [
 			'www',
 			'stat_ttl',
 			'outgoing-messages-domain-limit',
 		];
-		$vrt_hst_properties = [
+		$vrtHstProperties = [
 			'ftp_login',
 			'ftp_password',
 		];
-		$vrt_hsts = [
+		$vrtHsts = [
 			'ip_address',
 		];
 		$extra = [
@@ -667,16 +667,16 @@ class Plesk {
 			'plan-guid',
 			'plan-external-id',
 		];
-		$gen_setups = $this->getSiteGenSetups();
+		$genSetups = $this->getSiteGenSetups();
 		foreach ($required as $require)
 			if (!isset($params[$require]) && (isset($revMapping[$require]) && !isset($params[$revMapping[$require]])))
 				throw new ApiRequestException('Plesk API '.__FUNCTION__.'('.json_decode(json_encode($params), TRUE).') missing required parameter '.$require);
 		if (isset($params['htype'])) {
 			$get->appendChild($hosting);
-			$hosting->appendChild($vrt_hst);
+			$hosting->appendChild($vrtHst);
 		}
 		$found = FALSE;
-		foreach ($prefs_types as $pref)
+		foreach ($prefTypes as $pref)
 			if (isset($params[$pref]))
 				$found = TRUE;
 		if ($found == TRUE)
@@ -686,18 +686,18 @@ class Plesk {
 				$realField = $mapping[$field];
 			else
 				$realField = $field;
-			if (in_array($realField, $gen_setups))
-				$gen_setup->appendChild($xmldoc->createElement($realField, $value));
-			if (in_array($realField, $prefs_types))
+			if (in_array($realField, $genSetups))
+				$genSetup->appendChild($xmldoc->createElement($realField, $value));
+			if (in_array($realField, $prefTypes))
 				$prefs->appendChild($xmldoc->createElement($realField, $value));
-			if (in_array($realField, $vrt_hst_properties)) {
+			if (in_array($realField, $vrtHstProperties)) {
 				$property = $xmldoc->createElement('property');
-				$vrt_hst->appendChild($property);
+				$vrtHst->appendChild($property);
 				$property->appendChild($xmldoc->createElement('name', $realField));
 				$property->appendChild($xmldoc->createElement('value', $value));
 			}
-			if (in_array($realField, $vrt_hsts))
-				$vrt_hst->appendChild($xmldoc->createElement($realField, $value));
+			if (in_array($realField, $vrtHsts))
+				$vrtHst->appendChild($xmldoc->createElement($realField, $value));
 			if (in_array($realField, $extra))
 				$get->appendChild($xmldoc->createElement($realField, $value));
 		}
@@ -726,14 +726,14 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('set');
 		$domain->appendChild($get);
-		$gen_setups = $this->getSiteGenSetups();
+		$genSetups = $this->getSiteGenSetups();
 		//$filters = $this->getSiteFilters();
 		$values_values = $this->getSiteDatasets();
-		$gen_setup_added = FALSE;
+		$genSetup_added = FALSE;
 		$filters = ['id'];
 		$filter = $xmldoc->createElement('filter');
 		$values = $xmldoc->createElement('values');
-		$gen_setup = $xmldoc->createElement('gen_setup');
+		$genSetup = $xmldoc->createElement('gen_setup');
 		$get->appendChild($filter);
 		$get->appendChild($values);
 		foreach ($params as $field => $value) {
@@ -743,12 +743,12 @@ class Plesk {
 				$realField = $field;
 			if (in_array($realField, $filters))
 				$filter->appendChild($xmldoc->createElement($realField, $value));
-			if (in_array($realField, $gen_setups)) {
-				if ($gen_setup_added == FALSE) {
-					$values->appendChild($gen_setup);
-					$gen_setup_added = TRUE;
+			if (in_array($realField, $genSetups)) {
+				if ($genSetup_added == FALSE) {
+					$values->appendChild($genSetup);
+					$genSetup_added = TRUE;
 				}
-				$gen_setup->appendChild($xmldoc->createElement($realField, $value));
+				$genSetup->appendChild($xmldoc->createElement($realField, $value));
 			}
 		}
 		$responseText = $this->sendRequest($xmldoc->saveXML());
@@ -808,19 +808,19 @@ class Plesk {
 		$add = $xmldoc->createElement('add');
 		$site->appendChild($add);
 
-		$gen_setup = $xmldoc->createElement('gen_setup');
-		$add->appendChild($gen_setup);
+		$genSetup = $xmldoc->createElement('gen_setup');
+		$add->appendChild($genSetup);
 		$hosting = $xmldoc->createElement('hosting');
 		$add->appendChild($hosting);
 
-		$gen_setup->appendChild($xmldoc->createElement('name', $params['name']));
-		$gen_setup->appendChild($xmldoc->createElement('webspace-id', $params['webspace-id']));
+		$genSetup->appendChild($xmldoc->createElement('name', $params['name']));
+		$genSetup->appendChild($xmldoc->createElement('webspace-id', $params['webspace-id']));
 
-		$vrt_hst = $xmldoc->createElement('vrt_hst');
-		$hosting->appendChild($vrt_hst);
+		$vrtHst = $xmldoc->createElement('vrt_hst');
+		$hosting->appendChild($vrtHst);
 
 		$property = $xmldoc->createElement('property');
-		$vrt_hst->appendChild($property);
+		$vrtHst->appendChild($property);
 		$property->appendChild($xmldoc->createElement('name', 'php'));
 		$property->appendChild($xmldoc->createElement('value', 'true'));
 
@@ -1119,7 +1119,7 @@ class Plesk {
 			'name',
 			'ip_address'
 		];
-		$gen_setups = [
+		$genSetups = [
 			'name',
 			'ip_address',
 			'owner-id',
@@ -1130,11 +1130,11 @@ class Plesk {
 			'status',
 			'external-id',
 		];
-		$vrt_hst_properties = [
+		$vrtHstProperties = [
 			'ftp_login',
 			'ftp_password',
 		];
-		$vrt_hsts = [
+		$vrtHsts = [
 			'ip_address',
 		];
 		$extra = [
@@ -1163,10 +1163,10 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('add');
 		$domain->appendChild($get);
-		$gen_setup = $xmldoc->createElement('gen_setup');
+		$genSetup = $xmldoc->createElement('gen_setup');
 		$hosting = $xmldoc->createElement('hosting');
-		$vrt_hst = $xmldoc->createElement('vrt_hst');
-		$get->appendChild($gen_setup);
+		$vrtHst = $xmldoc->createElement('vrt_hst');
+		$get->appendChild($genSetup);
 		$htypes = $this->getHtypes();
 		foreach ($required as $require)
 			if ((isset($revMapping[$require]) && !isset($params[$revMapping[$require]])) && !isset($params[$require]))
@@ -1174,7 +1174,7 @@ class Plesk {
 		$hosting_added = FALSE;
 		if (isset($params['htype'])) {
 			$get->appendChild($hosting);
-			$hosting->appendChild($vrt_hst);
+			$hosting->appendChild($vrtHst);
 			$hosting_added = TRUE;
 		}
 		foreach ($params as $field => $value) {
@@ -1182,29 +1182,29 @@ class Plesk {
 				$realField = $mapping[$field];
 			else
 				$realField = $field;
-			if (in_array($realField, $gen_setups))
-				$gen_setup->appendChild($xmldoc->createElement($realField, $value));
-			if (in_array($realField, $vrt_hst_properties)) {
+			if (in_array($realField, $genSetups))
+				$genSetup->appendChild($xmldoc->createElement($realField, $value));
+			if (in_array($realField, $vrtHstProperties)) {
 				if ($hosting_added == FALSE) {
 					$get->appendChild($hosting);
-					$hosting->appendChild($vrt_hst);
+					$hosting->appendChild($vrtHst);
 					$hosting_added = TRUE;
 				}
 				$property = $xmldoc->createElement('property');
-				$vrt_hst->appendChild($property);
+				$vrtHst->appendChild($property);
 				$property->appendChild($xmldoc->createElement('name', $realField));
 				$property->appendChild($xmldoc->createElement('value', $value));
 				/*$property = $xmldoc->createAttribute($realField);
 				$property->value = $value;
-				$vrt_hst->appendChild($property);*/
+				$vrtHst->appendChild($property);*/
 			}
-			if (in_array($realField, $vrt_hsts)) {
+			if (in_array($realField, $vrtHsts)) {
 				if ($hosting_added == FALSE) {
 					$get->appendChild($hosting);
-					$hosting->appendChild($vrt_hst);
+					$hosting->appendChild($vrtHst);
 					$hosting_added = TRUE;
 				}
-				$vrt_hst->appendChild($xmldoc->createElement($realField, $value));
+				$vrtHst->appendChild($xmldoc->createElement($realField, $value));
 			}
 			if (in_array($realField, $extra)) {
 				$get->appendChild($xmldoc->createElement($realField, $value));
@@ -1309,9 +1309,9 @@ class Plesk {
 			if ($result['status'] == 'error')
 				throw new ApiRequestException('Plesk listSubscriptions returned Error #'.$result['errcode'].' '.$result['errtext']);
 		} else {
-			foreach ($result as $idx => $result_data)
-				if ($result_data['status'] == 'error')
-					throw new ApiRequestException('Plesk listSubscriptions returned Error #'.$result_data['errcode'].' '.$result_data['errtext']);
+			foreach ($result as $idx => $resultData)
+				if ($resultData['status'] == 'error')
+					throw new ApiRequestException('Plesk listSubscriptions returned Error #'.$resultData['errcode'].' '.$resultData['errtext']);
 		}
 		return $result;
 	}
@@ -1504,9 +1504,9 @@ class Plesk {
 			if ($result['status'] == 'error')
 				throw new ApiRequestException('Plesk deleteSite returned Error #'.$result['errcode'].' '.$result['errtext']);
 		} else {
-			foreach ($result as $idx => $result_data)
-				if ($result_data['status'] == 'error')
-					throw new ApiRequestException('Plesk deleteSite returned Error #'.$result_data['errcode'].' '.$result_data['errtext']);
+			foreach ($result as $idx => $resultData)
+				if ($resultData['status'] == 'error')
+					throw new ApiRequestException('Plesk deleteSite returned Error #'.$resultData['errcode'].' '.$resultData['errtext']);
 		}
 	}
 
@@ -1732,9 +1732,9 @@ class Plesk {
 			if ($result['status'] == 'error')
 				throw new ApiRequestException('Plesk list_clients returned Error #'.$result['errcode'].' '.$result['errtext']);
 		} else {
-			foreach ($result as $idx => $result_data)
-				if ($result_data['status'] == 'error')
-					throw new ApiRequestException('Plesk list_clients returned Error #'.$result_data['errcode'].' '.$result_data['errtext']);
+			foreach ($result as $idx => $resultData)
+				if ($resultData['status'] == 'error')
+					throw new ApiRequestException('Plesk list_clients returned Error #'.$resultData['errcode'].' '.$resultData['errtext']);
 		}
 		return $result;
 	}
@@ -2106,9 +2106,9 @@ class Plesk {
 			if ($result['status'] == 'error')
 				throw new ApiRequestException('Plesk update_client returned Error #'.$result['errcode'].' '.$result['errtext']);
 		} else {
-			foreach ($result as $idx => $result_data)
-				if ($result_data['status'] == 'error')
-					throw new ApiRequestException('Plesk update_client returned Error #'.$result_data['errcode'].' '.$result_data['errtext'], __LINE__, __FILE__);
+			foreach ($result as $idx => $resultData)
+				if ($resultData['status'] == 'error')
+					throw new ApiRequestException('Plesk update_client returned Error #'.$resultData['errcode'].' '.$resultData['errtext'], __LINE__, __FILE__);
 		}
 		return $result;
 	}
