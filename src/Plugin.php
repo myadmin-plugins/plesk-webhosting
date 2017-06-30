@@ -76,11 +76,11 @@ class Plugin {
 				echo "plesk->list_service_plans() = ".var_export($result, TRUE).PHP_EOL;
 			foreach ($result as $idx => $plan) {
 				if ($plan['name'] == 'ASP.NET plan') {
-					$plan_id = $plan['id'];
+					$planId = $plan['id'];
 					break;
 				}
 			}
-			if (!isset($plan_id)) {
+			if (!isset($planId)) {
 				myadmin_log(self::$module, 'critical', 'Plesk Could not find the appropriate service plan');
 				return FALSE;
 			}
@@ -155,13 +155,13 @@ class Plugin {
 			//$ftp_login = 'ftpuser'.$serviceInfo[$settings['PREFIX'].'_id'];
 			$ftp_login = 'ftp'.Plesk::randomString(9);
 			//$ftp_login = 'ftp'.str_replace('.',''), array('',''), $hostname);
-			//$ftp_password = Plesk::randomString(16);
-			$ftp_password = generateRandomString(10, 2, 1, 1, 1);
-			while (mb_strpos($ftp_password, '&') !== FALSE)
-				$ftp_password = generateRandomString(10, 2, 1, 1, 1);
+			//$ftpPassword = Plesk::randomString(16);
+			$ftpPassword = generateRandomString(10, 2, 1, 1, 1);
+			while (mb_strpos($ftpPassword, '&') !== FALSE)
+				$ftpPassword = generateRandomString(10, 2, 1, 1, 1);
 			$extra[0] = $account_id;
-			$ser_extra = $db->real_escape(myadmin_stringify($extra));
-			$db->query("update {$settings['TABLE']} set {$settings['PREFIX']}_ip='{$ip}', {$settings['PREFIX']}_extra='{$ser_extra}' where {$settings['PREFIX']}_id='{$serviceInfo[$settings['PREFIX'].'_id']}'", __LINE__, __FILE__);
+			$serExtra = $db->real_escape(myadmin_stringify($extra));
+			$db->query("update {$settings['TABLE']} set {$settings['PREFIX']}_ip='{$ip}', {$settings['PREFIX']}_extra='{$serExtra}' where {$settings['PREFIX']}_id='{$serviceInfo[$settings['PREFIX'].'_id']}'", __LINE__, __FILE__);
 			myadmin_log(self::$module, 'info', "createClient got client id {$account_id}", __LINE__, __FILE__);
 			//$plesk->debug = TRUE;
 			//$debugCalls = TRUE;
@@ -170,10 +170,10 @@ class Plugin {
 				'owner_id' => $account_id,
 				'htype' => 'vrt_hst',
 				'ftp_login' => $username,
-				'ftp_password' => $ftp_password,
+				'ftp_password' => $ftpPassword,
 				'ip' => $ip,
 				'status' => 0,
-				'plan_id' => $plan_id,
+				'plan_id' => $planId,
 			);
 			$result = [];
 			try {
@@ -219,8 +219,8 @@ class Plugin {
 			}
 			$subscriptoinId = $result['id'];
 			$extra[1] = $subscriptoinId;
-			$ser_extra = $db->real_escape(myadmin_stringify($extra));
-			$db->query("update {$settings['TABLE']} set {$settings['PREFIX']}_ip='{$ip}', {$settings['PREFIX']}_extra='{$ser_extra}', {$settings['PREFIX']}_username='{$username}' where {$settings['PREFIX']}_id='{$serviceInfo[$settings['PREFIX'].'_id']}'", __LINE__, __FILE__);
+			$serExtra = $db->real_escape(myadmin_stringify($extra));
+			$db->query("update {$settings['TABLE']} set {$settings['PREFIX']}_ip='{$ip}', {$settings['PREFIX']}_extra='{$serExtra}', {$settings['PREFIX']}_username='{$username}' where {$settings['PREFIX']}_id='{$serviceInfo[$settings['PREFIX'].'_id']}'", __LINE__, __FILE__);
 			if ($debugCalls == TRUE)
 				echo "plesk->createSubscription(".var_export($request, TRUE).") = ".var_export($result, TRUE).PHP_EOL;
 			myadmin_log(self::$module, 'info', "createSubscription got Subscription ID {$subscriptoinId}\n", __LINE__, __FILE__);

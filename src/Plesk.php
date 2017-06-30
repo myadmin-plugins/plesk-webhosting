@@ -342,7 +342,7 @@ class Plesk {
 	 * @param array $result an array to get a php shorthand array version of
 	 * @return string the exported php code
 	 */
-	public function var_export($result) {
+	public function varExport($result) {
 		$export = var_export($result, TRUE);
 		$export = preg_replace("/^array\s*\(\s*$/m", '[', $export);
 		$export = preg_replace("/^\)\s*$/m", ']', $export);
