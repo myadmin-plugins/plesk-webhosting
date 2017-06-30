@@ -795,7 +795,7 @@ class Plesk {
 	 * @param array $params
 	 * @return \DomDocument
 	 */
-	public function createSite($params) {
+	public function createSite2($params) {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 
