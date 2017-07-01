@@ -18,7 +18,7 @@ try {
 		die('this would delete all clients');
 	$result = $plesk->deleteClient(array($field => $value));
 } catch (ApiRequestException $e) {
-	echo "Exception Error: " . $e;
+	echo "Exception Error: ".$e;
 	print_r($e);
 	die();
 }

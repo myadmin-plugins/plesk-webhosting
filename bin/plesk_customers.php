@@ -15,9 +15,9 @@ try {
 	$response = $plesk->sendRequest($plesk->getCustomers()->saveXML());
 	print_r($response);
 	$responseXml = $plesk->parseResponse($response);
-	$resultNodes = (array)$plesk->checkResponse($responseXml);
+	$resultNodes = (array) $plesk->checkResponse($responseXml);
 } catch (ApiRequestException $e) {
-	echo "Exception Error: " . $e;
+	echo "Exception Error: ".$e;
 	die();
 }
 print_r($resultNodes);

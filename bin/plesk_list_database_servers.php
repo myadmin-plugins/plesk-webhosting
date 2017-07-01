@@ -14,7 +14,7 @@ $plesk = get_webhosting_plesk_instance((isset($_SERVER['argv'][1]) ? $_SERVER['a
 try {
 	$result = $plesk->listDatabaseServers();
 } catch (ApiRequestException $e) {
-	echo "Exception Error: " . $e;
+	echo "Exception Error: ".$e;
 	print_r($e);
 	die();
 }

@@ -69,7 +69,7 @@ class Plesk {
 	/**
 	 * Performs a Plesk API request, returns raw API response text
 	 *
-	 * @param type $packet
+	 * @param string $packet
 	 * @return string
 	 * @throws Detain\MyAdminPlesk\ApiRequestException
 	 */
@@ -442,7 +442,7 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for information about all available customers
 	 *
-	 * @return DOMDocument
+	 * @return \DOMDocument
 	 */
 	public function getCustomers() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -466,7 +466,7 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for information about all available domains
 	 *
-	 * @return DOMDocument
+	 * @return \DOMDocument
 	 */
 	public function getDomains() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');

@@ -2,8 +2,8 @@
 
 namespace Detain\MyAdminPlesk;
 
-use Detain\MyAdminPlesk\Plesk;
 use Detain\MyAdminPlesk\ApiRequestException;
+use Detain\MyAdminPlesk\Plesk;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
 class Plugin {
@@ -36,7 +36,7 @@ class Plugin {
 			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
 			$hostname = $serviceClass->getHostname();
 			if (trim($hostname) == '')
-				$hostname = $serviceClass->getId() . '.server.com';
+				$hostname = $serviceClass->getId().'.server.com';
 			$password = website_get_password($serviceClass->getId());
 			$username = get_new_webhosting_username($serviceClass->getId(), $hostname, $serviceClass->getServer());
 			$data = $GLOBALS['tf']->accounts->read($serviceClass->getCustid());

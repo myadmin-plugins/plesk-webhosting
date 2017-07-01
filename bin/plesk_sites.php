@@ -15,7 +15,7 @@ try {
 	$response = $plesk->sendRequest($plesk->getSites()->saveXML());
 	print_r($response);
 	$responseXml = $plesk->parseResponse($response);
-	$resultNodes = (array)$plesk->checkResponse($responseXml);
+	$resultNodes = (array) $plesk->checkResponse($responseXml);
 } catch (ApiRequestException $e) {
 	echo $e;
 	die();
