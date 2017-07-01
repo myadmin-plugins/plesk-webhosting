@@ -3,6 +3,7 @@
 namespace Detain\MyAdminPlesk;
 
 use Detain\MyAdminPlesk\Plesk;
+use Detain\MyAdminPlesk\ApiRequestException;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
 class Plugin {
@@ -69,7 +70,7 @@ class Plugin {
 			 */
 			try {
 				$result = $plesk->listServicePlans();
-			} catch (\ApiRequestException $e) {
+			} catch (ApiRequestException $e) {
 				myadmin_log(self::$module, 'info', 'listServicePlans Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 				$event['success'] = FALSE;
 				$event->stopPropagation();
@@ -103,7 +104,7 @@ class Plugin {
 			try {
 				myadmin_log(self::$module, 'DEBUG', 'createClient called with '.json_encode($request), __LINE__, __FILE__);
 				$result = $plesk->createClient($request);
-			} catch (\ApiRequestException $e) {
+			} catch (ApiRequestException $e) {
 				$error = $e->getMessage();
 				myadmin_log(self::$module, 'info', 'createClient Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 			}
@@ -120,7 +121,7 @@ class Plugin {
 						try {
 							myadmin_log(self::$module, 'DEBUG', 'createClient called with '.json_encode($request), __LINE__, __FILE__);
 							$result = $plesk->createClient($request);
-						} catch (\ApiRequestException $e) {
+						} catch (ApiRequestException $e) {
 							$error = $e->getMessage();
 							myadmin_log(self::$module, 'info', 'createClient Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 						}
@@ -133,7 +134,7 @@ class Plugin {
 						try {
 							myadmin_log(self::$module, 'DEBUG', 'createClient called with '.json_encode($request), __LINE__, __FILE__);
 							$result = $plesk->createClient($request);
-						} catch (\ApiRequestException $e) {
+						} catch (ApiRequestException $e) {
 							$error = $e->getMessage();
 							myadmin_log(self::$module, 'info', 'createClient Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 						}
@@ -187,12 +188,12 @@ class Plugin {
 			try {
 				myadmin_log(self::$module, 'info', 'createSubscription called with '.json_encode($request), __LINE__, __FILE__);
 				$result = $plesk->createSubscription($request);
-			} catch (\ApiRequestException $e) {
+			} catch (ApiRequestException $e) {
 				myadmin_log(self::$module, 'warning', ' createSubscription Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 				try {
 					myadmin_log(self::$module, 'info', 'deleteClient called with '.json_encode($request), __LINE__, __FILE__);
 					$result = $plesk->deleteClient(['login' => $username]);
-				} catch (\ApiRequestException $e) {
+				} catch (ApiRequestException $e) {
 					$error = $e->getMessage();
 					myadmin_log(self::$module, 'warning', 'deleteClient Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 				}
