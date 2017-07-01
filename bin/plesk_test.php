@@ -49,11 +49,11 @@
 include_once(__DIR__.'/../../../include/functions.inc.php');
 require_once(INCLUDE_ROOT.'/webhosting/class.plesk.php');
 
-$runSiteTests = true;
-$runEmailAddressTests = false;
-$runSiteAliasTests = false;
-$runSubdomainTests = false;
-$runDatabaseTests = false;
+$runSiteTests = TRUE;
+$runEmailAddressTests = FALSE;
+$runSiteAliasTests = FALSE;
+$runSubdomainTests = FALSE;
+$runDatabaseTests = FALSE;
 
 function exception_error_handler($errno, $errstr, $errfile, $errline) {
 	throw new ErrorException($errstr, $errno, 0, $errfile, $errline);
@@ -110,10 +110,10 @@ try {
 	$request = $plesk->createSubscription($params);
 	$data['subscription_id'] = $request->id;
 	$request = $plesk->listSubscriptions();
-	$subscription_found = false;
+	$subscription_found = FALSE;
 	foreach ($request as $subscription)
 		if ($subscription['id'] == $data['subscription_id'])
-			$subscription_found = true;
+			$subscription_found = TRUE;
 	if (!$subscription_found)
 		throw new Exception("Couldn't find created subscription");
 	if ($runSiteTests) {
@@ -121,10 +121,10 @@ try {
 		$request = $plesk->createSite(array('domain' => $data['domain'], 'subscription_id' => $data['subscription_id']));
 		$data['site_id'] = $request->id;
 		$request = $plesk->listSites(array('subscription_id' => $data['subscription_id']));
-		$site_found = false;
+		$site_found = FALSE;
 		foreach ($request as $site)
 			if ($site['id'] == $data['site_id'])
-				$site_found = true;
+				$site_found = TRUE;
 		if (!$site_found)
 			throw new Exception("Couldn't find created site");
 		$data['domain'] = random_string().'.com';
@@ -140,10 +140,10 @@ try {
 		$request = $plesk->listEmailAddresses(array(
 			'site_id' => $data['site_id'],
 		));
-		$email_address_found = false;
+		$email_address_found = FALSE;
 		foreach ($request as $email_address)
 			if ($email_address['id'] == $data['email_address_id'])
-				$email_address_found = true;
+				$email_address_found = TRUE;
 		if (!$email_address_found)
 			throw new Exception("Couldn't find created email address (".$data['email_address_id'].")");
 		$request = $plesk->updateEmailPassword(array(
@@ -160,10 +160,10 @@ try {
 		$request = $plesk->createSiteAlias($params);
 		$data['site_alias_id'] = $request->id;
 		$request = $plesk->listSiteAliases(array('site_id' => $data['site_id']));
-		$alias_found = false;
+		$alias_found = FALSE;
 		foreach ($request as $alias_id => $alias_name)
 			if ($alias_id == $data['site_alias_id'])
-				$alias_found = true;
+				$alias_found = TRUE;
 		if (!$alias_found)
 			throw new Exception("Couldn't find created site alias");
 		$request = $plesk->deleteSiteAlias(array('id' => $data['site_alias_id']));
@@ -181,10 +181,10 @@ try {
 		$request = $plesk->listSubdomains(array(
 			'site_id' => $data['site_id'],
 		));
-		$subdomain_found = false;
+		$subdomain_found = FALSE;
 		foreach ($request as $subdomain)
 			if ($subdomain['id'] == $data['subdomain_id'])
-				$subdomain_found = true;
+				$subdomain_found = TRUE;
 		if (!$subdomain_found)
 			throw new Exception("Couldn't find created subdomain");
 		$request = $plesk->updateSubdomain(array(
@@ -203,11 +203,11 @@ try {
 	}
 	if ($runDatabaseTests) {
 		$request = $plesk->listDatabaseServers();
-		$server_found = false;
+		$server_found = FALSE;
 		foreach ($request as $server)
 			if ($server['type'] == 'mysql') {
 				$data['db_server_id'] = $server['id'];
-				$server_found = true;
+				$server_found = TRUE;
 			}
 		if (!$server_found)
 			throw new Exception("Couldn't find mysql database server");
@@ -222,10 +222,10 @@ try {
 			'subscription_id' => $data['subscription_id'],
 		));
 		$databases = $request->process();
-		$database_found = false;
+		$database_found = FALSE;
 		foreach ($databases as $database)
 			if ($database['id'] == $data['db_id'])
-				$database_found = true;
+				$database_found = TRUE;
 		if (!$database_found)
 			throw new Exception("Couldn't find created database");
 		$data['db_user_username'] = random_string();
@@ -251,18 +251,18 @@ try {
 	$request = $plesk->createSecretKey(['ip_address' => file_get_contents('https://api.ipify.org')]);
 	$data['secret_key'] = $request->key;
 	$request = $plesk->listSecretKeys(['key' => $data['secret_key'], 'host' => $config['host']]);
-	$secret_key_found = false;
+	$secret_key_found = FALSE;
 	foreach ($request as $key)
 		if ($key['key'] == $data['secret_key'])
-			$secret_key_found = true;
+			$secret_key_found = TRUE;
 	if (!$secret_key_found)
 		throw new Exception("Couldn't find created secret_key");
 	$request = $plesk->deleteSecretKey(['key' => $data['secret_key']]);
 	$request = $plesk->listSecretKeys();
-	$secret_key_found = false;
+	$secret_key_found = FALSE;
 	foreach ($request as $key)
 		if ($key['key'] == $data['secret_key'])
-			$secret_key_found = true;
+			$secret_key_found = TRUE;
 	if ($secret_key_found)
 		throw new Exception("Failed to delete secret_key");
 } catch (Exception $e) {
