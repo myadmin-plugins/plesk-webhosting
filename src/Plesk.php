@@ -2095,9 +2095,6 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('set');
 		$domain->appendChild($get);
-		$defaultParams = [
-			'status' => 0,
-		];
 		$filters = [
 			'username',
 		];

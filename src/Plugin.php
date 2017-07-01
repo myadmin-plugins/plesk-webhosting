@@ -140,9 +140,8 @@ class Plugin {
 					} else
 						$cantFix = TRUE;
 				}
-				if ($passwordUpdated == TRUE) {
-					$GLOBALS['tf']->history->add($settings['PREFIX'], 'password', $serviceClass->getId(), $options['password']);
-				}
+				if ($passwordUpdated == TRUE)
+					$GLOBALS['tf']->history->add($settings['PREFIX'], 'password', $serviceClass->getId(), $request['password']);
 			}
 			request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'plesk', 'createClient', $request, $result);
 			if (!isset($result['id'])) {
@@ -246,9 +245,7 @@ class Plugin {
 	public static function getReactivate(GenericEvent $event) {
 		if ($event['category'] == SERVICE_TYPES_WEB_PLESK) {
 			$serviceClass = $event->getSubject();
-			$settings = get_module_settings(self::$module);
 			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
-			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
 			function_requirements('get_webhosting_plesk_instance');
 			$plesk = get_webhosting_plesk_instance($serverdata);
 			$request = ['username' => $serviceClass->getUsername(), 'status' => 0];
