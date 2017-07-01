@@ -72,9 +72,9 @@ try {
 		'phone' => Plesk::random_string(),
 		'email' => $data['email'],
 	);
-	$result = $plesk->update_client($request);
+	$result = $plesk->updateClient($request);
 	if ($debugCalls == true)
-		echo "plesk->update_client(".var_export($request, true).") = ".var_export($result, true). "\n";
+		echo "plesk->updateClient(".var_export($request, true).") = ".var_export($result, true). "\n";
 	$request = array(
 		'domain' => $data['subscription_domain'],
 		'owner_id' => $data['client_id'],

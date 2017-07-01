@@ -2037,7 +2037,7 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
-		$types = $this->list_subdomains_types();
+		$types = $this->listSubdomainsTypes();
 		$typesKeys = array_keys($types);
 		foreach ($typesKeys as $type)
 			if (!in_array($type, array('certificates')))
@@ -2057,7 +2057,7 @@ class Plesk {
 	 *
 	 * @return DOMDocument
 	 */
-	public function rename_subdomain() {
+	public function renameSubdomain() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -2067,7 +2067,7 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
-		$types = $this->rename_subdomain_types();
+		$types = $this->renameSubdomainTypes();
 		$typesKeys = array_keys($types);
 		foreach ($typesKeys as $type)
 			if (!in_array($type, array('certificates')))
@@ -2078,7 +2078,7 @@ class Plesk {
 		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk rename_subdomain returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk renameSubdomain returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 
@@ -2088,7 +2088,7 @@ class Plesk {
 	 * @param array $params array of update parameters
 	 * @return DOMDocument
 	 */
-	public function update_client($params) {
+	public function updateClient($params) {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -2132,12 +2132,12 @@ class Plesk {
 		$result = $result[$packetName]['set']['result'];
 		if (isset($result['status'])) {
 			if ($result['status'] == 'error')
-				throw new ApiRequestException('Plesk update_client returned Error #'.$result['errcode'].' '.$result['errtext']);
+				throw new ApiRequestException('Plesk updateClient returned Error #'.$result['errcode'].' '.$result['errtext']);
 		} else {
 			$resultValues = array_values($result);
 			foreach ($resultValues as $resultData)
 				if ($resultData['status'] == 'error')
-					throw new ApiRequestException('Plesk update_client returned Error #'.$resultData['errcode'].' '.$resultData['errtext'], __LINE__, __FILE__);
+					throw new ApiRequestException('Plesk updateClient returned Error #'.$resultData['errcode'].' '.$resultData['errtext'], __LINE__, __FILE__);
 		}
 		return $result;
 	}
@@ -2147,7 +2147,7 @@ class Plesk {
 	 *
 	 * @return DOMDocument
 	 */
-	public function update_email_password() {
+	public function updateEmailPassword() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -2157,7 +2157,7 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
-		$types = $this->update_email_password_types();
+		$types = $this->updateEmailPasswordTypes();
 		$typesKeys = array_keys($types);
 		foreach ($typesKeys as $type)
 			if (!in_array($type, array('certificates')))
@@ -2168,7 +2168,7 @@ class Plesk {
 		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk update_email_password returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk updateEmailPassword returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 
@@ -2177,7 +2177,7 @@ class Plesk {
 	 *
 	 * @return DOMDocument
 	 */
-	public function update_subdomain() {
+	public function updateSubdomain() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -2187,7 +2187,7 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
-		$types = $this->update_subdomain_types();
+		$types = $this->updateSubdomainTypes();
 		$typesKeys = array_keys($types);
 		foreach ($typesKeys as $type)
 			if (!in_array($type, array('certificates')))
@@ -2198,7 +2198,7 @@ class Plesk {
 		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk update_subdomain returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk updateSubdomain returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 

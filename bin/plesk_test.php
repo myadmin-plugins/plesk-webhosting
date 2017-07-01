@@ -94,7 +94,7 @@ $request = $plesk->createClient(array(
 $data['client_id'] = $request->id;
 try {
 	$request = $plesk->getClient(array('username' => $data['client_username']));
-	$request = $plesk->update_client(array(
+	$request = $plesk->updateClient(array(
 		'username' => $data['client_username'],
 		'phone' => random_string(),
 		'email' => random_string().'@example.com',
@@ -146,7 +146,7 @@ try {
 				$email_address_found = true;
 		if (!$email_address_found)
 			throw new Exception("Couldn't find created email address (" . $data['email_address_id'] . ")");
-		$request = $plesk->update_email_password(array(
+		$request = $plesk->updateEmailPassword(array(
 			'email' => $data['email_address'],
 			'password' => random_string(),
 		));
@@ -187,12 +187,12 @@ try {
 				$subdomain_found = true;
 		if (!$subdomain_found)
 			throw new Exception("Couldn't find created subdomain");
-		$request = $plesk->update_subdomain(array(
+		$request = $plesk->updateSubdomain(array(
 			'id' => $data['subdomain_id'],
 			'www_root' => '/subdomains/'.strtolower($data['subdomain']).'2',
 		));
 		$data['subdomain'] = random_string();
-		$request = $plesk->rename_subdomain(array(
+		$request = $plesk->renameSubdomain(array(
 			'id' => $data['subdomain_id'],
 			'name' => $data['subdomain'],
 		));

@@ -256,11 +256,11 @@ class Plugin {
 			list($userId, $subscriptoinId) = $extra;
 			$request = ['username' => $serviceClass->getUsername(), 'status' => 0];
 			try {
-				$result = $plesk->update_client($request);
+				$result = $plesk->updateClient($request);
 			} catch (\Exception $e) {
 				echo 'Caught exception: '.$e->getMessage().PHP_EOL;
 			}
-			myadmin_log(self::$module, 'info', 'update_client Called got '.json_encode($result), __LINE__, __FILE__);
+			myadmin_log(self::$module, 'info', 'updateClient Called got '.json_encode($result), __LINE__, __FILE__);
 			$event->stopPropagation();
 		}
 	}
