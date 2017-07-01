@@ -60,7 +60,9 @@ class Plugin {
 						$sharedIp = $ipData['ip_address'];
 			if (!isset($sharedIp)) {
 				myadmin_log(self::$module, 'critical', 'Plesk Could not find any shared IP addresses', __LINE__, __FILE__);
-				return FALSE;
+				$event['success'] = FALSE;
+				$event->stopPropagation();
+				return;
 			}
 			/**
 			 * Gets the Service Plans and finds the one matching the desired parameters
@@ -69,7 +71,9 @@ class Plugin {
 				$result = $plesk->listServicePlans();
 			} catch (\ApiRequestException $e) {
 				myadmin_log(self::$module, 'info', 'listServicePlans Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
-				return FALSE;
+				$event['success'] = FALSE;
+				$event->stopPropagation();
+				return;
 			}
 			if ($debugCalls == TRUE)
 				echo "plesk->listServicePlans() = ".var_export($result, TRUE).PHP_EOL;
@@ -81,7 +85,9 @@ class Plugin {
 			}
 			if (!isset($planId)) {
 				myadmin_log(self::$module, 'critical', 'Plesk Could not find the appropriate service plan');
-				return FALSE;
+				$event['success'] = FALSE;
+				$event->stopPropagation();
+				return;
 			}
 			/**
 			 * Creates a Client in with Plesk
@@ -146,7 +152,9 @@ class Plugin {
 					myadmin_log(self::$module, 'info', 'continuing using pre-existing client id', __LINE__, __FILE__);
 					$accountId = $extra[0];
 				} else {
-					return FALSE;
+					$event['success'] = FALSE;
+					$event->stopPropagation();
+					return;
 				}
 			} else {
 				$accountId = $result['id'];
@@ -188,7 +196,9 @@ class Plugin {
 					$error = $e->getMessage();
 					myadmin_log(self::$module, 'warning', 'deleteClient Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 				}
-				return FALSE;
+				$event['success'] = FALSE;
+				$event->stopPropagation();
+				return;
 			}
 
 			if (!isset($result['id'])) {
@@ -215,7 +225,9 @@ class Plugin {
 			request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'plesk', 'createSubscription', $request, $result);
 			if (!isset($result['id'])) {
 				myadmin_log(self::$module, 'info', 'createSubscription did not return the expected id information: '.$e->getMessage(), __LINE__, __FILE__);
-				return FALSE;
+				$event['success'] = FALSE;
+				$event->stopPropagation();
+				return;
 			}
 			$subscriptoinId = $result['id'];
 			$extra[1] = $subscriptoinId;
