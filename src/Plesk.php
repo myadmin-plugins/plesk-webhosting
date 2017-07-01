@@ -393,7 +393,8 @@ class Plesk {
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
 		$types = $this->getServerInfoTypes();
-		foreach ($types as $type => $description)
+		$typesKeys = array_keys($types);
+		foreach ($types as $type)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
@@ -778,7 +779,8 @@ class Plesk {
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
 		$types = $this->updateSiteTypes();
-		foreach ($types as $type => $description)
+		$typesKeys = array_keys($types);
+		foreach ($types as $type)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
@@ -897,7 +899,8 @@ class Plesk {
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
 		$types = $this->createDatabaseTypes();
-		foreach ($types as $type => $description)
+		$typesKeys = array_keys($types);
+		foreach ($types as $type)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
@@ -926,7 +929,8 @@ class Plesk {
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
 		$types = $this->createDatabaseUserTypes();
-		foreach ($types as $type => $description)
+		$typesKeys = array_keys($types);
+		foreach ($types as $type)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
@@ -955,7 +959,8 @@ class Plesk {
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
 		$types = $this->createEmailAddress_types();
-		foreach ($types as $type => $description)
+		$typesKeys = array_keys($types);
+		foreach ($types as $type)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
@@ -984,7 +989,8 @@ class Plesk {
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
 		$types = $this->createSecretKey_types();
-		foreach ($types as $type => $description)
+		$typesKeys = array_keys($types);
+		foreach ($types as $type)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
@@ -1013,7 +1019,8 @@ class Plesk {
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
 		$types = $this->createSiteAliasTypes();
-		foreach ($types as $type => $description)
+		$typesKeys = array_keys($types);
+		foreach ($types as $type)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
@@ -1042,7 +1049,8 @@ class Plesk {
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
 		$types = $this->createSubdomainTypes();
-		foreach ($types as $type => $description)
+		$typesKeys = array_keys($types);
+		foreach ($types as $type)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
@@ -1373,7 +1381,8 @@ class Plesk {
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
 		$types = $this->deleteDatabase_types();
-		foreach ($types as $type => $description)
+		$typesKeys = array_keys($types);
+		foreach ($types as $type)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
@@ -1402,7 +1411,8 @@ class Plesk {
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
 		$types = $this->deleteEmailAddress_types();
-		foreach ($types as $type => $description)
+		$typesKeys = array_keys($types);
+		foreach ($types as $type)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
@@ -1431,7 +1441,8 @@ class Plesk {
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
 		$types = $this->deleteSecretKey_types();
-		foreach ($types as $type => $description)
+		$typesKeys = array_keys($types);
+		foreach ($types as $type)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
@@ -1460,7 +1471,8 @@ class Plesk {
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
 		$types = $this->deleteSiteAlias_types();
-		foreach ($types as $type => $description)
+		$typesKeys = array_keys($types);
+		foreach ($types as $type)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
@@ -1526,7 +1538,8 @@ class Plesk {
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
 		$types = $this->deleteSubdomain_types();
-		foreach ($types as $type => $description)
+		$typesKeys = array_keys($types);
+		foreach ($types as $type)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
@@ -1593,7 +1606,8 @@ class Plesk {
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
 		$types = $this->getDatabaseUser_types();
-		foreach ($types as $type => $description)
+		$typesKeys = array_keys($types);
+		foreach ($types as $type)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
@@ -1622,7 +1636,8 @@ class Plesk {
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
 		$types = $this->getServicePlan_types();
-		foreach ($types as $type => $description)
+		$typesKeys = array_keys($types);
+		foreach ($types as $type)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
@@ -1651,7 +1666,8 @@ class Plesk {
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
 		$types = $this->getSubdomain_types();
-		foreach ($types as $type => $description)
+		$typesKeys = array_keys($types);
+		foreach ($types as $type)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
@@ -1690,7 +1706,8 @@ class Plesk {
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
 		$types = $this->getTrafficTypes();
-		foreach ($types as $type => $description)
+		$typesKeys = array_keys($types);
+		foreach ($types as $type)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
@@ -1813,7 +1830,8 @@ class Plesk {
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
 		$types = $this->listDatabases_types();
-		foreach ($types as $type => $description)
+		$typesKeys = array_keys($types);
+		foreach ($types as $type)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
@@ -1842,7 +1860,8 @@ class Plesk {
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
 		$types = $this->listDnsRecords_types();
-		foreach ($types as $type => $description)
+		$typesKeys = array_keys($types);
+		foreach ($types as $type)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
@@ -1871,7 +1890,8 @@ class Plesk {
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
 		$types = $this->listEmailAddresses_types();
-		foreach ($types as $type => $description)
+		$typesKeys = array_keys($types);
+		foreach ($types as $type)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
@@ -1928,7 +1948,8 @@ class Plesk {
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
 		$types = $this->listSecretKeys_types();
-		foreach ($types as $type => $description)
+		$typesKeys = array_keys($types);
+		foreach ($types as $type)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
@@ -1983,7 +2004,8 @@ class Plesk {
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
 		$types = $this->list_site_aliases_types();
-		foreach ($types as $type => $description)
+		$typesKeys = array_keys($types);
+		foreach ($types as $type)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
@@ -2012,7 +2034,8 @@ class Plesk {
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
 		$types = $this->list_subdomains_types();
-		foreach ($types as $type => $description)
+		$typesKeys = array_keys($types);
+		foreach ($types as $type)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
@@ -2041,7 +2064,8 @@ class Plesk {
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
 		$types = $this->rename_subdomain_types();
-		foreach ($types as $type => $description)
+		$typesKeys = array_keys($types);
+		foreach ($types as $type)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
@@ -2106,6 +2130,7 @@ class Plesk {
 			if ($result['status'] == 'error')
 				throw new ApiRequestException('Plesk update_client returned Error #'.$result['errcode'].' '.$result['errtext']);
 		} else {
+			$resultValues = array_values($result);
 			foreach ($result as $idx => $resultData)
 				if ($resultData['status'] == 'error')
 					throw new ApiRequestException('Plesk update_client returned Error #'.$resultData['errcode'].' '.$resultData['errtext'], __LINE__, __FILE__);
@@ -2129,7 +2154,8 @@ class Plesk {
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
 		$types = $this->update_email_password_types();
-		foreach ($types as $type => $description)
+		$typesKeys = array_keys($types);
+		foreach ($types as $type)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
@@ -2158,7 +2184,8 @@ class Plesk {
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
 		$types = $this->update_subdomain_types();
-		foreach ($types as $type => $description)
+		$typesKeys = array_keys($types);
+		foreach ($types as $type)
 			if (!in_array($type, array('certificates')))
 				$get->appendChild($xmldoc->createElement($type));
 		$responseText = $this->sendRequest($xmldoc->saveXML());

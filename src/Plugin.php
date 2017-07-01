@@ -32,7 +32,6 @@ class Plugin {
 			$serviceClass = $event->getSubject();
 			$settings = get_module_settings(self::$module);
 			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
-			$hash = $serverdata[$settings['PREFIX'].'_key'];
 			$ip = $serverdata[$settings['PREFIX'].'_ip'];
 			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
 			$hostname = $serviceClass->getHostname();
