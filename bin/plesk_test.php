@@ -178,7 +178,7 @@ try {
 			'fpt_password' => random_string(),
 		));
 		$data['subdomain_id'] = $request->id;
-		$request = $plesk->list_subdomains(array(
+		$request = $plesk->listSubdomains(array(
 			'site_id' => $data['site_id'],
 		));
 		$subdomain_found = false;

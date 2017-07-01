@@ -639,7 +639,6 @@ class Plesk {
 		$hosting = $xmldoc->createElement('hosting');
 		$prefs = $xmldoc->createElement('prefs');
 		$vrtHst = $xmldoc->createElement('vrt_hst');
-		$htypeTypes = $this->getHtypes();
 		$required = [
 			'name',
 		];
@@ -730,7 +729,6 @@ class Plesk {
 		$domain->appendChild($get);
 		$genSetups = $this->getSiteGenSetups();
 		//$filters = $this->getSiteFilters();
-		$valuesValues = $this->getSiteDatasets();
 		$genSetupAdded = FALSE;
 		$filters = ['id'];
 		$filter = $xmldoc->createElement('filter');
@@ -1176,7 +1174,6 @@ class Plesk {
 		$hosting = $xmldoc->createElement('hosting');
 		$vrtHst = $xmldoc->createElement('vrt_hst');
 		$get->appendChild($genSetup);
-		$htypes = $this->getHtypes();
 		foreach ($required as $require)
 			if ((isset($revMapping[$require]) && !isset($params[$revMapping[$require]])) && !isset($params[$require]))
 				throw new ApiRequestException('Plesk API '.__FUNCTION__.'('.json_decode(json_encode($params), TRUE).') missing required parameter '.$require);
@@ -1319,7 +1316,7 @@ class Plesk {
 				throw new ApiRequestException('Plesk listSubscriptions returned Error #'.$result['errcode'].' '.$result['errtext']);
 		} else {
 			$resultValues = array_values($result);
-			foreach ($result as $resultData)
+			foreach ($resultValues as $resultData)
 				if ($resultData['status'] == 'error')
 					throw new ApiRequestException('Plesk listSubscriptions returned Error #'.$resultData['errcode'].' '.$resultData['errtext']);
 		}
@@ -1519,7 +1516,7 @@ class Plesk {
 				throw new ApiRequestException('Plesk deleteSite returned Error #'.$result['errcode'].' '.$result['errtext']);
 		} else {
 			$resultValues = array_values($result);
-			foreach ($result as $resultData)
+			foreach ($resultValues as $resultData)
 				if ($resultData['status'] == 'error')
 					throw new ApiRequestException('Plesk deleteSite returned Error #'.$resultData['errcode'].' '.$resultData['errtext']);
 		}
@@ -1753,7 +1750,7 @@ class Plesk {
 				throw new ApiRequestException('Plesk listClients returned Error #'.$result['errcode'].' '.$result['errtext']);
 		} else {
 			$resultValues = array_values($result);
-			foreach ($result as $resultData)
+			foreach ($resultValues as $resultData)
 				if ($resultData['status'] == 'error')
 					throw new ApiRequestException('Plesk listClients returned Error #'.$resultData['errcode'].' '.$resultData['errtext']);
 		}
@@ -2027,7 +2024,7 @@ class Plesk {
 	 *
 	 * @return DOMDocument
 	 */
-	public function list_subdomains() {
+	public function listSubdomains() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -2048,7 +2045,7 @@ class Plesk {
 		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk list_subdomains returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk listSubdomains returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 

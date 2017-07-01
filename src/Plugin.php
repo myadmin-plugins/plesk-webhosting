@@ -160,7 +160,7 @@ class Plugin {
 				$accountId = $result['id'];
 			}
 			//$ftpLogin = 'ftpuser'.$serviceClass->getId();
-			$ftpLogin = 'ftp'.Plesk::randomString(9);
+			//$ftpLogin = 'ftp'.Plesk::randomString(9);
 			//$ftpLogin = 'ftp'.str_replace('.',''), array('',''), $hostname);
 			//$ftpPassword = Plesk::randomString(16);
 			$ftpPassword = generateRandomString(10, 2, 1, 1, 1);
@@ -248,12 +248,9 @@ class Plugin {
 			$serviceClass = $event->getSubject();
 			$settings = get_module_settings(self::$module);
 			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
-			$hash = $serverdata[$settings['PREFIX'].'_key'];
-			$ip = $serverdata[$settings['PREFIX'].'_ip'];
 			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
 			function_requirements('get_webhosting_plesk_instance');
 			$plesk = get_webhosting_plesk_instance($serverdata);
-			list($userId, $subscriptoinId) = $extra;
 			$request = ['username' => $serviceClass->getUsername(), 'status' => 0];
 			try {
 				$result = $plesk->updateClient($request);
