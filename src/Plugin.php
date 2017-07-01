@@ -26,21 +26,20 @@ class Plugin {
 	}
 
 	public static function getActivate(GenericEvent $event) {
-		$service = $event->getSubject();
 		if ($event['category'] == SERVICE_TYPES_WEB_PLESK) {
 			myadmin_log(self::$module, 'info', 'Plesk Activation', __LINE__, __FILE__);
-			$serviceInfo = $service->getServiceInfo();
+			$serviceClass = $event->getSubject();
 			$settings = get_module_settings(self::$module);
-			$serverdata = get_service_master($serviceInfo[$settings['PREFIX'].'_server'], self::$module);
+			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
 			$hash = $serverdata[$settings['PREFIX'].'_key'];
 			$ip = $serverdata[$settings['PREFIX'].'_ip'];
-			$extra = run_event('parse_service_extra', $serviceInfo[$settings['PREFIX'].'_extra'], self::$module);
-			$hostname = $serviceInfo[$settings['PREFIX'].'_hostname'];
+			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
+			$hostname = $serviceClass->getHostname();
 			if (trim($hostname) == '')
-				$hostname = $serviceInfo[$settings['PREFIX'].'_id'] . '.server.com';
-			$password = website_get_password($serviceInfo[$settings['PREFIX'].'_id']);
-			$username = get_new_webhosting_username($serviceInfo[$settings['PREFIX'].'_id'], $hostname, $serviceInfo[$settings['PREFIX'].'_server']);
-			$data = $GLOBALS['tf']->accounts->read($serviceInfo[$settings['PREFIX'].'_custid']);
+				$hostname = $serviceClass->getId() . '.server.com';
+			$password = website_get_password($serviceClass->getId());
+			$username = get_new_webhosting_username($serviceClass->getId(), $hostname, $serviceClass->getServer());
+			$data = $GLOBALS['tf']->accounts->read($serviceClass->getCustid());
 			$debugCalls = FALSE;
 			if (!is_array($extra))
 				$extra = [];
@@ -136,10 +135,10 @@ class Plugin {
 						$cantFix = TRUE;
 				}
 				if ($passwordUpdated == TRUE) {
-					$GLOBALS['tf']->history->add($settings['PREFIX'], 'password', $serviceInfo[$settings['PREFIX'].'_id'], $options['password']);
+					$GLOBALS['tf']->history->add($settings['PREFIX'], 'password', $serviceClass->getId(), $options['password']);
 				}
 			}
-			request_log(self::$module, $serviceInfo[$settings['PREFIX'].'_custid'], __FUNCTION__, 'plesk', 'createClient', $request, $result);
+			request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'plesk', 'createClient', $request, $result);
 			if (!isset($result['id'])) {
 				//myadmin_log(self::$module, 'info', 'createClient did not return the expected id information: '.$e->getMessage(), __LINE__, __FILE__);
 				myadmin_log(self::$module, 'info', 'createClient did not return the expected id', __LINE__, __FILE__);
@@ -152,7 +151,7 @@ class Plugin {
 			} else {
 				$accountId = $result['id'];
 			}
-			//$ftpLogin = 'ftpuser'.$serviceInfo[$settings['PREFIX'].'_id'];
+			//$ftpLogin = 'ftpuser'.$serviceClass->getId();
 			$ftpLogin = 'ftp'.Plesk::randomString(9);
 			//$ftpLogin = 'ftp'.str_replace('.',''), array('',''), $hostname);
 			//$ftpPassword = Plesk::randomString(16);
@@ -161,7 +160,7 @@ class Plugin {
 				$ftpPassword = generateRandomString(10, 2, 1, 1, 1);
 			$extra[0] = $accountId;
 			$serExtra = $db->real_escape(myadmin_stringify($extra));
-			$db->query("update {$settings['TABLE']} set {$settings['PREFIX']}_ip='{$ip}', {$settings['PREFIX']}_extra='{$serExtra}' where {$settings['PREFIX']}_id='{$serviceInfo[$settings['PREFIX'].'_id']}'", __LINE__, __FILE__);
+			$db->query("update {$settings['TABLE']} set {$settings['PREFIX']}_ip='{$ip}', {$settings['PREFIX']}_extra='{$serExtra}' where {$settings['PREFIX']}_id='{$serviceClass->getId()}'", __LINE__, __FILE__);
 			myadmin_log(self::$module, 'info', "createClient got client id {$accountId}", __LINE__, __FILE__);
 			//$plesk->debug = TRUE;
 			//$debugCalls = TRUE;
@@ -212,7 +211,7 @@ class Plugin {
 						$cantFix = TRUE;
 				}
 			}
-			request_log(self::$module, $serviceInfo[$settings['PREFIX'].'_custid'], __FUNCTION__, 'plesk', 'createSubscription', $request, $result);
+			request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'plesk', 'createSubscription', $request, $result);
 			if (!isset($result['id'])) {
 				myadmin_log(self::$module, 'info', 'createSubscription did not return the expected id information: '.$e->getMessage(), __LINE__, __FILE__);
 				return FALSE;
@@ -220,30 +219,29 @@ class Plugin {
 			$subscriptoinId = $result['id'];
 			$extra[1] = $subscriptoinId;
 			$serExtra = $db->real_escape(myadmin_stringify($extra));
-			$db->query("update {$settings['TABLE']} set {$settings['PREFIX']}_ip='{$ip}', {$settings['PREFIX']}_extra='{$serExtra}', {$settings['PREFIX']}_username='{$username}' where {$settings['PREFIX']}_id='{$serviceInfo[$settings['PREFIX'].'_id']}'", __LINE__, __FILE__);
+			$db->query("update {$settings['TABLE']} set {$settings['PREFIX']}_ip='{$ip}', {$settings['PREFIX']}_extra='{$serExtra}', {$settings['PREFIX']}_username='{$username}' where {$settings['PREFIX']}_id='{$serviceClass->getId()}'", __LINE__, __FILE__);
 			if ($debugCalls == TRUE)
 				echo "plesk->createSubscription(".var_export($request, TRUE).") = ".var_export($result, TRUE).PHP_EOL;
 			myadmin_log(self::$module, 'info', "createSubscription got Subscription ID {$subscriptoinId}\n", __LINE__, __FILE__);
 			if (is_numeric($subscriptoinId)) {
-				website_welcome_email($serviceInfo[$settings['PREFIX'].'_id']);
+				website_welcome_email($serviceClass->getId());
 			}
 			$event->stopPropagation();
 		}
 	}
 
 	public static function getReactivate(GenericEvent $event) {
-		$service = $event->getSubject();
 		if ($event['category'] == SERVICE_TYPES_WEB_PLESK) {
-			$serviceInfo = $service->getServiceInfo();
+			$serviceClass = $event->getSubject();
 			$settings = get_module_settings(self::$module);
-			$serverdata = get_service_master($serviceInfo[$settings['PREFIX'].'_server'], self::$module);
+			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
 			$hash = $serverdata[$settings['PREFIX'].'_key'];
 			$ip = $serverdata[$settings['PREFIX'].'_ip'];
-			$extra = run_event('parse_service_extra', $serviceInfo[$settings['PREFIX'].'_extra'], self::$module);
+			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
 			function_requirements('get_webhosting_plesk_instance');
 			$plesk = get_webhosting_plesk_instance($serverdata);
 			list($userId, $subscriptoinId) = $extra;
-			$request = ['username' => $serviceInfo[$settings['PREFIX'].'_username'], 'status' => 0];
+			$request = ['username' => $serviceClass->getUsername(), 'status' => 0];
 			try {
 				$result = $plesk->update_client($request);
 			} catch (\Exception $e) {
@@ -256,18 +254,18 @@ class Plugin {
 
 	public static function getChangeIp(GenericEvent $event) {
 		if ($event['category'] == SERVICE_TYPES_WEB_PLESK) {
-			$license = $event->getSubject();
+			$serviceClass = $event->getSubject();
 			$settings = get_module_settings(self::$module);
 			$plesk = new Plesk(FANTASTICO_USERNAME, FANTASTICO_PASSWORD);
-			myadmin_log(self::$module, 'info', "IP Change - (OLD:".$license->get_ip().") (NEW:{$event['newip']})", __LINE__, __FILE__);
-			$result = $plesk->editIp($license->get_ip(), $event['newip']);
+			myadmin_log(self::$module, 'info', "IP Change - (OLD:".$serviceClass->get_ip().") (NEW:{$event['newip']})", __LINE__, __FILE__);
+			$result = $plesk->editIp($serviceClass->get_ip(), $event['newip']);
 			if (isset($result['faultcode'])) {
-				myadmin_log(self::$module, 'error', 'Plesk editIp('.$license->get_ip().', '.$event['newip'].') returned Fault '.$result['faultcode'].': '.$result['fault'], __LINE__, __FILE__);
+				myadmin_log(self::$module, 'error', 'Plesk editIp('.$serviceClass->get_ip().', '.$event['newip'].') returned Fault '.$result['faultcode'].': '.$result['fault'], __LINE__, __FILE__);
 				$event['status'] = 'error';
 				$event['status_text'] = 'Error Code '.$result['faultcode'].': '.$result['fault'];
 			} else {
-				$GLOBALS['tf']->history->add($settings['TABLE'], 'change_ip', $event['newip'], $license->get_ip());
-				$license->set_ip($event['newip'])->save();
+				$GLOBALS['tf']->history->add($settings['TABLE'], 'change_ip', $event['newip'], $serviceClass->get_ip());
+				$serviceClass->set_ip($event['newip'])->save();
 				$event['status'] = 'ok';
 				$event['status_text'] = 'The IP Address has been changed.';
 			}
