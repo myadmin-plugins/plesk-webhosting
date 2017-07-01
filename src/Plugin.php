@@ -159,6 +159,7 @@ class Plugin {
 			while (mb_strpos($ftpPassword, '&') !== FALSE)
 				$ftpPassword = generateRandomString(10, 2, 1, 1, 1);
 			$extra[0] = $accountId;
+			$db = get_module_db(self::$module);
 			$serExtra = $db->real_escape(myadmin_stringify($extra));
 			$db->query("update {$settings['TABLE']} set {$settings['PREFIX']}_ip='{$ip}', {$settings['PREFIX']}_extra='{$serExtra}' where {$settings['PREFIX']}_id='{$serviceClass->getId()}'", __LINE__, __FILE__);
 			myadmin_log(self::$module, 'info', "createClient got client id {$accountId}", __LINE__, __FILE__);
