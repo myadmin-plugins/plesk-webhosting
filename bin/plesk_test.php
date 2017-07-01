@@ -159,7 +159,7 @@ try {
 		$params = array('site_id' => $data['site_id'], 'alias' => $data['site_alias']);
 		$request = $plesk->createSiteAlias($params);
 		$data['site_alias_id'] = $request->id;
-		$request = $plesk->list_site_aliases(array('site_id' => $data['site_id']));
+		$request = $plesk->listSiteAliases(array('site_id' => $data['site_id']));
 		$alias_found = false;
 		foreach ($request as $alias_id => $alias_name)
 			if ($alias_id == $data['site_alias_id'])

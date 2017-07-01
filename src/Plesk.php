@@ -444,7 +444,7 @@ class Plesk {
 	 *
 	 * @return DOMDocument
 	 */
-	public function get_customers() {
+	public function getCustomers() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -575,7 +575,8 @@ class Plesk {
 				if ($result['status'] == 'error')
 					throw new ApiRequestException('Plesk getSites returned Error #'.$result['errcode'].' '.$result['errtext']);
 			} else {
-				foreach ($result as $idx => $resultData)
+				$resultValues = array_values($result);
+				foreach ($resultValues as $resultData)
 					if ($resultData['status'] == 'error')
 						throw new ApiRequestException('Plesk getSites returned Error #'.$resultData['errcode'].' '.$resultData['errtext']);
 			}
@@ -1317,7 +1318,8 @@ class Plesk {
 			if ($result['status'] == 'error')
 				throw new ApiRequestException('Plesk listSubscriptions returned Error #'.$result['errcode'].' '.$result['errtext']);
 		} else {
-			foreach ($result as $idx => $resultData)
+			$resultValues = array_values($result);
+			foreach ($result as $resultData)
 				if ($resultData['status'] == 'error')
 					throw new ApiRequestException('Plesk listSubscriptions returned Error #'.$resultData['errcode'].' '.$resultData['errtext']);
 		}
@@ -1516,7 +1518,8 @@ class Plesk {
 			if ($result['status'] == 'error')
 				throw new ApiRequestException('Plesk deleteSite returned Error #'.$result['errcode'].' '.$result['errtext']);
 		} else {
-			foreach ($result as $idx => $resultData)
+			$resultValues = array_values($result);
+			foreach ($result as $resultData)
 				if ($resultData['status'] == 'error')
 					throw new ApiRequestException('Plesk deleteSite returned Error #'.$resultData['errcode'].' '.$resultData['errtext']);
 		}
@@ -1749,7 +1752,8 @@ class Plesk {
 			if ($result['status'] == 'error')
 				throw new ApiRequestException('Plesk listClients returned Error #'.$result['errcode'].' '.$result['errtext']);
 		} else {
-			foreach ($result as $idx => $resultData)
+			$resultValues = array_values($result);
+			foreach ($result as $resultData)
 				if ($resultData['status'] == 'error')
 					throw new ApiRequestException('Plesk listClients returned Error #'.$resultData['errcode'].' '.$resultData['errtext']);
 		}
@@ -1993,7 +1997,7 @@ class Plesk {
 	 *
 	 * @return DOMDocument
 	 */
-	public function list_site_aliases() {
+	public function listSiteAliases() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -2003,7 +2007,7 @@ class Plesk {
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('get');
 		$domain->appendChild($get);
-		$types = $this->list_site_aliases_types();
+		$types = $this->listSiteAliasesTypes();
 		$typesKeys = array_keys($types);
 		foreach ($typesKeys as $type)
 			if (!in_array($type, array('certificates')))
@@ -2014,7 +2018,7 @@ class Plesk {
 		$result = $this->fixResult($result);
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
-			throw new ApiRequestException('Plesk list_site_aliases returned Error #'.$result['errcode'].' '.$result['errtext']);
+			throw new ApiRequestException('Plesk listSiteAliases returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
 	}
 
@@ -2131,7 +2135,7 @@ class Plesk {
 				throw new ApiRequestException('Plesk update_client returned Error #'.$result['errcode'].' '.$result['errtext']);
 		} else {
 			$resultValues = array_values($result);
-			foreach ($result as $idx => $resultData)
+			foreach ($resultValues as $resultData)
 				if ($resultData['status'] == 'error')
 					throw new ApiRequestException('Plesk update_client returned Error #'.$resultData['errcode'].' '.$resultData['errtext'], __LINE__, __FILE__);
 		}
