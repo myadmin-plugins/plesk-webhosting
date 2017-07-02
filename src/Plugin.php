@@ -265,12 +265,9 @@ class Plugin {
 		if ($event['category'] == SERVICE_TYPES_WEB_PLESK) {
 			myadmin_log(self::$module, 'info', 'Plesk Deactivation', __LINE__, __FILE__);
 			$serviceClass = $event->getSubject();
-			$serviceTypes = run_event('get_service_types', FALSE, self::$module);
-			$settings = get_module_settings(self::$module);
 			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
 			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
 			$plesk = get_webhosting_plesk_instance($serverdata);
-			list($userId, $subscriptoinId) = $extra;
 			$request = array(
 				'username' => $serviceClass->getUsername(),
 				'status' => 1,
@@ -289,8 +286,6 @@ class Plugin {
 		if ($event['category'] == SERVICE_TYPES_WEB_PLESK) {
 			myadmin_log(self::$module, 'info', 'Plesk Termination', __LINE__, __FILE__);
 			$serviceClass = $event->getSubject();
-			$serviceTypes = run_event('get_service_types', FALSE, self::$module);
-			$settings = get_module_settings(self::$module);
 			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
 			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
 			$plesk = get_webhosting_plesk_instance($serverdata);
