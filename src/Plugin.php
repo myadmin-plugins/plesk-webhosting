@@ -267,6 +267,22 @@ class Plugin {
 			$serviceClass = $event->getSubject();
 			$serviceTypes = run_event('get_service_types', FALSE, self::$module);
 			$settings = get_module_settings(self::$module);
+			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
+			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
+			$hash = $serverdata[$settings['PREFIX'].'_key'];
+			$ip = $serverdata[$settings['PREFIX'].'_ip'];
+			$plesk = get_webhosting_plesk_instance($serverdata);
+			list($userId, $subscriptoinId) = $extra;
+			$request = array(
+				'username' => $serviceClass->getUsername(),
+				'status' => 1,
+			);
+			try {
+				$result = $plesk->updateClient($request);
+				myadmin_log(self::$module, 'info', 'updateClient(' . json_encode($request) . ') Called got ' . json_encode($result), __LINE__, __FILE__);
+			} catch (Exception $e) {
+				myadmin_log(self::$module, 'info', 'updateClient(' . json_encode($request) . ') Caught exception: ' . $e->getMessage(), __LINE__, __FILE__);
+			}
 			$event->stopPropagation();
 		}
 	}
@@ -277,6 +293,39 @@ class Plugin {
 			$serviceClass = $event->getSubject();
 			$serviceTypes = run_event('get_service_types', FALSE, self::$module);
 			$settings = get_module_settings(self::$module);
+			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
+			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
+			$hash = $serverdata[$settings['PREFIX'].'_key'];
+			$ip = $serverdata[$settings['PREFIX'].'_ip'];
+			$plesk = get_webhosting_plesk_instance($serverdata);
+			list($userId, $subscriptoinId) = $extra;
+			/*
+			$request = array('id' => $data['site_id']);
+			try {
+				$result = $plesk->deleteSite($request);
+			} catch (Exception $e) {
+				billingd_log('deleteSite Caught exception: ' . $e->getMessage(), __LINE__, __FILE__);
+				echo 'Caught exception: ' . $e->getMessage() . "\n";
+			}
+			myadmin_log(self::$module, 'info', 'deleteSite Called got ' . json_encode($result), __LINE__, __FILE__);
+			*/
+			$request = array('id' => $subscriptoinId);
+			try {
+				$result = $plesk->deleteSubscription($request);
+			} catch (Exception $e) {
+				billingd_log('deleteSubscription id:' . $subscriptoinId . ' Caught exception: ' . $e->getMessage(), __LINE__, __FILE__);
+				echo 'Caught exception: ' . $e->getMessage() . "\n";
+			}
+			myadmin_log(self::$module, 'info', 'deleteSubscription Called got ' . json_encode($result), __LINE__, __FILE__);
+			$request = array('id' => $userId);
+			try {
+				$result = $plesk->deleteClient($request);
+			} catch (Exception $e) {
+				billingd_log('deleteClient id:'. $userId . ' Caught exception: ' . $e->getMessage(), __LINE__, __FILE__);
+				echo 'Caught exception: ' . $e->getMessage() . "\n";
+			}
+			myadmin_log(self::$module, 'info', 'deleteClient Called got ' . json_encode($result), __LINE__, __FILE__);
+			return true;
 			$event->stopPropagation();
 		}
 	}
