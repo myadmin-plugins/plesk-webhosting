@@ -9,8 +9,8 @@ use Symfony\Component\EventDispatcher\GenericEvent;
 class Plugin {
 
 	public static $name = 'Plesk Webhosting';
-	public static $description = 'Allows selling of Plesk Server and VPS License Types.  More info at https://www.netenberg.com/plesk.php';
-	public static $help = 'It provides more than one million end users the ability to quickly install dozens of the leading open source content management systems into their web space.  	Must have a pre-existing cPanel license with cPanelDirect to purchase a plesk license. Allow 10 minutes for activation.';
+	public static $description = 'Single control panel with an intuitive graphical interface, ready-to-code environment and powerful extensions. Everything you need to develop websites and apps that scale in the cloud.  More info at https://www.plesk.com/';
+	public static $help = '';
 	public static $module = 'webhosting';
 	public static $type = 'service';
 
