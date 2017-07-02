@@ -269,8 +269,6 @@ class Plugin {
 			$settings = get_module_settings(self::$module);
 			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
 			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
-			$hash = $serverdata[$settings['PREFIX'].'_key'];
-			$ip = $serverdata[$settings['PREFIX'].'_ip'];
 			$plesk = get_webhosting_plesk_instance($serverdata);
 			list($userId, $subscriptoinId) = $extra;
 			$request = array(
@@ -295,8 +293,6 @@ class Plugin {
 			$settings = get_module_settings(self::$module);
 			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
 			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
-			$hash = $serverdata[$settings['PREFIX'].'_key'];
-			$ip = $serverdata[$settings['PREFIX'].'_ip'];
 			$plesk = get_webhosting_plesk_instance($serverdata);
 			list($userId, $subscriptoinId) = $extra;
 			/*
