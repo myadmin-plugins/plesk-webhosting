@@ -265,13 +265,9 @@ class Plugin {
 		if ($event['category'] == SERVICE_TYPES_WEB_PLESK) {
 			myadmin_log(self::$module, 'info', 'Plesk Deactivation', __LINE__, __FILE__);
 			$serviceClass = $event->getSubject();
-			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
 			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
 			$plesk = get_webhosting_plesk_instance($serverdata);
-			$request = array(
-				'username' => $serviceClass->getUsername(),
-				'status' => 1,
-			);
+			$request = ['username' => $serviceClass->getUsername(), 'status' => 1];
 			try {
 				$result = $plesk->updateClient($request);
 				myadmin_log(self::$module, 'info', 'updateClient(' . json_encode($request) . ') Called got ' . json_encode($result), __LINE__, __FILE__);
