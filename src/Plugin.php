@@ -301,15 +301,15 @@ class Plugin {
 				$result = $plesk->deleteSubscription($request);
 			} catch (Exception $e) {
 				billingd_log('deleteSubscription id:'.$subscriptoinId.' Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
-				echo 'Caught exception: '.$e->getMessage() . "\n";
+				echo 'Caught exception: '.$e->getMessage()."\n";
 			}
 			myadmin_log(self::$module, 'info', 'deleteSubscription Called got '.json_encode($result), __LINE__, __FILE__);
 			$request = array('id' => $userId);
 			try {
 				$result = $plesk->deleteClient($request);
 			} catch (Exception $e) {
-				billingd_log('deleteClient id:'. $userId.' Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
-				echo 'Caught exception: '.$e->getMessage() . "\n";
+				billingd_log('deleteClient id:'.$userId.' Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
+				echo 'Caught exception: '.$e->getMessage()."\n";
 			}
 			myadmin_log(self::$module, 'info', 'deleteClient Called got '.json_encode($result), __LINE__, __FILE__);
 			return true;
