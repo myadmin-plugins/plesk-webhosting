@@ -126,11 +126,11 @@ try {
 	$result = $plesk->updateSite($request);
 	if ($debugCalls == TRUE)
 		echo "plesk->updateSite(".var_export($request, TRUE).") = ".var_export($result, TRUE)."\n";
-	//echo "Got " . print_r($result, true) . "\n";
+	//echo "Got " . print_r($result, TRUE) . "\n";
 } catch (Exception $e) {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
-//echo "Final Data: ".print_r($data, true).PHP_EOL;
+//echo "Final Data: ".print_r($data, TRUE).PHP_EOL;
 if (isset($data['site_id'])) {
 	echo "Deleting Site {$data['site_id']}\n";
 	$request = array('id' => $data['site_id']);
