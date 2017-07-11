@@ -25,6 +25,7 @@ class Plugin {
 			self::$module.'.reactivate' => [__CLASS__, 'getReactivate'],
 			self::$module.'.deactivate' => [__CLASS__, 'getDeactivate'],
 			self::$module.'.terminate' => [__CLASS__, 'getTerminate'],
+			'function.requirements' => [__CLASS__, 'getRequirements'],
 		];
 	}
 
@@ -349,18 +350,7 @@ class Plugin {
 
 	public static function getRequirements(GenericEvent $event) {
 		$loader = $event->getSubject();
-		$loader->add_requirement('crud_plesk_list', '/../vendor/detain/crud/src/crud/crud_plesk_list.php');
-		$loader->add_requirement('crud_reusable_plesk', '/../vendor/detain/crud/src/crud/crud_reusable_plesk.php');
-		$loader->add_requirement('get_plesk_licenses', '/../vendor/detain/myadmin-plesk-webhosting/src/plesk.inc.php');
-		$loader->add_requirement('get_plesk_list', '/../vendor/detain/myadmin-plesk-webhosting/src/plesk.inc.php');
-		$loader->add_requirement('plesk_licenses_list', '/../vendor/detain/myadmin-plesk-webhosting/src/plesk_licenses_list.php');
-		$loader->add_requirement('plesk_list', '/../vendor/detain/myadmin-plesk-webhosting/src/plesk_list.php');
-		$loader->add_requirement('get_available_plesk', '/../vendor/detain/myadmin-plesk-webhosting/src/plesk.inc.php');
-		$loader->add_requirement('activate_plesk', '/../vendor/detain/myadmin-plesk-webhosting/src/plesk.inc.php');
-		$loader->add_requirement('get_reusable_plesk', '/../vendor/detain/myadmin-plesk-webhosting/src/plesk.inc.php');
-		$loader->add_requirement('reusable_plesk', '/../vendor/detain/myadmin-plesk-webhosting/src/reusable_plesk.php');
-		$loader->add_requirement('class.Plesk', '/../vendor/detain/plesk-webhosting/src/Plesk.php');
-		$loader->add_requirement('vps_add_plesk', '/vps/addons/vps_add_plesk.php');
+		$loader->add_requirement('get_webhosting_plesk_instance', '/../vendor/detain/myadmin-plesk-webhosting/src/get_webhosting_plesk_instance.php');
 	}
 
 	public static function getSettings(GenericEvent $event) {
