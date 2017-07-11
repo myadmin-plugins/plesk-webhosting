@@ -46,6 +46,7 @@ class Plugin {
 			$debugCalls = FALSE;
 			if (!is_array($extra))
 				$extra = [];
+			function_requirements('get_webhosting_plesk_instance');
 			$plesk = get_webhosting_plesk_instance($serverdata);
 			/**
 			 * Gets the Shared IP Address
@@ -267,6 +268,7 @@ class Plugin {
 			myadmin_log(self::$module, 'info', 'Plesk Deactivation', __LINE__, __FILE__);
 			$serviceClass = $event->getSubject();
 			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
+			function_requirements('get_webhosting_plesk_instance');
 			$plesk = get_webhosting_plesk_instance($serverdata);
 			$request = ['username' => $serviceClass->getUsername(), 'status' => 1];
 			try {
@@ -285,6 +287,7 @@ class Plugin {
 			$serviceClass = $event->getSubject();
 			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
 			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
+			function_requirements('get_webhosting_plesk_instance');
 			$plesk = get_webhosting_plesk_instance($serverdata);
 			list($userId, $subscriptoinId) = $extra;
 			/*
