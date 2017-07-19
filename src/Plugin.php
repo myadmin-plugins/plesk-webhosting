@@ -30,7 +30,7 @@ class Plugin {
 	}
 
 	public static function getActivate(GenericEvent $event) {
-		if ($event['category'] == SERVICE_TYPES_WEB_PLESK) {
+		if ($event['category'] == get_service_define('WEB_PLESK')) {
 			myadmin_log(self::$module, 'info', 'Plesk Activation', __LINE__, __FILE__);
 			$serviceClass = $event->getSubject();
 			$settings = get_module_settings(self::$module);
@@ -247,7 +247,7 @@ class Plugin {
 	}
 
 	public static function getReactivate(GenericEvent $event) {
-		if ($event['category'] == SERVICE_TYPES_WEB_PLESK) {
+		if ($event['category'] == get_service_define('WEB_PLESK')) {
 			$serviceClass = $event->getSubject();
 			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
 			function_requirements('get_webhosting_plesk_instance');
@@ -264,7 +264,7 @@ class Plugin {
 	}
 
 	public static function getDeactivate(GenericEvent $event) {
-		if ($event['category'] == SERVICE_TYPES_WEB_PLESK) {
+		if ($event['category'] == get_service_define('WEB_PLESK')) {
 			myadmin_log(self::$module, 'info', 'Plesk Deactivation', __LINE__, __FILE__);
 			$serviceClass = $event->getSubject();
 			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
@@ -282,7 +282,7 @@ class Plugin {
 	}
 
 	public static function getTerminate(GenericEvent $event) {
-		if ($event['category'] == SERVICE_TYPES_WEB_PLESK) {
+		if ($event['category'] == get_service_define('WEB_PLESK')) {
 			myadmin_log(self::$module, 'info', 'Plesk Termination', __LINE__, __FILE__);
 			$serviceClass = $event->getSubject();
 			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
@@ -322,7 +322,7 @@ class Plugin {
 	}
 
 	public static function getChangeIp(GenericEvent $event) {
-		if ($event['category'] == SERVICE_TYPES_WEB_PLESK) {
+		if ($event['category'] == get_service_define('WEB_PLESK')) {
 			$serviceClass = $event->getSubject();
 			$settings = get_module_settings(self::$module);
 			$plesk = new Plesk(FANTASTICO_USERNAME, FANTASTICO_PASSWORD);
@@ -358,7 +358,7 @@ class Plugin {
 
 	public static function getSettings(GenericEvent $event) {
 		$settings = $event->getSubject();
-		$settings->add_select_master(self::$module, 'Default Servers', self::$module, 'new_website_plesk_server', 'Default Plesk Setup Server', NEW_WEBSITE_PLESK_SERVER, SERVICE_TYPES_WEB_PLESK);
+		$settings->add_select_master(self::$module, 'Default Servers', self::$module, 'new_website_plesk_server', 'Default Plesk Setup Server', NEW_WEBSITE_PLESK_SERVER, get_service_define('WEB_PLESK'));
 		$settings->add_dropdown_setting(self::$module, 'Out of Stock', 'outofstock_webhosting_plesk', 'Out Of Stock Plesk Webhosting', 'Enable/Disable Sales Of This Type', $settings->get_setting('OUTOFSTOCK_WEBHOSTING_PLESK'), ['0', '1'], ['No', 'Yes']);
 	}
 
