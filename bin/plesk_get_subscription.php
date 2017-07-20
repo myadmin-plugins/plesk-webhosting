@@ -17,7 +17,7 @@ try {
 	$value = $_SERVER['argv'][3];
 	$result = $plesk->getSubscription([$field => $value]);
 } catch (ApiRequestException $e) {
-	echo "Exception Error: ".$e;
+	echo 'Exception Error: ' .$e;
 	print_r($e);
 	die();
 }

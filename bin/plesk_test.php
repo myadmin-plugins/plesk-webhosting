@@ -70,11 +70,11 @@ function exception_error_handler($errno, $errstr, $errfile, $errline) {
  * @return string
  */
 function random_string($length = 8) {
-	$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	$chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 	return mb_substr(str_shuffle($chars), 0, $length);
 }
 
-set_error_handler("exception_error_handler");
+set_error_handler('exception_error_handler');
 $data = [];
 $plesk = new Plesk('162.246.20.210', 'admin', 'x0Bak5&0');
 $request = $plesk->listIpAddresses();
@@ -98,9 +98,9 @@ $data['client_username'] = strtolower(random_string());
 $plesk = new Plesk('162.246.20.210', 'admin', 'x0Bak5&0');
 $request = $plesk->createClient(
 	[
-	'name' => random_string(),
-	'username' => $data['client_username'],
-	'password' => random_string(16)."1!",
+		'name' => random_string(),
+		'username' => $data['client_username'],
+		'password' => random_string(16). '1!',
 	]
 );
 $data['client_id'] = $request->id;
@@ -148,8 +148,8 @@ try {
 		$data['email_address'] = random_string(4).'@'.$data['domain'];
 		$request = $plesk->createEmailAddress(
 			[
-			'email' => $data['email_address'],
-			'password' => random_string()."1!",
+				'email' => $data['email_address'],
+				'password' => random_string(). '1!',
 			]
 		);
 		$data['email_address_id'] = $request->id;
@@ -163,7 +163,7 @@ try {
 			if ($email_address['id'] == $data['email_address_id'])
 				$email_address_found = TRUE;
 		if (!$email_address_found)
-			throw new Exception("Couldn't find created email address (".$data['email_address_id'].")");
+			throw new Exception("Couldn't find created email address (".$data['email_address_id']. ')');
 		$request = $plesk->updateEmailPassword(
 			[
 			'email' => $data['email_address'],
@@ -304,7 +304,7 @@ try {
 		if ($key['key'] == $data['secret_key'])
 			$secret_key_found = TRUE;
 	if ($secret_key_found)
-		throw new Exception("Failed to delete secret_key");
+		throw new Exception('Failed to delete secret_key');
 } catch (Exception $e) {
 	throw $e;
 }

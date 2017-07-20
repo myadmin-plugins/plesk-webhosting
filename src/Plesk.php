@@ -351,9 +351,9 @@ class Plesk {
 		$export = var_export($result, TRUE);
 		$export = preg_replace("/^array\s*\(\s*$/m", '[', $export);
 		$export = preg_replace("/^\)\s*$/m", ']', $export);
-		$export = preg_replace("/=>\s*$\n\s*array\s*\(/m", "=> [", $export);
+		$export = preg_replace("/=>\s*$\n\s*array\s*\(/m", '=> [', $export);
 		$export = preg_replace("/^(\s*)\),\s*$/m", '$1],', $export);
-		$export = preg_replace("/=>\s*\[\s*$\n\s*\],\s*$/m", "=> [],", $export);
+		$export = preg_replace("/=>\s*\[\s*$\n\s*\],\s*$/m", '=> [],', $export);
 		return $export;
 	}
 
