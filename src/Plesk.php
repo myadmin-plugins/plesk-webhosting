@@ -545,7 +545,7 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for information about all available sites
 	 *
-	 * @param bool $params
+	 * @param bool|array $params
 	 * @return array
 	 * @throws \Detain\MyAdminPlesk\ApiRequestException
 	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
@@ -606,7 +606,8 @@ class Plesk {
 	 *
 	 * @param bool $params
 	 * @return array
-	 * @throws \ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function getSite($params = FALSE) {
 		return $this->getSites($params);
@@ -617,7 +618,8 @@ class Plesk {
 	 *
 	 * @param bool|array $params
 	 * @return array
-	 * @throws \ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function listSites($params = FALSE) {
 		return $this->getSites($params);
@@ -1763,6 +1765,7 @@ class Plesk {
 	 * @param array $params
 	 * @return \Detain\MyAdminPlesk\DOMDocument
 	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function getSubscription($params) {
 		return $this->listSubscriptions($params);
