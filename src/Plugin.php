@@ -191,7 +191,7 @@ class Plugin {
 			myadmin_log(self::$module, 'info', "createClient got client id {$accountId}", __LINE__, __FILE__);
 			//$plesk->debug = TRUE;
 			//$debugCalls = TRUE;
-			$request = array(
+			$request = [
 				'domain' => $hostname,
 				'owner_id' => $accountId,
 				'htype' => 'vrt_hst',
@@ -200,7 +200,7 @@ class Plugin {
 				'ip' => $ip,
 				'status' => 0,
 				'plan_id' => $planId,
-			);
+			];
 			$result = [];
 			try {
 				myadmin_log(self::$module, 'info', 'createSubscription called with '.json_encode($request), __LINE__, __FILE__);
@@ -329,7 +329,7 @@ class Plugin {
 			}
 			myadmin_log(self::$module, 'info', 'deleteSite Called got '.json_encode($result), __LINE__, __FILE__);
 			*/
-			$request = array('id' => $subscriptoinId);
+			$request = ['id' => $subscriptoinId];
 			try {
 				$result = $plesk->deleteSubscription($request);
 			} catch (Exception $e) {
@@ -337,7 +337,7 @@ class Plugin {
 				echo 'Caught exception: '.$e->getMessage()."\n";
 			}
 			myadmin_log(self::$module, 'info', 'deleteSubscription Called got '.json_encode($result), __LINE__, __FILE__);
-			$request = array('id' => $userId);
+			$request = ['id' => $userId];
 			try {
 				$result = $plesk->deleteClient($request);
 			} catch (Exception $e) {

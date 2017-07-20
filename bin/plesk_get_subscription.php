@@ -15,7 +15,7 @@ $plesk = get_webhosting_plesk_instance((isset($_SERVER['argv'][1]) ? $_SERVER['a
 try {
 	$field = $_SERVER['argv'][2];
 	$value = $_SERVER['argv'][3];
-	$result = $plesk->getSubscription(array($field => $value));
+	$result = $plesk->getSubscription([$field => $value]);
 } catch (ApiRequestException $e) {
 	echo "Exception Error: ".$e;
 	print_r($e);
