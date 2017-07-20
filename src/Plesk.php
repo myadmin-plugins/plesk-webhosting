@@ -366,10 +366,10 @@ class Plesk {
 		if (is_array($result)) {
 			$tempResult = $result;
 			foreach ($tempResult as $key => $value) {
-				if (is_numeric($key) && is_array($value) && sizeof($value) == 2 && isset($value['name']) && isset($value['value'])) {
+				if (is_numeric($key) && is_array($value) && count($value) == 2 && isset($value['name']) && isset($value['value'])) {
 					unset($result[$key]);
 					$result[$value['name']] = $value['value'];
-				} elseif (is_numeric($key) && is_array($value) && sizeof($value) == 2 && isset($value['name']) && isset($value['version'])) {
+				} elseif (is_numeric($key) && is_array($value) && count($value) == 2 && isset($value['name']) && isset($value['version'])) {
 					unset($result[$key]);
 					$result[$value['name']] = $value['version'];
 				} elseif (is_array($value)) {
