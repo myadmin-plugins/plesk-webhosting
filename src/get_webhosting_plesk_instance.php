@@ -8,7 +8,6 @@
 function get_webhosting_plesk_instance($server = false) {
 	$module = 'webhosting';
 	$settings = get_module_settings($module);
-	$db = get_module_db($module);
 	if (is_array($server)) {
 		$serverData = $server;
 	} else {
