@@ -35,7 +35,7 @@ class Plugin {
 			self::$module.'.reactivate' => [__CLASS__, 'getReactivate'],
 			self::$module.'.deactivate' => [__CLASS__, 'getDeactivate'],
 			self::$module.'.terminate' => [__CLASS__, 'getTerminate'],
-			'function.requirements' => [__CLASS__, 'getRequirements'],
+			'function.requirements' => [__CLASS__, 'getRequirements']
 		];
 	}
 
@@ -199,7 +199,7 @@ class Plugin {
 				'ftp_password' => $ftpPassword,
 				'ip' => $ip,
 				'status' => 0,
-				'plan_id' => $planId,
+				'plan_id' => $planId
 			];
 			$result = [];
 			try {

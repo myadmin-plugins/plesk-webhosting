@@ -178,7 +178,7 @@ class Plesk {
 			1050 => 'Webmail not installed.',
 			11003 => 'Secret key validation failed.',
 			14008 => 'Wrong database server type.',
-			14009 => 'Database server not configured.',
+			14009 => 'Database server not configured.'
 		];
 	}
 
@@ -240,7 +240,7 @@ class Plesk {
 			'pname' => 'name',
 			'email' => 'account_lid',
 			'pcode' => 'zip',
-			'cname' => 'company',
+			'cname' => 'company'
 		];
 		$fields = [
 			'cname',
@@ -255,7 +255,7 @@ class Plesk {
 			'city',
 			'state',
 			'pcode',
-			'country',
+			'country'
 		];
 		foreach ($fields as $field) {
 			$sfield = $field;
@@ -337,7 +337,7 @@ class Plesk {
 			'site-isolation-config' => 'It retrieves the the server-wide site isolation settings.',
 			'updates' => 'It retrieves the information about installed and available Plesk updates, missed security updates, and Plesk update policy.',
 			'admin-domain-list' => 'It retrieves the information about all domains, addon domains, subdomains, and domain aliases created on the administrator\'s subscriptions.',
-			'certificates' => 'It retrieves the information about the SSL/TLS certificates used for securing Plesk and mail server.',
+			'certificates' => 'It retrieves the information about the SSL/TLS certificates used for securing Plesk and mail server.'
 		];
 	}
 
@@ -509,7 +509,7 @@ class Plesk {
 			'16' => 'disabled by admin',
 			'32' => 'disabled by reseller',
 			'64' => 'disabled by customer',
-			'256' => 'expired',
+			'256' => 'expired'
 		];
 	}
 
@@ -526,7 +526,7 @@ class Plesk {
 			'parent-site-name',
 			'guid',
 			'parent-guid',
-			'parent-site-guid',
+			'parent-site-guid'
 		];
 	}
 
@@ -539,7 +539,7 @@ class Plesk {
 			'hosting',
 			'stat',
 			'prefs',
-			'disk_usage',
+			'disk_usage'
 		];
 	}
 
@@ -555,7 +555,7 @@ class Plesk {
 		if ($params === FALSE)
 			$params = [];
 		$mapping = [
-			'subscription_id' => 'parent-id',
+			'subscription_id' => 'parent-id'
 		];
 		$filters = $this->getSiteFilters();
 		$datasets = $this->getSiteDatasets();
@@ -639,7 +639,7 @@ class Plesk {
 			'webspace-guid',
 			'parent-site-id',
 			'parent-site-name',
-			'parent-site-guid',
+			'parent-site-guid'
 		];
 	}
 
@@ -667,12 +667,12 @@ class Plesk {
 		$prefs = $xmldoc->createElement('prefs');
 		$vrtHst = $xmldoc->createElement('vrt_hst');
 		$required = [
-			'name',
+			'name'
 		];
 		$mapping = [
 			'domain' => 'name',
 			'subscription_id' => 'webspace-id',
-			'plan_id' => 'plan-id',
+			'plan_id' => 'plan-id'
 		];
 		$revMapping = [];
 		foreach ($mapping as $field => $value)
@@ -680,20 +680,20 @@ class Plesk {
 		$prefTypes = [
 			'www',
 			'stat_ttl',
-			'outgoing-messages-domain-limit',
+			'outgoing-messages-domain-limit'
 		];
 		$vrtHstProperties = [
 			'ftp_login',
-			'ftp_password',
+			'ftp_password'
 		];
 		$vrtHsts = [
-			'ip_address',
+			'ip_address'
 		];
 		$extra = [
 			'plan-id',
 			'plan-name',
 			'plan-guid',
-			'plan-external-id',
+			'plan-external-id'
 		];
 		$genSetups = $this->getSiteGenSetups();
 		foreach ($required as $require)
@@ -884,7 +884,7 @@ class Plesk {
 			'name' => NULL,
 			'username' => NULL,
 			'password' => NULL,
-			'status' => 0,
+			'status' => 0
 		];
 		$mapping = [
 			'company' => 'cname',
@@ -899,7 +899,7 @@ class Plesk {
 			'city' => 'city',
 			'state' => 'state',
 			'zip' => 'pcode',
-			'country' => 'country',
+			'country' => 'country'
 		];
 		foreach ($mapping as $field => $realField)
 			if (isset($data[$field]))
@@ -1123,7 +1123,7 @@ class Plesk {
 			'vrt_hst',
 			'std_fwd',
 			'frm_fwd',
-			'none',
+			'none'
 		];
 	}
 
@@ -1139,7 +1139,7 @@ class Plesk {
 			'guid',
 			'owner-guid',
 			'external-id',
-			'owner-external-id',
+			'owner-external-id'
 		];
 	}
 
@@ -1189,20 +1189,20 @@ class Plesk {
 			'owner-external-id',
 			'htype',
 			'status',
-			'external-id',
+			'external-id'
 		];
 		$vrtHstProperties = [
 			'ftp_login',
-			'ftp_password',
+			'ftp_password'
 		];
 		$vrtHsts = [
-			'ip_address',
+			'ip_address'
 		];
 		$extra = [
 			'plan-id',
 			'plan-name',
 			'plan-guid',
-			'plan-external-id',
+			'plan-external-id'
 		];
 		$mapping = [
 			'domain' => 'name',
@@ -1210,7 +1210,7 @@ class Plesk {
 			'owner_login' => 'owner-login',
 			'ip' => 'ip_address',
 			'subscription_id' => 'webspace-id',
-			'plan_id' => 'plan-id',
+			'plan_id' => 'plan-id'
 		];
 		$revMapping = [];
 		foreach ($mapping as $field => $value)
@@ -1305,7 +1305,7 @@ class Plesk {
 			'domain' => 'name',
 			'owner_id' => 'owner-id',
 			'owner_login' => 'owner-login',
-			'ip' => 'ip_address',
+			'ip' => 'ip_address'
 		];
 		$filters = $this->getSubscriptionFilters();
 		foreach ($params as $field => $value) {
@@ -1400,7 +1400,7 @@ class Plesk {
 		$get = $xmldoc->createElement('del');
 		$domain->appendChild($get);
 		$mapping = [
-			'username' => 'login',
+			'username' => 'login'
 		];
 		$filter = $xmldoc->createElement('filter');
 		$get->appendChild($filter);
@@ -1649,7 +1649,7 @@ class Plesk {
 		$dataset->appendChild($xmldoc->createElement('gen_info'));
 		$dataset->appendChild($xmldoc->createElement('stat'));
 		$mapping = [
-			'username' => 'login',
+			'username' => 'login'
 		];
 		foreach ($params as $field => $value) {
 			$filter->appendChild($xmldoc->createElement((isset($mapping[$field]) ? $mapping[$field] : $field), $value));
@@ -2206,12 +2206,12 @@ class Plesk {
 		$get = $xmldoc->createElement('set');
 		$domain->appendChild($get);
 		$filters = [
-			'username',
+			'username'
 		];
 		$mapping = [
 			'username' => 'login',
 			'password' => 'passwd',
-			'zip' => 'pcode',
+			'zip' => 'pcode'
 		];
 		$filter = $xmldoc->createElement('filter');
 		$get->appendChild($filter);

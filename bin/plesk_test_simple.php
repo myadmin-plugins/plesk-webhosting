@@ -55,7 +55,7 @@ $data['subscription_domain'] = 'detain-qa-'.Plesk::random_string().'.com';
 $request = [
 	'name' => $data['name'],
 	'username' => $data['username'],
-	'password' => $data['password'],
+	'password' => $data['password']
 ];
 $result = $plesk->createClient($request);
 if ($debugCalls == TRUE)
@@ -70,7 +70,7 @@ try {
 	$request = [
 		'username' => $data['username'],
 		'phone' => Plesk::random_string(),
-		'email' => $data['email'],
+		'email' => $data['email']
 	];
 	$result = $plesk->updateClient($request);
 	if ($debugCalls == TRUE)
@@ -83,7 +83,7 @@ try {
 		'ftp_password' => $data['password'],
 		'ip' => $data['shared_ip_address'],
 		'status' => 0,
-		'plan_id' => $data['unlimited_plan_id'],
+		'plan_id' => $data['unlimited_plan_id']
 	];
 	$result = $plesk->createSubscription($request);
 	if ($debugCalls == TRUE)
@@ -101,7 +101,7 @@ try {
 		throw new Exception("Couldn't find created subscription");
 	$request = [
 		'domain' => $data['domain'],
-		'subscription_id' => $data['subscription_id'],
+		'subscription_id' => $data['subscription_id']
 	];
 	$result = $plesk->createSite($request);
 	if ($debugCalls == TRUE)

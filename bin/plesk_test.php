@@ -100,7 +100,7 @@ $request = $plesk->createClient(
 	[
 		'name' => random_string(),
 		'username' => $data['client_username'],
-		'password' => random_string(16). '1!',
+		'password' => random_string(16). '1!'
 	]
 );
 $data['client_id'] = $request->id;
@@ -110,7 +110,7 @@ try {
 		[
 		'username' => $data['client_username'],
 		'phone' => random_string(),
-		'email' => random_string().'@example.com',
+		'email' => random_string().'@example.com'
 		]
 	);
 	$params = [
@@ -119,7 +119,7 @@ try {
 		'password' => random_string(16).'1!',
 		'ip_address' => $data['shared_ip_address'],
 		'owner_id' => $data['client_id'],
-		'service_plan_id' => $data['unlimited_plan_id'],
+		'service_plan_id' => $data['unlimited_plan_id']
 	];
 	$request = $plesk->createSubscription($params);
 	$data['subscription_id'] = $request->id;
@@ -149,13 +149,13 @@ try {
 		$request = $plesk->createEmailAddress(
 			[
 				'email' => $data['email_address'],
-				'password' => random_string(). '1!',
+				'password' => random_string(). '1!'
 			]
 		);
 		$data['email_address_id'] = $request->id;
 		$request = $plesk->listEmailAddresses(
 			[
-			'site_id' => $data['site_id'],
+			'site_id' => $data['site_id']
 			]
 		);
 		$email_address_found = FALSE;
@@ -167,12 +167,12 @@ try {
 		$request = $plesk->updateEmailPassword(
 			[
 			'email' => $data['email_address'],
-			'password' => random_string(),
+			'password' => random_string()
 			]
 		);
 		$request = $plesk->deleteEmailAddress(
 			[
-			'email' => $data['email_address'],
+			'email' => $data['email_address']
 			]
 		);
 	}
@@ -198,13 +198,13 @@ try {
 			'subdomain' => $data['subdomain'],
 			'www_root' => '/subdomains/'.strtolower($data['subdomain']),
 			'fpt_username' => random_string(),
-			'fpt_password' => random_string(),
+			'fpt_password' => random_string()
 			]
 		);
 		$data['subdomain_id'] = $request->id;
 		$request = $plesk->listSubdomains(
 			[
-			'site_id' => $data['site_id'],
+			'site_id' => $data['site_id']
 			]
 		);
 		$subdomain_found = FALSE;
@@ -216,20 +216,20 @@ try {
 		$request = $plesk->updateSubdomain(
 			[
 			'id' => $data['subdomain_id'],
-			'www_root' => '/subdomains/'.strtolower($data['subdomain']).'2',
+			'www_root' => '/subdomains/'.strtolower($data['subdomain']).'2'
 			]
 		);
 		$data['subdomain'] = random_string();
 		$request = $plesk->renameSubdomain(
 			[
 			'id' => $data['subdomain_id'],
-			'name' => $data['subdomain'],
+			'name' => $data['subdomain']
 			]
 		);
 		$info = $request->process();
 		$request = $plesk->deleteSubdomain(
 			[
-			'id' => $data['subdomain_id'],
+			'id' => $data['subdomain_id']
 			]
 		);
 	}
@@ -248,13 +248,13 @@ try {
 			'name' => random_string(),
 			'subscription_id' => $data['subscription_id'],
 			'server_id' => $data['db_server_id'],
-			'type' => 'mysql',
+			'type' => 'mysql'
 			]
 		);
 		$data['db_id'] = $request->id;
 		$request = $plesk->listDatabases(
 			[
-			'subscription_id' => $data['subscription_id'],
+			'subscription_id' => $data['subscription_id']
 			]
 		);
 		$databases = $request->process();
@@ -269,13 +269,13 @@ try {
 			[
 			'database_id' => $data['db_id'],
 			'username' => $data['db_user_username'],
-			'password' => random_string(),
+			'password' => random_string()
 			]
 		);
 		$data['db_user_id'] = $request->id;
 		$request = $plesk->getDatabaseUser(
 			[
-			'database_id' => $data['db_id'],
+			'database_id' => $data['db_id']
 			]
 		);
 		if ($data['db_user_id'] != $request->id)
