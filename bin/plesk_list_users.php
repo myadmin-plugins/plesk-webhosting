@@ -13,7 +13,7 @@ function_requirements('get_webhosting_plesk_instance');
 $plesk = get_webhosting_plesk_instance((isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : FALSE));
 
 try {
-	$result = $plesk->listusers();
+	$result = $plesk->listUsers();
 } catch (ApiRequestException $e) {
 	echo "Exception Error: ".$e;
 	print_r($e);
