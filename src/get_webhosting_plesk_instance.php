@@ -18,7 +18,7 @@ function get_webhosting_plesk_instance($server = false) {
 	}
 	$hash = $serverData[$settings['PREFIX'].'_key'];
 	$ip = $serverData[$settings['PREFIX'].'_ip'];
-	list($plesk_user, $plesk_pass) = explode(':', html_entity_decode($hash));
-	myadmin_log('webhosting', 'info', "Plesk($ip, $plesk_user, $plesk_pass)", __LINE__, __FILE__);
-	return new \Detain\MyAdminPlesk\Plesk($ip, $plesk_user, $plesk_pass);
+	list($pleskUser, $pleskPass) = explode(':', html_entity_decode($hash));
+	myadmin_log('webhosting', 'info', "Plesk($ip, $pleskUser, $pleskPass)", __LINE__, __FILE__);
+	return new \Detain\MyAdminPlesk\Plesk($ip, $pleskUser, $pleskPass);
 }
