@@ -6,6 +6,11 @@ use Detain\MyAdminPlesk\ApiRequestException;
 use Detain\MyAdminPlesk\Plesk;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
+/**
+ * Class Plugin
+ *
+ * @package Detain\MyAdminPlesk
+ */
 class Plugin {
 
 	public static $name = 'Plesk Webhosting';
@@ -14,10 +19,15 @@ class Plugin {
 	public static $module = 'webhosting';
 	public static $type = 'service';
 
-
+	/**
+	 * Plugin constructor.
+	 */
 	public function __construct() {
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function getHooks() {
 		return [
 			self::$module.'.settings' => [__CLASS__, 'getSettings'],
@@ -29,6 +39,11 @@ class Plugin {
 		];
 	}
 
+	/**
+	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
+	 */
 	public static function getActivate(GenericEvent $event) {
 		if ($event['category'] == get_service_define('WEB_PLESK')) {
 			myadmin_log(self::$module, 'info', 'Plesk Activation', __LINE__, __FILE__);
@@ -246,6 +261,10 @@ class Plugin {
 		}
 	}
 
+	/**
+	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
+	 */
 	public static function getReactivate(GenericEvent $event) {
 		if ($event['category'] == get_service_define('WEB_PLESK')) {
 			$serviceClass = $event->getSubject();
@@ -263,6 +282,10 @@ class Plugin {
 		}
 	}
 
+	/**
+	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
+	 */
 	public static function getDeactivate(GenericEvent $event) {
 		if ($event['category'] == get_service_define('WEB_PLESK')) {
 			myadmin_log(self::$module, 'info', 'Plesk Deactivation', __LINE__, __FILE__);
@@ -281,6 +304,12 @@ class Plugin {
 		}
 	}
 
+	/**
+	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
+	 * @return bool
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
+	 */
 	public static function getTerminate(GenericEvent $event) {
 		if ($event['category'] == get_service_define('WEB_PLESK')) {
 			myadmin_log(self::$module, 'info', 'Plesk Termination', __LINE__, __FILE__);
@@ -321,6 +350,9 @@ class Plugin {
 		}
 	}
 
+	/**
+	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
+	 */
 	public static function getChangeIp(GenericEvent $event) {
 		if ($event['category'] == get_service_define('WEB_PLESK')) {
 			$serviceClass = $event->getSubject();
@@ -342,6 +374,9 @@ class Plugin {
 		}
 	}
 
+	/**
+	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
+	 */
 	public static function getMenu(GenericEvent $event) {
 		$menu = $event->getSubject();
 		if ($GLOBALS['tf']->ima == 'admin') {
@@ -351,11 +386,17 @@ class Plugin {
 		}
 	}
 
+	/**
+	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
+	 */
 	public static function getRequirements(GenericEvent $event) {
 		$loader = $event->getSubject();
 		$loader->add_requirement('get_webhosting_plesk_instance', '/../vendor/detain/myadmin-plesk-webhosting/src/get_webhosting_plesk_instance.php');
 	}
 
+	/**
+	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
+	 */
 	public static function getSettings(GenericEvent $event) {
 		$settings = $event->getSubject();
 		$settings->add_select_master(self::$module, 'Default Servers', self::$module, 'new_website_plesk_server', 'Default Plesk Setup Server', NEW_WEBSITE_PLESK_SERVER, get_service_define('WEB_PLESK'));

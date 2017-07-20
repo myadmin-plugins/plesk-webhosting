@@ -71,7 +71,7 @@ class Plesk {
 	 *
 	 * @param string $packet
 	 * @return string
-	 * @throws Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function sendRequest($packet) {
 		$this->updateCurl();
@@ -105,7 +105,7 @@ class Plesk {
 	 *
 	 * @param string $responseString
 	 * @return \SimpleXMLElement
-	 * @throws Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function parseResponse($responseString) {
 		$xml = new \SimpleXMLElement($responseString);
@@ -127,7 +127,8 @@ class Plesk {
 	 * Check data in API response
 	 *
 	 * @param \SimpleXMLElement $response
-	 * @throws Detain\MyAdminPlesk\ApiRequestException
+	 * @return
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function checkResponse(\SimpleXMLElement $response) {
 		$resultNode = $response->domain->get->result;
@@ -317,6 +318,9 @@ class Plesk {
 		return $xmldoc;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getServerInfoTypes() {
 		return [
 			'key' => 'It retrieves Plesk license key.',
@@ -380,7 +384,8 @@ class Plesk {
 	 * Returns DOM object representing request for
 	 *
 	 * @return \DOMDocument
-	 * @throws \ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function getServerInfo() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -412,7 +417,8 @@ class Plesk {
 	 *
 	 * @param $user
 	 * @return \DOMDocument
-	 * @throws \ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function createSession($user) {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -492,6 +498,9 @@ class Plesk {
 		return $xmldoc;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getObjectStatusList() {
 		return [
 			'0' => 'active',
@@ -503,6 +512,9 @@ class Plesk {
 		];
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getSiteFilters() {
 		return [
 			'id',
@@ -517,6 +529,9 @@ class Plesk {
 		];
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getSiteDatasets() {
 		return [
 			'gen_info',
@@ -532,7 +547,8 @@ class Plesk {
 	 *
 	 * @param bool $params
 	 * @return array
-	 * @throws \ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function getSites($params = FALSE) {
 		if ($params === FALSE)
@@ -598,13 +614,18 @@ class Plesk {
 
 	/**
 	 * Returns DOM object representing request for list sites
+	 *
 	 * @param bool|array $params
 	 * @return array
+	 * @throws \ApiRequestException
 	 */
 	public function listSites($params = FALSE) {
 		return $this->getSites($params);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getSiteGenSetups() {
 		return [
 			'name',
@@ -621,8 +642,11 @@ class Plesk {
 
 	/**
 	 * Returns DOM object representing request for create site
+	 *
 	 * @param array $params
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function createSite($params) {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -714,8 +738,11 @@ class Plesk {
 
 	/**
 	 * Returns DOM object representing request for update site
+	 *
 	 * @param array $params
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function updateSite($params) {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -765,7 +792,9 @@ class Plesk {
 	 * Returns DOM object representing request for update site
 	 *
 	 * @param array $params
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function updateServer($params) {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -832,7 +861,9 @@ class Plesk {
 	 * Returns DOM object representing request for create client
 	 *
 	 * @param array $data account data
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function createClient($data) {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -885,7 +916,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for create database
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function createDatabase() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -915,7 +948,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for create database user
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function createDatabaseUser() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -945,7 +980,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for create email address
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function createEmailAddress() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -975,7 +1012,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for create secret key
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function createSecretKey() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -1005,7 +1044,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for create site alias
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function createSiteAlias() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -1035,7 +1076,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for create subdomain
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function createSubdomain() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -1081,6 +1124,9 @@ class Plesk {
 		];
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getSubscriptionFilters() {
 		return [
 			'id',
@@ -1094,6 +1140,9 @@ class Plesk {
 		];
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getSubscriptionDatasets() {
 		return [
 			'gen_info',
@@ -1119,7 +1168,9 @@ class Plesk {
 	 * Returns DOM object representing request for create subscription
 	 *
 	 * @param array $params
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function createSubscription($params) {
 		$required = [
@@ -1231,7 +1282,9 @@ class Plesk {
 	 * Returns DOM object representing request for delete subscription
 	 *
 	 * @param array $params
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function deleteSubscription($params) {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -1274,7 +1327,9 @@ class Plesk {
 	 * Returns DOM object representing request for list subscriptions
 	 *
 	 * @param bool|array $params
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function listSubscriptions($params = FALSE) {
 		if ($params === FALSE)
@@ -1327,7 +1382,9 @@ class Plesk {
 	 * Returns DOM object representing request for delete client
 	 *
 	 * @param array $params
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function deleteClient($params) {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -1367,7 +1424,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for delete database
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function deleteDatabase() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -1397,7 +1456,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for delete email address
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function deleteEmailAddress() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -1427,7 +1488,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for delete secret key
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function deleteSecretKey() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -1457,7 +1520,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for delete site alias
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function deleteSiteAlias() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -1488,7 +1553,9 @@ class Plesk {
 	 * Returns DOM object representing request for delete site
 	 *
 	 * @param array $params
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function deleteSite($params) {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -1525,7 +1592,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for delete subdomain
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function deleteSubdomain() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -1556,7 +1625,9 @@ class Plesk {
 	 * Returns DOM object representing request for get client
 	 *
 	 * @param array $params
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function getClient($params) {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -1593,7 +1664,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for get database user
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function getDatabaseUser() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -1623,7 +1696,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for get service plan
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function getServicePlan() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -1653,7 +1728,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for get subdomain
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function getSubdomain() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -1684,7 +1761,8 @@ class Plesk {
 	 * Returns DOM object representing request for get subscription
 	 *
 	 * @param array $params
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function getSubscription($params) {
 		return $this->listSubscriptions($params);
@@ -1693,7 +1771,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for get traffic
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function getTraffic() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -1723,7 +1803,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for list clients
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function listClients() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -1760,7 +1842,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for list users
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function listUsers() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -1792,7 +1876,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for list database servers
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function listDatabaseServers() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -1818,7 +1904,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for list databases
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function listDatabases() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -1848,7 +1936,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for list dns records
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function listDnsRecords() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -1878,7 +1968,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for list email addresses
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function listEmailAddresses() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -1908,7 +2000,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for list ip addresses
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function listIpAddresses() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -1936,7 +2030,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for list secret keys
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function listSecretKeys() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -1966,7 +2062,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for list service plans
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function listServicePlans() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -1992,7 +2090,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for list site aliases
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function listSiteAliases() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -2022,7 +2122,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for list subdomains
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function listSubdomains() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -2052,7 +2154,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for rename subdomain
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function renameSubdomain() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -2083,7 +2187,9 @@ class Plesk {
 	 * Returns DOM object representing request for update client
 	 *
 	 * @param array $params array of update parameters
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function updateClient($params) {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -2139,7 +2245,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for update email password
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function updateEmailPassword() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -2169,7 +2277,9 @@ class Plesk {
 	/**
 	 * Returns DOM object representing request for update subdomain
 	 *
-	 * @return DOMDocument
+	 * @return \Detain\MyAdminPlesk\DOMDocument
+	 * @throws \Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function updateSubdomain() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');

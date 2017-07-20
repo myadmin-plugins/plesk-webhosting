@@ -54,11 +54,21 @@ $runEmailAddressTests = FALSE;
 $runSiteAliasTests = FALSE;
 $runSubdomainTests = FALSE;
 $runDatabaseTests = FALSE;
-
+/**
+ * @param $errno
+ * @param $errstr
+ * @param $errfile
+ * @param $errline
+ * @throws \ErrorException
+ */
 function exception_error_handler($errno, $errstr, $errfile, $errline) {
 	throw new ErrorException($errstr, $errno, 0, $errfile, $errline);
 }
 
+/**
+ * @param int $length
+ * @return string
+ */
 function random_string($length = 8) {
 	$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	return mb_substr(str_shuffle($chars), 0, $length);
