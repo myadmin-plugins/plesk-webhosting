@@ -46,8 +46,8 @@
 * @copyright 2017
 */
 
-include_once(__DIR__.'/../../../../include/functions.inc.php');
-require_once(INCLUDE_ROOT.'/webhosting/class.plesk.php');
+include_once __DIR__.'/../../../../include/functions.inc.php';
+require_once INCLUDE_ROOT.'/webhosting/class.plesk.php';
 
 $runSiteTests = TRUE;
 $runEmailAddressTests = FALSE;

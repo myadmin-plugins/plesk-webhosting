@@ -1865,7 +1865,7 @@ class Plesk {
 		$dataset->appendChild($xmldoc->createElement('roles'));
 		$filter = $xmldoc->createElement('filter');
 		$get->appendChild($filter);
-		$filter->appendChild($xmldoc->createElement(('all')));
+		$filter->appendChild($xmldoc->createElement('all'));
 		$get->appendChild($dataset);
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
