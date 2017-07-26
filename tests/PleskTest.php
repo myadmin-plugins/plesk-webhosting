@@ -19,7 +19,7 @@ class PleskTest extends TestCase
 	 */
 	protected function setUp()
 	{
-		$this->object = new Plesk;
+		$this->object = new Plesk('host', 'login', 'password');
 	}
 
 	/**
