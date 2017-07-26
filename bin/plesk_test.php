@@ -100,7 +100,7 @@ $request = $plesk->createClient(
 	[
 		'name' => random_string(),
 		'username' => $data['client_username'],
-		'password' => random_string(16). '1!'
+		'password' => random_string(16).'1!'
 	]
 );
 $data['client_id'] = $request->id;
@@ -149,7 +149,7 @@ try {
 		$request = $plesk->createEmailAddress(
 			[
 				'email' => $data['email_address'],
-				'password' => random_string(). '1!'
+				'password' => random_string().'1!'
 			]
 		);
 		$data['email_address_id'] = $request->id;
@@ -163,7 +163,7 @@ try {
 			if ($email_address['id'] == $data['email_address_id'])
 				$email_address_found = TRUE;
 		if (!$email_address_found)
-			throw new Exception("Couldn't find created email address (".$data['email_address_id']. ')');
+			throw new Exception("Couldn't find created email address (".$data['email_address_id'].')');
 		$request = $plesk->updateEmailPassword(
 			[
 			'email' => $data['email_address'],

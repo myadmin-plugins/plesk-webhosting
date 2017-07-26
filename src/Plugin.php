@@ -70,7 +70,7 @@ class Plugin {
 			if ((!isset($result['ips'][0]['ip_address']) && !isset($result['ips']['ip_address'])) || $result['status'] == 'error')
 				throw new Exception('Failed getting server information.'.(isset($result['errtext']) ? ' Error message was: '.$result['errtext'].'.' : ''));
 			if ($debugCalls == TRUE)
-				echo 'plesk->list_ip_adddresses() = ' .var_export($result, TRUE).PHP_EOL;
+				echo 'plesk->list_ip_adddresses() = '.var_export($result, TRUE).PHP_EOL;
 			if (isset($result['ips']['ip_address']))
 				$sharedIp = $result['ips']['ip_address'];
 			else
@@ -95,7 +95,7 @@ class Plugin {
 				return;
 			}
 			if ($debugCalls == TRUE)
-				echo 'plesk->listServicePlans() = ' .var_export($result, TRUE).PHP_EOL;
+				echo 'plesk->listServicePlans() = '.var_export($result, TRUE).PHP_EOL;
 			foreach ($result as $idx => $plan) {
 				if ($plan['name'] == 'ASP.NET plan') {
 					$planId = $plan['id'];
@@ -252,7 +252,7 @@ class Plugin {
 			$serExtra = $db->real_escape(myadmin_stringify($extra));
 			$db->query("update {$settings['TABLE']} set {$settings['PREFIX']}_ip='{$ip}', {$settings['PREFIX']}_extra='{$serExtra}', {$settings['PREFIX']}_username='{$username}' where {$settings['PREFIX']}_id='{$serviceClass->getId()}'", __LINE__, __FILE__);
 			if ($debugCalls == TRUE)
-				echo 'plesk->createSubscription(' .var_export($request, TRUE). ') = ' .var_export($result, TRUE).PHP_EOL;
+				echo 'plesk->createSubscription('.var_export($request, TRUE).') = '.var_export($result, TRUE).PHP_EOL;
 			myadmin_log(self::$module, 'info', "createSubscription got Subscription ID {$subscriptoinId}\n", __LINE__, __FILE__);
 			if (is_numeric($subscriptoinId)) {
 				website_welcome_email($serviceClass->getId());
@@ -306,7 +306,7 @@ class Plugin {
 
 	/**
 	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
-	 * @return bool
+	 * @return boolean|null
 	 * @throws \Detain\MyAdminPlesk\ApiRequestException
 	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
 	 */
@@ -358,7 +358,7 @@ class Plugin {
 			$serviceClass = $event->getSubject();
 			$settings = get_module_settings(self::$module);
 			$plesk = new Plesk(FANTASTICO_USERNAME, FANTASTICO_PASSWORD);
-			myadmin_log(self::$module, 'info', 'IP Change - (OLD:' .$serviceClass->getIp().") (NEW:{$event['newip']})", __LINE__, __FILE__);
+			myadmin_log(self::$module, 'info', 'IP Change - (OLD:'.$serviceClass->getIp().") (NEW:{$event['newip']})", __LINE__, __FILE__);
 			$result = $plesk->editIp($serviceClass->getIp(), $event['newip']);
 			if (isset($result['faultcode'])) {
 				myadmin_log(self::$module, 'error', 'Plesk editIp('.$serviceClass->getIp().', '.$event['newip'].') returned Fault '.$result['faultcode'].': '.$result['fault'], __LINE__, __FILE__);

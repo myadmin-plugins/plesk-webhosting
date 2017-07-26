@@ -514,7 +514,7 @@ class Plesk {
 	}
 
 	/**
-	 * @return array
+	 * @return string[]
 	 */
 	public function getSiteFilters() {
 		return [
@@ -531,7 +531,7 @@ class Plesk {
 	}
 
 	/**
-	 * @return array
+	 * @return string[]
 	 */
 	public function getSiteDatasets() {
 		return [
@@ -627,7 +627,7 @@ class Plesk {
 	}
 
 	/**
-	 * @return array
+	 * @return string[]
 	 */
 	public function getSiteGenSetups() {
 		return [
@@ -1128,7 +1128,7 @@ class Plesk {
 	}
 
 	/**
-	 * @return array
+	 * @return string[]
 	 */
 	public function getSubscriptionFilters() {
 		return [
@@ -1144,7 +1144,7 @@ class Plesk {
 	}
 
 	/**
-	 * @return array
+	 * @return string[]
 	 */
 	public function getSubscriptionDatasets() {
 		return [
