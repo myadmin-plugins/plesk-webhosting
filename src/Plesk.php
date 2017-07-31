@@ -1320,7 +1320,8 @@ class Plesk {
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fixResult($result);
-		$result = $result[$packetName]['del']['result'];
+		if (isset($result[$packetName]))
+			$result = $result[$packetName]['del']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk deleteSubscription returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
@@ -1418,7 +1419,8 @@ class Plesk {
 		}*/
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fixResult($result);
-		$result = $result[$packetName]['del']['result'];
+		if (isset($result[$packetName]))
+			$result = $result[$packetName]['del']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk deleteClient returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;

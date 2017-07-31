@@ -312,12 +312,15 @@ class Plugin {
 	 */
 	public static function getTerminate(GenericEvent $event) {
 		if ($event['category'] == get_service_define('WEB_PLESK')) {
+			$event->stopPropagation();
 			myadmin_log(self::$module, 'info', 'Plesk Termination', __LINE__, __FILE__);
 			$serviceClass = $event->getSubject();
 			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
 			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
 			function_requirements('get_webhosting_plesk_instance');
 			$plesk = get_webhosting_plesk_instance($serverdata);
+			if (!isset($extra[1]))
+				return false;
 			list($userId, $subscriptoinId) = $extra;
 			/*
 			$request = array('id' => $data['site_id']);
@@ -346,7 +349,6 @@ class Plugin {
 			}
 			myadmin_log(self::$module, 'info', 'deleteClient Called got '.json_encode($result), __LINE__, __FILE__);
 			return true;
-			$event->stopPropagation();
 		}
 	}
 
