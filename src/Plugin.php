@@ -320,7 +320,7 @@ class Plugin {
 			function_requirements('get_webhosting_plesk_instance');
 			$plesk = get_webhosting_plesk_instance($serverdata);
 			if (!isset($extra[1]))
-				return false;
+				return FALSE;
 			list($userId, $subscriptoinId) = $extra;
 			/*
 			$request = array('id' => $data['site_id']);
@@ -348,7 +348,7 @@ class Plugin {
 				echo 'Caught exception: '.$e->getMessage()."\n";
 			}
 			myadmin_log(self::$module, 'info', 'deleteClient Called got '.json_encode($result), __LINE__, __FILE__);
-			return true;
+			return TRUE;
 		}
 	}
 
