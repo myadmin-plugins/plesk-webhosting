@@ -43,6 +43,8 @@ class Plugin {
 	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
 	 * @throws \Detain\MyAdminPlesk\ApiRequestException
 	 * @throws \Detain\MyAdminPlesk\Detain\MyAdminPlesk\ApiRequestException
+	 * @throws \Exception
+	 * @throws \SmartyException
 	 */
 	public static function getActivate(GenericEvent $event) {
 		if ($event['category'] == get_service_define('WEB_PLESK')) {

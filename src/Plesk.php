@@ -189,7 +189,7 @@ class Plesk {
 	 * @return string the description of the error
 	 */
 	public function getError($code) {
-		$codes = getErrorCodes();
+		$codes = $this->getErrorCodes();
 		return $codes[$code];
 	}
 
