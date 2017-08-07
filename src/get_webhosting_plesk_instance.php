@@ -2,7 +2,7 @@
 /**
  * Gets a Plesk Class instance for the given server.
  *
- * @param array|bool|false|int $server the server to get a Plesk instance for, can be an array like from get_service or a server id, or false for default
+ * @param array|bool|false|int|string $server the server to get a Plesk instance for, can be an array like from get_service or a server id, or false for default
  * @return \Detain\MyAdminPlesk\Plesk the plesk instance
  */
 function get_webhosting_plesk_instance($server = FALSE) {

@@ -25,7 +25,11 @@ $data = [];
 $plesk = get_webhosting_plesk_instance((isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : FALSE));
 $debugCalls = FALSE;
 //$plesk->debug = true;
-$result = $plesk->listIpAddresses();
+try {
+	$result = $plesk->listIpAddresses();
+} catch (Exception $e) {
+	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
+}
 if (!isset($result['ips'][0]['ip_address']) || $result['status'] == 'error')
 	throw new Exception('Failed getting server information.'.(isset($result['errtext']) ? ' Error message was: '.$result['errtext'].'.' : ''));
 if ($debugCalls == TRUE)
@@ -33,9 +37,13 @@ if ($debugCalls == TRUE)
 foreach ($result['ips'] as $idx => $ip_data)
 	if (trim($ip_data['type']) == 'shared' && (!isset($data['shared_ip_address']) || $ip_data['is_default']))
 		$data['shared_ip_address'] = $ip_data['ip_address'];
-if (!isset($data['shared_ip_address']))
-	throw new Exception("Couldn't find any shared IP addresses");
-$result = $plesk->listServicePlans();
+try {
+	if (!isset($data['shared_ip_address']))
+		throw new Exception("Couldn't find any shared IP addresses");
+	$result = $plesk->listServicePlans();
+} catch (Exception $e) {
+	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
+}
 if ($debugCalls == TRUE)
 	echo 'plesk->listServicePlans() = '.var_export($result, TRUE)."\n";
 foreach ($result as $idx => $plan)
@@ -57,84 +65,112 @@ $request = [
 	'username' => $data['username'],
 	'password' => $data['password']
 ];
-$result = $plesk->createClient($request);
-if ($debugCalls == TRUE)
-	echo 'plesk->createClient('.var_export($request, TRUE).') = '.var_export($result, TRUE)."\n";
-$data['client_id'] = $result['id'];
-echo "Got Client ID {$data['client_id']}\n";
 try {
-	$request = ['username' => $data['username']];
-	$result = $plesk->getClient($request);
-	if ($debugCalls == TRUE)
-		echo 'plesk->getClient('.var_export($request, TRUE).') = '.var_export($result, TRUE)."\n";
-	$request = [
-		'username' => $data['username'],
-		'phone' => Plesk::random_string(),
-		'email' => $data['email']
-	];
-	$result = $plesk->updateClient($request);
-	if ($debugCalls == TRUE)
-		echo 'plesk->updateClient('.var_export($request, TRUE).') = '.var_export($result, TRUE)."\n";
-	$request = [
-		'domain' => $data['subscription_domain'],
-		'owner_id' => $data['client_id'],
-		'htype' => 'vrt_hst',
-		'ftp_login' => $data['username'],
-		'ftp_password' => $data['password'],
-		'ip' => $data['shared_ip_address'],
-		'status' => 0,
-		'plan_id' => $data['unlimited_plan_id']
-	];
-	$result = $plesk->createSubscription($request);
-	if ($debugCalls == TRUE)
-		echo 'plesk->createSubscription('.var_export($request, TRUE).') = '.var_export($result, TRUE)."\n";
-	$data['subscription_id'] = $result['id'];
-	echo "Got Subscription ID {$data['subscription_id']}\n";
-	$result = $plesk->listSubscriptions();
-	if ($debugCalls == TRUE)
-		echo 'plesk->listSubscriptions() = '.var_export($result, TRUE)."\n";
-	$subscription_found = FALSE;
-	foreach ($result as $subscription)
-		if ($subscription['id'] == $data['subscription_id'])
-			$subscription_found = TRUE;
-	if (!$subscription_found)
-		throw new Exception("Couldn't find created subscription");
-	$request = [
-		'domain' => $data['domain'],
-		'subscription_id' => $data['subscription_id']
-	];
-	$result = $plesk->createSite($request);
-	if ($debugCalls == TRUE)
-		echo 'plesk->createSite('.var_export($request, TRUE).') = '.var_export($result, TRUE)."\n";
-	$data['site_id'] = $result['id'];
-	echo "Got Site ID {$data['site_id']}\n";
-	$request = ['subscription_id' => $data['subscription_id']];
-	$result = $plesk->listSites($request);
-	if ($debugCalls == TRUE)
-		echo 'plesk->listSites('.var_export($request, TRUE).') = '.var_export($result, TRUE)."\n";
-	$site_found = FALSE;
-	if (isset($result['id']))
-		$result = [$result];
-	foreach ($result as $site)
-		if (isset($site['id']) && $site['id'] == $data['site_id'])
-			$site_found = TRUE;
-	if (!$site_found)
-		throw new Exception("Couldn't find created site");
-	$data['new_domain'] = 'detain-qa-'.Plesk::random_string().'.com';
-	echo "Changing Domain from {$data['domain']} to {$data['new_domain']}\n";
-	$request = ['id' => $data['site_id'], 'domain' => $data['new_domain']];
-	$result = $plesk->updateSite($request);
-	if ($debugCalls == TRUE)
-		echo 'plesk->updateSite('.var_export($request, TRUE).') = '.var_export($result, TRUE)."\n";
-	//echo "Got " . print_r($result, TRUE) . "\n";
+	$result = $plesk->createClient($request);
 } catch (Exception $e) {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
+if ($debugCalls === TRUE)
+	echo 'plesk->createClient('.var_export($request, TRUE).') = '.var_export($result, TRUE)."\n";
+$data['client_id'] = $result['id'];
+echo "Got Client ID {$data['client_id']}\n";
+$request = ['username' => $data['username']];
+try {
+	$result = $plesk->getClient($request);
+} catch (Exception $e) {
+	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
+}
+if ($debugCalls === TRUE)
+	echo 'plesk->getClient('.var_export($request, TRUE).') = '.var_export($result, TRUE)."\n";
+$request = ['username' => $data['username'], 'phone' => Plesk::random_string(), 'email' => $data['email']];
+try {
+	$result = $plesk->updateClient($request);
+} catch (Exception $e) {
+	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
+}
+if ($debugCalls === TRUE)
+	echo 'plesk->updateClient('.var_export($request, TRUE).') = '.var_export($result, TRUE)."\n";
+$request = [
+	'domain' => $data['subscription_domain'],
+	'owner_id' => $data['client_id'],
+	'htype' => 'vrt_hst',
+	'ftp_login' => $data['username'],
+	'ftp_password' => $data['password'],
+	'ip' => $data['shared_ip_address'],
+	'status' => 0,
+	'plan_id' => $data['unlimited_plan_id']
+];
+try {
+	$result = $plesk->createSubscription($request);
+} catch (Exception $e) {
+	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
+}
+if ($debugCalls === TRUE)
+	echo 'plesk->createSubscription('.var_export($request, TRUE).') = '.var_export($result, TRUE)."\n";
+$data['subscription_id'] = $result['id'];
+echo "Got Subscription ID {$data['subscription_id']}\n";
+try {
+	$result = $plesk->listSubscriptions();
+} catch (Exception $e) {
+	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
+}
+if ($debugCalls === TRUE)
+	echo 'plesk->listSubscriptions() = '.var_export($result, TRUE)."\n";
+$subscription_found = FALSE;
+foreach ($result as $subscription)
+	if ($subscription['id'] == $data['subscription_id'])
+		$subscription_found = TRUE;
+if (!$subscription_found)
+	throw new Exception("Couldn't find created subscription");
+$request = [
+	'domain' => $data['domain'],
+	'subscription_id' => $data['subscription_id']
+];
+try {
+	$result = $plesk->createSite($request);
+} catch (Exception $e) {
+	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
+}
+if ($debugCalls == TRUE)
+	echo 'plesk->createSite('.var_export($request, TRUE).') = '.var_export($result, TRUE)."\n";
+$data['site_id'] = $result['id'];
+echo "Got Site ID {$data['site_id']}\n";
+$request = ['subscription_id' => $data['subscription_id']];
+try {
+	$result = $plesk->listSites($request);
+} catch (Exception $e) {
+	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
+}
+if ($debugCalls == TRUE)
+	echo 'plesk->listSites('.var_export($request, TRUE).') = '.var_export($result, TRUE)."\n";
+$site_found = FALSE;
+if (isset($result['id']))
+	$result = [$result];
+foreach ($result as $site)
+	if (isset($site['id']) && $site['id'] == $data['site_id'])
+		$site_found = TRUE;
+if (!$site_found)
+	throw new Exception("Couldn't find created site");
+$data['new_domain'] = 'detain-qa-'.Plesk::random_string().'.com';
+echo "Changing Domain from {$data['domain']} to {$data['new_domain']}\n";
+$request = ['id' => $data['site_id'], 'domain' => $data['new_domain']];
+try {
+	$result = $plesk->updateSite($request);
+} catch (Exception $e) {
+	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
+}
+if ($debugCalls == TRUE)
+	echo 'plesk->updateSite('.var_export($request, TRUE).') = '.var_export($result, TRUE)."\n";
+//echo "Got " . print_r($result, TRUE) . "\n";
 //echo "Final Data: ".print_r($data, TRUE).PHP_EOL;
 if (isset($data['site_id'])) {
 	echo "Deleting Site {$data['site_id']}\n";
 	$request = ['id' => $data['site_id']];
-	$result = $plesk->deleteSite($request);
+	try {
+		$result = $plesk->deleteSite($request);
+	} catch (Exception $e) {
+		myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
+	}
 	if ($debugCalls == TRUE)
 		echo 'plesk->deleteSite('.var_export($request, TRUE).') = '.var_export($result, TRUE)."\n";
 } else
@@ -142,7 +178,11 @@ if (isset($data['site_id'])) {
 if (isset($data['subscription_id'])) {
 	echo "Deleting Subscription {$data['subscription_id']}\n";
 	$request = ['id' => $data['subscription_id']];
-	$result = $plesk->deleteSubscription($request);
+	try {
+		$result = $plesk->deleteSubscription($request);
+	} catch (Exception $e) {
+		myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
+	}
 	if ($debugCalls == TRUE)
 		echo 'plesk->deleteSubscription('.var_export($request, TRUE).') = '.var_export($result, TRUE)."\n";
 } else
@@ -150,7 +190,11 @@ if (isset($data['subscription_id'])) {
 if (isset($data['client_id'])) {
 	echo "Deleting Client {$data['client_id']}\n";
 	$request = ['id' => $data['client_id']];
-	$result = $plesk->deleteClient($request);
+	try {
+		$result = $plesk->deleteClient($request);
+	} catch (Exception $e) {
+		myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
+	}
 	if ($debugCalls == TRUE)
 		echo 'plesk->deleteClient('.var_export($request, TRUE).') = '.var_export($result, TRUE)."\n";
 } else
