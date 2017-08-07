@@ -21,6 +21,9 @@
 
 include_once __DIR__.'/../../../../include/functions.inc.php';
 
+use Detain\MyAdminPlesk\ApiRequestException;
+
+
 $data = [];
 $plesk = get_webhosting_plesk_instance((isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : FALSE));
 $debugCalls = FALSE;

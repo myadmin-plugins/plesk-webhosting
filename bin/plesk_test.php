@@ -47,6 +47,9 @@
 */
 
 include_once __DIR__.'/../../../../include/functions.inc.php';
+
+use Detain\MyAdminPlesk\ApiRequestException;
+
 require_once INCLUDE_ROOT.'/webhosting/class.plesk.php';
 
 $runSiteTests = TRUE;
