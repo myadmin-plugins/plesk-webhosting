@@ -34,7 +34,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Detain\\MyAdminPlesk\\": "src\/"
+            "Detain\\MyAdminPlesk\\": "src/"
         }
     }
 }
