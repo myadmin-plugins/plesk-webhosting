@@ -42,7 +42,7 @@
 *
 * @author Joe Huss <detain@interserver.net>
 * @package MyAdmin
-* @subpackage Scripts
+* @category Scripts
 * @copyright 2017
 */
 
