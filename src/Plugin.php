@@ -105,7 +105,7 @@ class Plugin {
 				}
 			}
 			if (!isset($planId)) {
-				myadmin_log(self::$module, 'critical', 'Plesk Could not find the appropriate service plan');
+				myadmin_log(self::$module, 'critical', 'Plesk Could not find the appropriate service plan', __LINE__, __FILE__);
 				$event['success'] = FALSE;
 				$event->stopPropagation();
 				return;
