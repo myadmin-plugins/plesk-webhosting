@@ -113,9 +113,8 @@ class Plugin {
 			/**
 			 * Creates a Client in with Plesk
 			 */
-			if (!isset($data['name']) || trim($data['name']) == '') {
+			if (!isset($data['name']) || trim($data['name']) == '')
 				$data['name'] = str_replace('@', ' ', $data['account_lid']);
-			}
 			$request = [
 				'name' => $data['name'],
 				'username' => $username,
@@ -256,9 +255,8 @@ class Plugin {
 			if ($debugCalls == TRUE)
 				echo 'plesk->createSubscription('.var_export($request, TRUE).') = '.var_export($result, TRUE).PHP_EOL;
 			myadmin_log(self::$module, 'info', "createSubscription got Subscription ID {$subscriptoinId}\n", __LINE__, __FILE__);
-			if (is_numeric($subscriptoinId)) {
+			if (is_numeric($subscriptoinId))
 				website_welcome_email($serviceClass->getId());
-			}
 			$event->stopPropagation();
 		}
 	}

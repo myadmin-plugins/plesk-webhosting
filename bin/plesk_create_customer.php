@@ -32,6 +32,5 @@ try {
 }
 
 // Explore the result
-foreach ($responseXml->xpath('/packet/customer/add/result') as $resultNode) {
+foreach ($responseXml->xpath('/packet/customer/add/result') as $resultNode)
 	echo 'Customer Added, Id: '.(string) $resultNode->id." Status:{$resultNode->status} GUID:{$resultNode->guid}\n";
-}

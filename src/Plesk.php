@@ -1266,9 +1266,8 @@ class Plesk {
 				}
 				$vrtHst->appendChild($xmldoc->createElement($realField, $value));
 			}
-			if (in_array($realField, $extra)) {
+			if (in_array($realField, $extra))
 				$get->appendChild($xmldoc->createElement($realField, $value));
-			}
 		}
 		//print_r($xmldoc->saveXML());
 		$responseText = $this->sendRequest($xmldoc->saveXML());
@@ -1653,9 +1652,8 @@ class Plesk {
 		$mapping = [
 			'username' => 'login'
 		];
-		foreach ($params as $field => $value) {
+		foreach ($params as $field => $value)
 			$filter->appendChild($xmldoc->createElement((isset($mapping[$field]) ? $mapping[$field] : $field), $value));
-		}
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);

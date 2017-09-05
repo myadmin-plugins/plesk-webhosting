@@ -287,9 +287,8 @@ try {
 			'id'=>$data['db_id'],
 		));*/
 	}
-	if ($runSiteTests) {
+	if ($runSiteTests)
 		$request = $plesk->deleteSite(['id' => $data['site_id']]);
-	}
 	$request = $plesk->deleteSubscription($data['subscription_id']);
 	$request = $plesk->createSecretKey(['ip_address' => file_get_contents('https://api.ipify.org')]);
 	$data['secret_key'] = $request->key;
