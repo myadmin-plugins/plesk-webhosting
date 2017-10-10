@@ -327,7 +327,7 @@ class Plugin {
 			try {
 				$result = $plesk->deleteSite($request);
 			} catch (Exception $e) {
-				billingd_log('deleteSite Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
+				myadmin_log('plesk', 'error', 'deleteSite Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 				echo 'Caught exception: '.$e->getMessage() . "\n";
 			}
 			myadmin_log(self::$module, 'info', 'deleteSite Called got '.json_encode($result), __LINE__, __FILE__);
@@ -336,7 +336,7 @@ class Plugin {
 			try {
 				$result = $plesk->deleteSubscription($request);
 			} catch (Exception $e) {
-				billingd_log('deleteSubscription id:'.$subscriptoinId.' Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
+				myadmin_log('plesk', 'error', 'deleteSubscription id:'.$subscriptoinId.' Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 				echo 'Caught exception: '.$e->getMessage()."\n";
 			}
 			myadmin_log(self::$module, 'info', 'deleteSubscription Called got '.json_encode($result), __LINE__, __FILE__);
@@ -344,7 +344,7 @@ class Plugin {
 			try {
 				$result = $plesk->deleteClient($request);
 			} catch (Exception $e) {
-				billingd_log('deleteClient id:'.$userId.' Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
+				myadmin_log('plesk', 'error', 'deleteClient id:'.$userId.' Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 				echo 'Caught exception: '.$e->getMessage()."\n";
 			}
 			myadmin_log(self::$module, 'info', 'deleteClient Called got '.json_encode($result), __LINE__, __FILE__);
