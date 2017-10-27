@@ -434,7 +434,7 @@ class Plesk {
 		$get->appendChild($xmldoc->createElement('login', $user));
 		$data = $xmldoc->createElement('data');
 		$get->appendChild($data);
-		$data->appendChild($xmldoc->createElement('user_ip', base64_encode($GLOBALS['tf']->session->getuser_ip())));
+		$data->appendChild($xmldoc->createElement('user_ip', base64_encode(\MyAdmin\Session::get_client_ip())));
 		$data->appendChild($xmldoc->createElement('source_server', base64_encode(DOMAIN)));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
