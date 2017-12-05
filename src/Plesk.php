@@ -407,6 +407,8 @@ class Plesk {
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fixResult($result);
+		if (!isset($result[$packetName]))
+			throw new ApiRequestException('Plesk getServerInfo returned Unknown Data '.json_encode($result));
 		$result = $result[$packetName]['get']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk getServerInfo returned Error #'.$result['errcode'].' '.$result['errtext']);
