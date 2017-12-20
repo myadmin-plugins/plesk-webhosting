@@ -20,5 +20,4 @@ try {
 	echo 'Exception Error: '.$e->getMessage();
 	die();
 }
-// Explore the result
 print_r($response);
