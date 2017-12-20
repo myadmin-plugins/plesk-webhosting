@@ -20,7 +20,7 @@ try {
 	$value = $_SERVER['argv'][2];
 	$result = $plesk->deleteSite([$field => $value]);
 } catch (ApiRequestException $e) {
-	echo 'Exception Error: '.$e;
+	echo 'Exception Error: '.$e->getMessage();
 	print_r($e);
 	die();
 }

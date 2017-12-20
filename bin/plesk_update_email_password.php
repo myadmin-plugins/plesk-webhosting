@@ -18,7 +18,7 @@ $plesk = get_webhosting_plesk_instance((isset($_SERVER['argv'][1]) ? $_SERVER['a
 try {
 	$result = $plesk->updateEmailPassword();
 } catch (ApiRequestException $e) {
-	echo 'Exception Error: '.$e;
+	echo 'Exception Error: '.$e->getMessage();
 	print_r($e);
 	die();
 }
