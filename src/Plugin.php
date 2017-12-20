@@ -65,9 +65,7 @@ class Plugin {
 				$extra = [];
 			function_requirements('get_webhosting_plesk_instance');
 			$plesk = get_webhosting_plesk_instance($serverdata);
-			/**
-			 * Gets the Shared IP Address
-			 */
+			/* Gets the Shared IP Address */
 			$result = $plesk->listIpAddresses();
 			if ((!isset($result['ips'][0]['ip_address']) && !isset($result['ips']['ip_address'])) || $result['status'] == 'error')
 				throw new Exception('Failed getting server information.'.(isset($result['errtext']) ? ' Error message was: '.$result['errtext'].'.' : ''));
@@ -85,9 +83,7 @@ class Plugin {
 				$event->stopPropagation();
 				return;
 			}
-			/**
-			 * Gets the Service Plans and finds the one matching the desired parameters
-			 */
+			/** Gets the Service Plans and finds the one matching the desired parameters */
 			try {
 				$result = $plesk->listServicePlans();
 			} catch (ApiRequestException $e) {
@@ -110,9 +106,7 @@ class Plugin {
 				$event->stopPropagation();
 				return;
 			}
-			/**
-			 * Creates a Client in with Plesk
-			 */
+			/** Creates a Client in with Plesk */
 			if (!isset($data['name']) || trim($data['name']) == '')
 				$data['name'] = str_replace('@', ' ', $data['account_lid']);
 			$request = [

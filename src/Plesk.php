@@ -449,9 +449,9 @@ class Plesk {
 	}
 
 	/**
-	 * Returns DOM object representing request for information about all available customers
+	 * Returns array representing request for information about all available customers
 	 *
-	 * @return \DOMDocument
+	 * @return array an array of customers
 	 */
 	public function getCustomers() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
@@ -469,20 +469,25 @@ class Plesk {
 		$get->appendChild($dataset);
 		$dataset->appendChild($xmldoc->createElement('gen_info'));
 		$dataset->appendChild($xmldoc->createElement('stat'));
-		return $xmldoc;
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
+		$result = json_decode(json_encode($response), TRUE);
+		$result = $this->fixResult($result);
+		$result = $result['customer']['get']['result'];
+		return $result;
 	}
 
 	/**
-	 * Returns DOM object representing request for information about all available domains
+	 * Returns array representing request for information about all available domains
 	 *
-	 * @return \DOMDocument
+	 * @return array an array of domains
 	 */
 	public function getDomains() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
-		$packetName = 'domain';
+		$packetName = 'webspace';
 		$domain = $xmldoc->createElement($packetName);
 		$packet->appendChild($domain);
 		$get = $xmldoc->createElement('get');
@@ -493,12 +498,15 @@ class Plesk {
 		$get->appendChild($dataset);
 		$dataset->appendChild($xmldoc->createElement('limits'));
 		$dataset->appendChild($xmldoc->createElement('prefs'));
-		$dataset->appendChild($xmldoc->createElement('user'));
 		$dataset->appendChild($xmldoc->createElement('hosting'));
 		$dataset->appendChild($xmldoc->createElement('stat'));
 		$dataset->appendChild($xmldoc->createElement('gen_info'));
-
-		return $xmldoc;
+		$responseText = $this->sendRequest($xmldoc->saveXML());
+		$response = $this->parseResponse($responseText);
+		$result = json_decode(json_encode($response), TRUE);
+		$result = $this->fixResult($result);
+		$result = $result['webspace']['get']['result'];
+		return $result;
 	}
 
 	/**
