@@ -451,9 +451,10 @@ class Plesk {
 	/**
 	 * Returns array representing request for information about all available customers
 	 *
+	 * @param bool $stat include the Stat info block, defaults to TRUE
 	 * @return array an array of customers
 	 */
-	public function getCustomers() {
+	public function getCustomers($stat = TRUE) {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -468,7 +469,8 @@ class Plesk {
 		$dataset = $xmldoc->createElement('dataset');
 		$get->appendChild($dataset);
 		$dataset->appendChild($xmldoc->createElement('gen_info'));
-		$dataset->appendChild($xmldoc->createElement('stat'));
+		if ($stat == TRUE)
+			$dataset->appendChild($xmldoc->createElement('stat'));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
