@@ -480,9 +480,13 @@ class Plesk {
 	/**
 	 * Returns array representing request for information about all available domains
 	 *
+	 * @param bool $hosting include the Hosting info block, defaults to TRUE
+	 * @param bool $limits include the Limits info block, defaults to TRUE
+	 * @param bool $stat include the Stat info block, defaults to TRUE
+	 * @param bool $prefs include the Prefs info block, defaults to TRUE
 	 * @return array an array of domains
 	 */
-	public function getWebspaces() {
+	public function getWebspaces($hosting = TRUE, $limits = TRUE, $stat = TRUE, $prefs = TRUE) {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
@@ -496,10 +500,14 @@ class Plesk {
 		$get->appendChild($filter);
 		$dataset = $xmldoc->createElement('dataset');
 		$get->appendChild($dataset);
-		$dataset->appendChild($xmldoc->createElement('limits'));
-		$dataset->appendChild($xmldoc->createElement('prefs'));
-		$dataset->appendChild($xmldoc->createElement('hosting'));
-		$dataset->appendChild($xmldoc->createElement('stat'));
+		if ($hosting == TRUE)
+			$dataset->appendChild($xmldoc->createElement('hosting'));
+		if ($limits == TRUE)
+			$dataset->appendChild($xmldoc->createElement('limits'));
+		if ($prefs == TRUE)
+			$dataset->appendChild($xmldoc->createElement('prefs'));
+		if ($stat == TRUE)
+			$dataset->appendChild($xmldoc->createElement('stat'));
 		$dataset->appendChild($xmldoc->createElement('gen_info'));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
