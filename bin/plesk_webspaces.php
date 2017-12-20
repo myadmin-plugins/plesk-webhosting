@@ -11,27 +11,14 @@ include_once __DIR__.'/../../../../include/functions.inc.php';
 
 use Detain\MyAdminPlesk\ApiRequestException;
 
-
 function_requirements('get_webhosting_plesk_instance');
 $plesk = get_webhosting_plesk_instance((isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : FALSE));
 
 try {
-	$response = $plesk->sendRequest($plesk->getDomains()->saveXML());
+	$response = $plesk->getWebspaces();
 } catch (ApiRequestException $e) {
-	echo 'Exception Error: '.$e;
+	echo 'Exception Error: '.$e->getMessage();
 	die();
 }
-print_r($response);
-try {
-	$responseXml = $plesk->parseResponse($response);
-} catch (Exception $e) {
-	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
-}
-try {
-	$resultNodes = (array) $plesk->checkResponse($responseXml);
-} catch (Exception $e) {
-	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
-}
-
 // Explore the result
-print_r($resultNodes);
+print_r($response);
