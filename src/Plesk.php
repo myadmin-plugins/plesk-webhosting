@@ -482,7 +482,7 @@ class Plesk {
 	 *
 	 * @return array an array of domains
 	 */
-	public function getDomains() {
+	public function getWebspaces() {
 		$xmldoc = new \DomDocument('1.0', 'UTF-8');
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');

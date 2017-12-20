@@ -235,10 +235,10 @@ class PleskTest extends TestCase
 	}
 
 	/**
-	 * @covers Detain\MyAdminPlesk\Plesk::getDomains
-	 * @todo   Implement testGetDomains().
+	 * @covers Detain\MyAdminPlesk\Plesk::getWebspaces
+	 * @todo   Implement testGetWebspaces().
 	 */
-	public function testGetDomains()
+	public function testGetWebspaces()
 	{
 		// Remove the following lines when you implement this test.
 		$this->markTestIncomplete(
