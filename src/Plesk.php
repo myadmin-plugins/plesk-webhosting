@@ -31,15 +31,6 @@ class Plesk {
 		//$this->updateCurl();
 	}
 
-	/**
-	 * @param int $length
-	 * @return string
-	 */
-	public static function randomString($length = 8) {
-		$chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-		return mb_substr(str_shuffle($chars), 0, $length);
-	}
-
 	public function updateCurl() {
 		$this->curlInit($this->host, $this->login, $this->password);
 	}
@@ -191,6 +182,15 @@ class Plesk {
 	public function getError($code) {
 		$codes = $this->getErrorCodes();
 		return $codes[$code];
+	}
+
+	/**
+	 * @param int $length
+	 * @return string
+	 */
+	public static function randomString($length = 8) {
+		$chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		return mb_substr(str_shuffle($chars), 0, $length);
 	}
 
 	/**
