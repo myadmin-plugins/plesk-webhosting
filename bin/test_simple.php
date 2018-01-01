@@ -33,7 +33,7 @@ try {
 if (!isset($result['ips'][0]['ip_address']) || $result['status'] == 'error')
 	throw new Exception('Failed getting server information.'.(isset($result['errtext']) ? ' Error message was: '.$result['errtext'].'.' : ''));
 if ($debugCalls == TRUE)
-	echo 'plesk->list_ip_adddresses() = '.var_export($result, TRUE)."\n";
+	echo 'plesk->list_ip_adddresses() = '.var_export($result, TRUE).PHP_EOL;
 foreach ($result['ips'] as $idx => $ip_data)
 	if (trim($ip_data['type']) == 'shared' && (!isset($data['shared_ip_address']) || $ip_data['is_default']))
 		$data['shared_ip_address'] = $ip_data['ip_address'];
@@ -45,7 +45,7 @@ try {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if ($debugCalls == TRUE)
-	echo 'plesk->listServicePlans() = '.var_export($result, TRUE)."\n";
+	echo 'plesk->listServicePlans() = '.var_export($result, TRUE).PHP_EOL;
 foreach ($result as $idx => $plan)
 	//if (strtolower($plan['name']) == 'unlimited') {
 	if ($plan['name'] == 'Default Simple') {
@@ -71,7 +71,7 @@ try {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if ($debugCalls === TRUE)
-	echo 'plesk->createClient('.var_export($request, TRUE).') = '.var_export($result, TRUE)."\n";
+	echo 'plesk->createClient('.var_export($request, TRUE).') = '.var_export($result, TRUE).PHP_EOL;
 $data['client_id'] = $result['id'];
 echo "Got Client ID {$data['client_id']}\n";
 $request = ['username' => $data['username']];
@@ -81,7 +81,7 @@ try {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if ($debugCalls === TRUE)
-	echo 'plesk->getClient('.var_export($request, TRUE).') = '.var_export($result, TRUE)."\n";
+	echo 'plesk->getClient('.var_export($request, TRUE).') = '.var_export($result, TRUE).PHP_EOL;
 $request = ['username' => $data['username'], 'phone' => Plesk::random_string(), 'email' => $data['email']];
 try {
 	$result = $plesk->updateClient($request);
@@ -89,7 +89,7 @@ try {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if ($debugCalls === TRUE)
-	echo 'plesk->updateClient('.var_export($request, TRUE).') = '.var_export($result, TRUE)."\n";
+	echo 'plesk->updateClient('.var_export($request, TRUE).') = '.var_export($result, TRUE).PHP_EOL;
 $request = [
 	'domain' => $data['subscription_domain'],
 	'owner_id' => $data['client_id'],
@@ -106,7 +106,7 @@ try {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if ($debugCalls === TRUE)
-	echo 'plesk->createSubscription('.var_export($request, TRUE).') = '.var_export($result, TRUE)."\n";
+	echo 'plesk->createSubscription('.var_export($request, TRUE).') = '.var_export($result, TRUE).PHP_EOL;
 $data['subscription_id'] = $result['id'];
 echo "Got Subscription ID {$data['subscription_id']}\n";
 try {
@@ -115,7 +115,7 @@ try {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if ($debugCalls === TRUE)
-	echo 'plesk->listSubscriptions() = '.var_export($result, TRUE)."\n";
+	echo 'plesk->listSubscriptions() = '.var_export($result, TRUE).PHP_EOL;
 $subscription_found = FALSE;
 foreach ($result as $subscription)
 	if ($subscription['id'] == $data['subscription_id'])
@@ -132,7 +132,7 @@ try {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if ($debugCalls == TRUE)
-	echo 'plesk->createSite('.var_export($request, TRUE).') = '.var_export($result, TRUE)."\n";
+	echo 'plesk->createSite('.var_export($request, TRUE).') = '.var_export($result, TRUE).PHP_EOL;
 $data['site_id'] = $result['id'];
 echo "Got Site ID {$data['site_id']}\n";
 $request = ['subscription_id' => $data['subscription_id']];
@@ -142,7 +142,7 @@ try {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if ($debugCalls == TRUE)
-	echo 'plesk->listSites('.var_export($request, TRUE).') = '.var_export($result, TRUE)."\n";
+	echo 'plesk->listSites('.var_export($request, TRUE).') = '.var_export($result, TRUE).PHP_EOL;
 $site_found = FALSE;
 if (isset($result['id']))
 	$result = [$result];
@@ -160,8 +160,8 @@ try {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if ($debugCalls == TRUE)
-	echo 'plesk->updateSite('.var_export($request, TRUE).') = '.var_export($result, TRUE)."\n";
-//echo "Got " . print_r($result, TRUE) . "\n";
+	echo 'plesk->updateSite('.var_export($request, TRUE).') = '.var_export($result, TRUE).PHP_EOL;
+//echo "Got " . print_r($result, TRUE).PHP_EOL;
 //echo "Final Data: ".print_r($data, TRUE).PHP_EOL;
 if (isset($data['site_id'])) {
 	echo "Deleting Site {$data['site_id']}\n";
@@ -172,7 +172,7 @@ if (isset($data['site_id'])) {
 		myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 	}
 	if ($debugCalls == TRUE)
-		echo 'plesk->deleteSite('.var_export($request, TRUE).') = '.var_export($result, TRUE)."\n";
+		echo 'plesk->deleteSite('.var_export($request, TRUE).') = '.var_export($result, TRUE).PHP_EOL;
 } else
 	echo "Skipping deleteSite as we lack site id\n";
 if (isset($data['subscription_id'])) {
@@ -184,7 +184,7 @@ if (isset($data['subscription_id'])) {
 		myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 	}
 	if ($debugCalls == TRUE)
-		echo 'plesk->deleteSubscription('.var_export($request, TRUE).') = '.var_export($result, TRUE)."\n";
+		echo 'plesk->deleteSubscription('.var_export($request, TRUE).') = '.var_export($result, TRUE).PHP_EOL;
 } else
 	echo "Skipping deleteClient as we lack subscription id\n";
 if (isset($data['client_id'])) {
@@ -196,6 +196,6 @@ if (isset($data['client_id'])) {
 		myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 	}
 	if ($debugCalls == TRUE)
-		echo 'plesk->deleteClient('.var_export($request, TRUE).') = '.var_export($result, TRUE)."\n";
+		echo 'plesk->deleteClient('.var_export($request, TRUE).') = '.var_export($result, TRUE).PHP_EOL;
 } else
 	echo "Skipping deleteClient as we lack customer id\n";
