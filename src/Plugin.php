@@ -68,7 +68,7 @@ class Plugin {
 			/* Gets the Shared IP Address */
 			$result = $plesk->listIpAddresses();
 			if ((!isset($result['ips'][0]['ip_address']) && !isset($result['ips']['ip_address'])) || $result['status'] == 'error')
-				throw new Exception('Failed getting server information.'.(isset($result['errtext']) ? ' Error message was: '.$result['errtext'].'.' : ''));
+				throw new \Exception('Failed getting server information.'.(isset($result['errtext']) ? ' Error message was: '.$result['errtext'].'.' : ''));
 			if ($debugCalls == TRUE)
 				echo 'plesk->list_ip_adddresses() = '.var_export($result, TRUE).PHP_EOL;
 			if (isset($result['ips']['ip_address']))
