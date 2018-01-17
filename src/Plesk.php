@@ -1806,21 +1806,17 @@ class Plesk {
 		$xmldoc->formatOutput = TRUE;
 		$packet = $xmldoc->createElement('packet');
 		$xmldoc->appendChild($packet);
-		$packetName = 'server';
+		$packetName = 'webspace';
 		$domain = $xmldoc->createElement($packetName);
 		$packet->appendChild($domain);
-		$get = $xmldoc->createElement('get');
+		$get = $xmldoc->createElement('get_traffic');
 		$domain->appendChild($get);
-		$types = $this->getTrafficTypes();
-		$typesKeys = array_keys($types);
-		foreach ($typesKeys as $type)
-			if (!in_array($type, ['certificates']))
-				$get->appendChild($xmldoc->createElement($type));
+		$get->appendChild($xmldoc->createElement('filter'));
 		$responseText = $this->sendRequest($xmldoc->saveXML());
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), TRUE);
 		$result = $this->fixResult($result);
-		$result = $result[$packetName]['get']['result'];
+		$result = $result[$packetName]['get_traffic']['result'];
 		if ($result['status'] == 'error')
 			throw new ApiRequestException('Plesk getTraffic returned Error #'.$result['errcode'].' '.$result['errtext']);
 		return $result;
