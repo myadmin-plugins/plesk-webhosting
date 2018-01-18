@@ -24,5 +24,5 @@ composer require detain/myadmin-plesk-webhosting
 
 ## License
 
-The Plesk Webhosting Class class is licensed under the LGPL-v2 license.
+The Plesk Webhosting Class class is licensed under the LGPL-v2.1 license.
 
