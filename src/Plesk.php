@@ -102,9 +102,16 @@ class Plesk {
 	 * @throws \Detain\MyAdminPlesk\ApiRequestException
 	 */
 	public function parseResponse($responseString) {
-		$xml = new \SimpleXMLElement($responseString);
-		if (!is_a($xml, 'SimpleXMLElement'))
+		try {
+			$xml = new \SimpleXMLElement($responseString);
+		} catch (\Exception $e) {
+			myadmin_log('plesk', 'error', 'Cannot parse xml response string:'.$responseString.' with message'.$e->getMessage(), __LINE__, __FILE__);
+			throw new ApiRequestException('Cannot parse xml response string:'.$responseString.' with message'.$e->getMessage());
+		}
+		if (!is_a($xml, 'SimpleXMLElement')) {
+			myadmin_log('plesk', 'error', 'cannot parse xml response string:'.$responseString, __LINE__, __FILE__);
 			throw new ApiRequestException("Can not parse server response: {$responseString}");
+		}
 		if ($this->debug === TRUE) {
 			$tempXml = json_decode(json_encode($xml), TRUE);
 			if (isset($tempXml['@attributes']))
