@@ -27,11 +27,11 @@ $debugCalls = FALSE;
 //$plesk->debug = true;
 try {
 	$result = $plesk->listIpAddresses();
-} catch (Exception $e) {
+} catch (xception $e) {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if (!isset($result['ips'][0]['ip_address']) || $result['status'] == 'error')
-	throw new Exception('Failed getting server information.'.(isset($result['errtext']) ? ' Error message was: '.$result['errtext'].'.' : ''));
+	throw new xception('Failed getting server information.'.(isset($result['errtext']) ? ' Error message was: '.$result['errtext'].'.' : ''));
 if ($debugCalls == TRUE)
 	echo 'plesk->list_ip_adddresses() = '.var_export($result, TRUE).PHP_EOL;
 foreach ($result['ips'] as $idx => $ip_data)
@@ -39,9 +39,9 @@ foreach ($result['ips'] as $idx => $ip_data)
 		$data['shared_ip_address'] = $ip_data['ip_address'];
 try {
 	if (!isset($data['shared_ip_address']))
-		throw new Exception("Couldn't find any shared IP addresses");
+		throw new xception("Couldn't find any shared IP addresses");
 	$result = $plesk->listServicePlans();
-} catch (Exception $e) {
+} catch (xception $e) {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if ($debugCalls == TRUE)
@@ -53,7 +53,7 @@ foreach ($result as $idx => $plan)
 		break;
 	}
 if (!isset($data['unlimited_plan_id']))
-	throw new Exception("Couldn't find unlimited service plan");
+	throw new xception("Couldn't find unlimited service plan");
 $data['username'] = 'detain'.strtolower(Plesk::random_string(5));
 $data['name'] = Plesk::random_string(8).' '.Plesk::random_string(8);
 $data['password'] = Plesk::random_string(10).'1!';
@@ -67,7 +67,7 @@ $request = [
 ];
 try {
 	$result = $plesk->createClient($request);
-} catch (Exception $e) {
+} catch (xception $e) {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if ($debugCalls === TRUE)
@@ -77,7 +77,7 @@ echo "Got Client ID {$data['client_id']}\n";
 $request = ['username' => $data['username']];
 try {
 	$result = $plesk->getClient($request);
-} catch (Exception $e) {
+} catch (xception $e) {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if ($debugCalls === TRUE)
@@ -85,7 +85,7 @@ if ($debugCalls === TRUE)
 $request = ['username' => $data['username'], 'phone' => Plesk::random_string(), 'email' => $data['email']];
 try {
 	$result = $plesk->updateClient($request);
-} catch (Exception $e) {
+} catch (xception $e) {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if ($debugCalls === TRUE)
@@ -102,7 +102,7 @@ $request = [
 ];
 try {
 	$result = $plesk->createSubscription($request);
-} catch (Exception $e) {
+} catch (xception $e) {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if ($debugCalls === TRUE)
@@ -111,7 +111,7 @@ $data['subscription_id'] = $result['id'];
 echo "Got Subscription ID {$data['subscription_id']}\n";
 try {
 	$result = $plesk->listSubscriptions();
-} catch (Exception $e) {
+} catch (xception $e) {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if ($debugCalls === TRUE)
@@ -121,14 +121,14 @@ foreach ($result as $subscription)
 	if ($subscription['id'] == $data['subscription_id'])
 		$subscription_found = TRUE;
 if (!$subscription_found)
-	throw new Exception("Couldn't find created subscription");
+	throw new xception("Couldn't find created subscription");
 $request = [
 	'domain' => $data['domain'],
 	'subscription_id' => $data['subscription_id']
 ];
 try {
 	$result = $plesk->createSite($request);
-} catch (Exception $e) {
+} catch (xception $e) {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if ($debugCalls == TRUE)
@@ -138,7 +138,7 @@ echo "Got Site ID {$data['site_id']}\n";
 $request = ['subscription_id' => $data['subscription_id']];
 try {
 	$result = $plesk->listSites($request);
-} catch (Exception $e) {
+} catch (xception $e) {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if ($debugCalls == TRUE)
@@ -150,13 +150,13 @@ foreach ($result as $site)
 	if (isset($site['id']) && $site['id'] == $data['site_id'])
 		$site_found = TRUE;
 if (!$site_found)
-	throw new Exception("Couldn't find created site");
+	throw new xception("Couldn't find created site");
 $data['new_domain'] = 'detain-qa-'.Plesk::random_string().'.com';
 echo "Changing Domain from {$data['domain']} to {$data['new_domain']}\n";
 $request = ['id' => $data['site_id'], 'domain' => $data['new_domain']];
 try {
 	$result = $plesk->updateSite($request);
-} catch (Exception $e) {
+} catch (xception $e) {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if ($debugCalls == TRUE)
@@ -168,7 +168,7 @@ if (isset($data['site_id'])) {
 	$request = ['id' => $data['site_id']];
 	try {
 		$result = $plesk->deleteSite($request);
-	} catch (Exception $e) {
+	} catch (xception $e) {
 		myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 	}
 	if ($debugCalls == TRUE)
@@ -180,7 +180,7 @@ if (isset($data['subscription_id'])) {
 	$request = ['id' => $data['subscription_id']];
 	try {
 		$result = $plesk->deleteSubscription($request);
-	} catch (Exception $e) {
+	} catch (xception $e) {
 		myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 	}
 	if ($debugCalls == TRUE)
@@ -192,7 +192,7 @@ if (isset($data['client_id'])) {
 	$request = ['id' => $data['client_id']];
 	try {
 		$result = $plesk->deleteClient($request);
-	} catch (Exception $e) {
+	} catch (xception $e) {
 		myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 	}
 	if ($debugCalls == TRUE)

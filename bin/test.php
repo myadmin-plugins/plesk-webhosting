@@ -82,12 +82,12 @@ $data = [];
 $plesk = new Plesk('162.246.20.210', 'admin', 'x0Bak5&0');
 $request = $plesk->listIpAddresses();
 if (!isset($request['ips'][0]['ip_address']) || $request['status'] == 'error')
-	throw new Exception('Failed getting server information.'.(isset($request['errtext']) ? ' Error message was: '.$request['errtext'].'.' : ''));
+	throw new xception('Failed getting server information.'.(isset($request['errtext']) ? ' Error message was: '.$request['errtext'].'.' : ''));
 foreach ($request['ips'] as $idx => $ip_data)
 	if (trim($ip_data['type']) == 'shared' && (!isset($data['shared_ip_address']) || $ip_data['is_default']))
 		$data['shared_ip_address'] = $ip_data['ip_address'];
 if (!isset($data['shared_ip_address']))
-	throw new Exception("Couldn't find any shared IP addresses");
+	throw new xception("Couldn't find any shared IP addresses");
 $plesk = new Plesk('162.246.20.210', 'admin', 'x0Bak5&0');
 $request = $plesk->listServicePlans();
 foreach ($request as $idx => $plan)
@@ -96,7 +96,7 @@ foreach ($request as $idx => $plan)
 		break;
 	}
 if (!isset($data['unlimited_plan_id']))
-	throw new Exception("Couldn't find unlimited service plan");
+	throw new xception("Couldn't find unlimited service plan");
 $data['client_username'] = strtolower(random_string());
 $plesk = new Plesk('162.246.20.210', 'admin', 'x0Bak5&0');
 $request = $plesk->createClient(
@@ -132,7 +132,7 @@ try {
 		if ($subscription['id'] == $data['subscription_id'])
 			$subscription_found = TRUE;
 	if (!$subscription_found)
-		throw new Exception("Couldn't find created subscription");
+		throw new xception("Couldn't find created subscription");
 	if ($runSiteTests) {
 		$data['domain'] = random_string().'.com';
 		$request = $plesk->createSite(['domain' => $data['domain'], 'subscription_id' => $data['subscription_id']]);
@@ -143,7 +143,7 @@ try {
 			if ($site['id'] == $data['site_id'])
 				$site_found = TRUE;
 		if (!$site_found)
-			throw new Exception("Couldn't find created site");
+			throw new xception("Couldn't find created site");
 		$data['domain'] = random_string().'.com';
 		$request = $plesk->updateSite(['id' => $data['site_id'], 'domain' => $data['domain']]);
 	}
@@ -166,7 +166,7 @@ try {
 			if ($email_address['id'] == $data['email_address_id'])
 				$email_address_found = TRUE;
 		if (!$email_address_found)
-			throw new Exception("Couldn't find created email address (".$data['email_address_id'].')');
+			throw new xception("Couldn't find created email address (".$data['email_address_id'].')');
 		$request = $plesk->updateEmailPassword(
 			[
 			'email' => $data['email_address'],
@@ -190,7 +190,7 @@ try {
 			if ($alias_id == $data['site_alias_id'])
 				$alias_found = TRUE;
 		if (!$alias_found)
-			throw new Exception("Couldn't find created site alias");
+			throw new xception("Couldn't find created site alias");
 		$request = $plesk->deleteSiteAlias(['id' => $data['site_alias_id']]);
 	}
 	if ($runSiteTests && $runSubdomainTests) {
@@ -215,7 +215,7 @@ try {
 			if ($subdomain['id'] == $data['subdomain_id'])
 				$subdomain_found = TRUE;
 		if (!$subdomain_found)
-			throw new Exception("Couldn't find created subdomain");
+			throw new xception("Couldn't find created subdomain");
 		$request = $plesk->updateSubdomain(
 			[
 			'id' => $data['subdomain_id'],
@@ -245,7 +245,7 @@ try {
 				$server_found = TRUE;
 			}
 		if (!$server_found)
-			throw new Exception("Couldn't find mysql database server");
+			throw new xception("Couldn't find mysql database server");
 		$request = $plesk->createDatabase(
 			[
 			'name' => random_string(),
@@ -266,7 +266,7 @@ try {
 			if ($database['id'] == $data['db_id'])
 				$database_found = TRUE;
 		if (!$database_found)
-			throw new Exception("Couldn't find created database");
+			throw new xception("Couldn't find created database");
 		$data['db_user_username'] = random_string();
 		$request = $plesk->createDatabaseUser(
 			[
@@ -282,7 +282,7 @@ try {
 			]
 		);
 		if ($data['db_user_id'] != $request->id)
-			throw new Exception("Created database user doesn't match retrieved database user");
+			throw new xception("Created database user doesn't match retrieved database user");
 		/*$request = $plesk->DeleteDatabase(array(
 			'id'=>$data['db_id'],
 		));*/
@@ -298,7 +298,7 @@ try {
 		if ($key['key'] == $data['secret_key'])
 			$secret_key_found = TRUE;
 	if (!$secret_key_found)
-		throw new Exception("Couldn't find created secret_key");
+		throw new xception("Couldn't find created secret_key");
 	$request = $plesk->deleteSecretKey(['key' => $data['secret_key']]);
 	$request = $plesk->listSecretKeys();
 	$secret_key_found = FALSE;
@@ -306,8 +306,8 @@ try {
 		if ($key['key'] == $data['secret_key'])
 			$secret_key_found = TRUE;
 	if ($secret_key_found)
-		throw new Exception('Failed to delete secret_key');
-} catch (Exception $e) {
+		throw new xception('Failed to delete secret_key');
+} catch (xception $e) {
 	throw $e;
 }
 $plesk = new Plesk('162.246.20.210', 'admin', 'x0Bak5&0');

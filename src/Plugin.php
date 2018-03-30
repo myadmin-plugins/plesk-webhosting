@@ -320,7 +320,7 @@ class Plugin {
 			$request = array('id' => $data['site_id']);
 			try {
 				$result = $plesk->deleteSite($request);
-			} catch (Exception $e) {
+			} catch (xception $e) {
 				myadmin_log('plesk', 'error', 'deleteSite Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 				echo 'Caught exception: '.$e->getMessage().PHP_EOL;
 			}
@@ -329,7 +329,7 @@ class Plugin {
 			$request = ['id' => $subscriptoinId];
 			try {
 				$result = $plesk->deleteSubscription($request);
-			} catch (Exception $e) {
+			} catch (xception $e) {
 				myadmin_log('plesk', 'error', 'deleteSubscription id:'.$subscriptoinId.' Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 				echo 'Caught exception: '.$e->getMessage().PHP_EOL;
 			}
@@ -337,7 +337,7 @@ class Plugin {
 			$request = ['id' => $userId];
 			try {
 				$result = $plesk->deleteClient($request);
-			} catch (Exception $e) {
+			} catch (xception $e) {
 				myadmin_log('plesk', 'error', 'deleteClient id:'.$userId.' Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 				echo 'Caught exception: '.$e->getMessage().PHP_EOL;
 			}
