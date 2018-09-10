@@ -5,4 +5,6 @@ namespace Detain\MyAdminPlesk;
 /**
  * {@inheritDoc}
  */
-class ApiRequestException extends \Exception {}
+class ApiRequestException extends \Exception
+{
+}

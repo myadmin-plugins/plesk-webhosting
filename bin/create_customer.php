@@ -11,9 +11,8 @@ include_once __DIR__.'/../../../../include/functions.inc.php';
 
 use Detain\MyAdminPlesk\ApiRequestException;
 
-
 function_requirements('get_webhosting_plesk_instance');
-$plesk = get_webhosting_plesk_instance((isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : FALSE));
+$plesk = get_webhosting_plesk_instance((isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : false));
 
 try {
 	$data = $GLOBALS['tf']->accounts->read(2773);
@@ -32,5 +31,6 @@ try {
 }
 
 // Explore the result
-foreach ($responseXml->xpath('/packet/customer/add/result') as $resultNode)
+foreach ($responseXml->xpath('/packet/customer/add/result') as $resultNode) {
 	echo 'Customer Added, Id: '.(string) $resultNode->id." Status:{$resultNode->status} GUID:{$resultNode->guid}\n";
+}
