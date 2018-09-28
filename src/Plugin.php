@@ -412,7 +412,7 @@ class Plugin
 	public static function getRequirements(GenericEvent $event)
 	{
 		$loader = $event->getSubject();
-		$loader->add_requirement('get_webhosting_plesk_instance', '/../vendor/detain/myadmin-plesk-webhosting/src/get_webhosting_plesk_instance.php');
+		$loader->add_requirement('get_webhosting_plesk_instance', '/../vendor/detain/plesk-webhosting/src/get_webhosting_plesk_instance.php');
 	}
 
 	/**

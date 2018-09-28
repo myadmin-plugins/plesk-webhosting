@@ -1,5 +1,5 @@
 {
-	"name": "detain/myadmin-plesk-webhosting",
+	"name": "detain/plesk-webhosting",
 	"type": "myadmin-plugin",
 	"description": "Plesk Webhosting Class",
 	"keywords": [
