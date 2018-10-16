@@ -351,19 +351,19 @@ class Plugin
 			$request = ['id' => $subscriptoinId];
 			try {
 				$result = $plesk->deleteSubscription($request);
+                myadmin_log(self::$module, 'info', 'deleteSubscription Called got '.json_encode($result), __LINE__, __FILE__);
 			} catch (\Exception $e) {
 				myadmin_log('plesk', 'error', 'deleteSubscription id:'.$subscriptoinId.' Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 				echo 'Caught exception: '.$e->getMessage().PHP_EOL;
 			}
-			myadmin_log(self::$module, 'info', 'deleteSubscription Called got '.json_encode($result), __LINE__, __FILE__);
 			$request = ['id' => $userId];
 			try {
 				$result = $plesk->deleteClient($request);
+                myadmin_log(self::$module, 'info', 'deleteClient Called got '.json_encode($result), __LINE__, __FILE__);
 			} catch (\Exception $e) {
 				myadmin_log('plesk', 'error', 'deleteClient id:'.$userId.' Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 				echo 'Caught exception: '.$e->getMessage().PHP_EOL;
 			}
-			myadmin_log(self::$module, 'info', 'deleteClient Called got '.json_encode($result), __LINE__, __FILE__);
 			return true;
 		}
 	}
