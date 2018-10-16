@@ -343,7 +343,7 @@ try {
 	if ($secret_key_found) {
 		throw new xception('Failed to delete secret_key');
 	}
-} catch (xception $e) {
+} catch (\Exception $e) {
 	throw $e;
 }
 $plesk = new Plesk('162.246.20.210', 'admin', 'x0Bak5&0');

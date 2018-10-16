@@ -27,7 +27,7 @@ $debugCalls = false;
 //$plesk->debug = true;
 try {
 	$result = $plesk->listIpAddresses();
-} catch (xception $e) {
+} catch (\Exception $e) {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if (!isset($result['ips'][0]['ip_address']) || $result['status'] == 'error') {
@@ -46,7 +46,7 @@ try {
 		throw new xception("Couldn't find any shared IP addresses");
 	}
 	$result = $plesk->listServicePlans();
-} catch (xception $e) {
+} catch (\Exception $e) {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if ($debugCalls == true) {
@@ -75,7 +75,7 @@ $request = [
 ];
 try {
 	$result = $plesk->createClient($request);
-} catch (xception $e) {
+} catch (\Exception $e) {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if ($debugCalls === true) {
@@ -86,7 +86,7 @@ echo "Got Client ID {$data['client_id']}\n";
 $request = ['username' => $data['username']];
 try {
 	$result = $plesk->getClient($request);
-} catch (xception $e) {
+} catch (\Exception $e) {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if ($debugCalls === true) {
@@ -95,7 +95,7 @@ if ($debugCalls === true) {
 $request = ['username' => $data['username'], 'phone' => Plesk::random_string(), 'email' => $data['email']];
 try {
 	$result = $plesk->updateClient($request);
-} catch (xception $e) {
+} catch (\Exception $e) {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if ($debugCalls === true) {
@@ -113,7 +113,7 @@ $request = [
 ];
 try {
 	$result = $plesk->createSubscription($request);
-} catch (xception $e) {
+} catch (\Exception $e) {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if ($debugCalls === true) {
@@ -123,7 +123,7 @@ $data['subscription_id'] = $result['id'];
 echo "Got Subscription ID {$data['subscription_id']}\n";
 try {
 	$result = $plesk->listSubscriptions();
-} catch (xception $e) {
+} catch (\Exception $e) {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if ($debugCalls === true) {
@@ -144,7 +144,7 @@ $request = [
 ];
 try {
 	$result = $plesk->createSite($request);
-} catch (xception $e) {
+} catch (\Exception $e) {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if ($debugCalls == true) {
@@ -155,7 +155,7 @@ echo "Got Site ID {$data['site_id']}\n";
 $request = ['subscription_id' => $data['subscription_id']];
 try {
 	$result = $plesk->listSites($request);
-} catch (xception $e) {
+} catch (\Exception $e) {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if ($debugCalls == true) {
@@ -178,7 +178,7 @@ echo "Changing Domain from {$data['domain']} to {$data['new_domain']}\n";
 $request = ['id' => $data['site_id'], 'domain' => $data['new_domain']];
 try {
 	$result = $plesk->updateSite($request);
-} catch (xception $e) {
+} catch (\Exception $e) {
 	myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 }
 if ($debugCalls == true) {
@@ -191,7 +191,7 @@ if (isset($data['site_id'])) {
 	$request = ['id' => $data['site_id']];
 	try {
 		$result = $plesk->deleteSite($request);
-	} catch (xception $e) {
+	} catch (\Exception $e) {
 		myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 	}
 	if ($debugCalls == true) {
@@ -205,7 +205,7 @@ if (isset($data['subscription_id'])) {
 	$request = ['id' => $data['subscription_id']];
 	try {
 		$result = $plesk->deleteSubscription($request);
-	} catch (xception $e) {
+	} catch (\Exception $e) {
 		myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 	}
 	if ($debugCalls == true) {
@@ -219,7 +219,7 @@ if (isset($data['client_id'])) {
 	$request = ['id' => $data['client_id']];
 	try {
 		$result = $plesk->deleteClient($request);
-	} catch (xception $e) {
+	} catch (\Exception $e) {
 		myadmin_log('webhosting', 'critical', 'Caught exception: '.$e->getMessage(), __LINE__, __FILE__);
 	}
 	if ($debugCalls == true) {
