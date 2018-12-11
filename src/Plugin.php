@@ -427,7 +427,9 @@ class Plugin
          * @var \MyAdmin\Settings $settings
          **/
         $settings = $event->getSubject();
+        $settings->setTarget('module');
 		$settings->add_select_master(_(self::$module), _('Default Servers'), self::$module, 'new_website_plesk_server', _('Default Plesk Setup Server'), NEW_WEBSITE_PLESK_SERVER, get_service_define('WEB_PLESK'));
 		$settings->add_dropdown_setting(self::$module, _('Out of Stock'), 'outofstock_webhosting_plesk', _('Out Of Stock Plesk Webhosting'), _('Enable/Disable Sales Of This Type'), $settings->get_setting('OUTOFSTOCK_WEBHOSTING_PLESK'), ['0', '1'], ['No', 'Yes']);
+        $settings->setTarget('global');
 	}
 }
