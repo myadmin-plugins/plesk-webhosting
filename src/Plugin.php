@@ -302,8 +302,8 @@ class Plugin
 	public static function getDeactivate(GenericEvent $event)
 	{
 		if ($event['category'] == get_service_define('WEB_PLESK')) {
-			myadmin_log(self::$module, 'info', 'Plesk Deactivation', __LINE__, __FILE__);
-			$serviceClass = $event->getSubject();
+            $serviceClass = $event->getSubject();
+			myadmin_log(self::$module, 'info', 'Plesk Deactivation', __LINE__, __FILE__, self::$module, $serviceClass->getId());
 			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
 			function_requirements('get_webhosting_plesk_instance');
 			$plesk = get_webhosting_plesk_instance($serverdata);
@@ -328,8 +328,8 @@ class Plugin
 	{
 		if ($event['category'] == get_service_define('WEB_PLESK')) {
 			$event->stopPropagation();
-			myadmin_log(self::$module, 'info', 'Plesk Termination', __LINE__, __FILE__);
-			$serviceClass = $event->getSubject();
+            $serviceClass = $event->getSubject();
+			myadmin_log(self::$module, 'info', 'Plesk Termination', __LINE__, __FILE__, self::$module, $serviceClass->getId());
 			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
 			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
 			function_requirements('get_webhosting_plesk_instance');
