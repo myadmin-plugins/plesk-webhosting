@@ -61,7 +61,7 @@ class Plesk
 			"HTTP_AUTH_LOGIN: {$login}",
 			"HTTP_AUTH_PASSWD: {$password}",
 			'HTTP_PRETTY_PRINT: TRUE',
-			'Content-Type: text/xml'
+			'Content-Type: text/xml; charset=UTF-8'
 		]
 		);
 		return $this->curl;

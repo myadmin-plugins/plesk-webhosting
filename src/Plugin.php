@@ -121,6 +121,11 @@ class Plugin
 			if (!isset($data['name']) || trim($data['name']) == '') {
 				$data['name'] = str_replace('@', ' ', $data['account_lid']);
 			}
+            $data['name'] = str_replace(['&',';'],['',''],$data['name']);
+            if (mb_strpos($data['name'], ' ') !== false) {
+                $nameParts = explode(' ', $data['name']);
+                $data['name'] = $nameParts[0].' '.$nameParts[1];
+            }
 			$request = [
 				'name' => $data['name'],
 				'username' => $username,
