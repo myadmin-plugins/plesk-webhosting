@@ -62,6 +62,11 @@ class Plugin
 				$hostname = $serviceClass->getId().'.server.com';
 			}
 			$password = website_get_password($serviceClass->getId());
+            if ($password == false) {
+                $password = generateRandomString(10, 2, 2, 2, 1);
+                $GLOBALS['tf']->history->add($settings['PREFIX'], 'password', $serviceClass->getId(), $password);
+            }
+            
 			$username = get_new_webhosting_username($serviceClass->getId(), $hostname, $serviceClass->getServer());
 			$data = $GLOBALS['tf']->accounts->read($serviceClass->getCustid());
 			$debugCalls = false;
