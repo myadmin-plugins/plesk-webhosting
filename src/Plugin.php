@@ -358,7 +358,7 @@ class Plugin
 			}
 			myadmin_log(self::$module, 'info', 'deleteSite Called got '.json_encode($result), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 			*/
-			$request = ['id' => $subscriptoinId];
+			$request = ['owner-login' => $serviceClass->getUsername()];
 			try {
 				$result = $plesk->deleteSubscription($request);
 				myadmin_log(self::$module, 'info', 'deleteSubscription Called got '.json_encode($result), __LINE__, __FILE__, self::$module, $serviceClass->getId());
@@ -366,7 +366,7 @@ class Plugin
 				myadmin_log('plesk', 'error', 'deleteSubscription id:'.$subscriptoinId.' Caught exception: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 				echo 'Caught exception: '.$e->getMessage().PHP_EOL;
 			}
-			$request = ['id' => $userId];
+			$request = ['login' => $serviceClass->getUsername()];
 			try {
 				$result = $plesk->deleteClient($request);
 				myadmin_log(self::$module, 'info', 'deleteClient Called got '.json_encode($result), __LINE__, __FILE__, self::$module, $serviceClass->getId());

@@ -54,16 +54,12 @@ class Plesk
 		curl_setopt($this->curl, CURLOPT_POST, true);
 		curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER, false);
 		curl_setopt($this->curl, CURLOPT_SSL_VERIFYHOST, false);
-		curl_setopt(
-			$this->curl,
-			CURLOPT_HTTPHEADER,
-			[
+		curl_setopt($this->curl, CURLOPT_HTTPHEADER, [
 			"HTTP_AUTH_LOGIN: {$login}",
 			"HTTP_AUTH_PASSWD: {$password}",
 			'HTTP_PRETTY_PRINT: TRUE',
-			'Content-Type: text/xml; charset=UTF-8'
-		]
-		);
+		    'Content-Type: text/xml; charset=UTF-8'
+		]);
 		return $this->curl;
 	}
 
