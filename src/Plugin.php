@@ -62,11 +62,11 @@ class Plugin
 				$hostname = $serviceClass->getId().'.server.com';
 			}
 			$password = website_get_password($serviceClass->getId());
-            if ($password == false) {
-                $password = generateRandomString(10, 2, 2, 2, 1);
-                $GLOBALS['tf']->history->add($settings['PREFIX'], 'password', $serviceClass->getId(), $password);
-            }
-            
+			if ($password == false) {
+				$password = generateRandomString(10, 2, 2, 2, 1);
+				$GLOBALS['tf']->history->add($settings['PREFIX'], 'password', $serviceClass->getId(), $password);
+			}
+			
 			$username = get_new_webhosting_username($serviceClass->getId(), $hostname, $serviceClass->getServer());
 			$data = $GLOBALS['tf']->accounts->read($serviceClass->getCustid());
 			$debugCalls = false;
@@ -126,11 +126,11 @@ class Plugin
 			if (!isset($data['name']) || trim($data['name']) == '') {
 				$data['name'] = str_replace('@', ' ', $data['account_lid']);
 			}
-            $data['name'] = str_replace(['&',';'],['',''],$data['name']);
-            if (mb_strpos($data['name'], ' ') !== false) {
-                $nameParts = explode(' ', $data['name']);
-                $data['name'] = $nameParts[0].' '.$nameParts[1];
-            }
+			$data['name'] = str_replace(['&',';'],['',''],$data['name']);
+			if (mb_strpos($data['name'], ' ') !== false) {
+				$nameParts = explode(' ', $data['name']);
+				$data['name'] = $nameParts[0].' '.$nameParts[1];
+			}
 			$request = [
 				'name' => $data['name'],
 				'username' => $username,
@@ -181,7 +181,7 @@ class Plugin
 					$GLOBALS['tf']->history->add($settings['PREFIX'], 'password', $serviceClass->getId(), $request['password']);
 				}
 			}
-			request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'plesk', 'createClient', $request, $result);
+			request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'plesk', 'createClient', $request, $result, $serviceClass->getId());
 			if (!isset($result['id'])) {
 				//myadmin_log(self::$module, 'info', 'createClient did not return the expected id information: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 				myadmin_log(self::$module, 'info', 'createClient did not return the expected id', __LINE__, __FILE__, self::$module, $serviceClass->getId());
@@ -261,7 +261,7 @@ class Plugin
 					}
 				}
 			}
-			request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'plesk', 'createSubscription', $request, $result);
+			request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'plesk', 'createSubscription', $request, $result, $serviceClass->getId());
 			if (!isset($result['id'])) {
 				myadmin_log(self::$module, 'info', 'createSubscription did not return the expected id information: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 				$event['success'] = false;
