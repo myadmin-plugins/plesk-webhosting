@@ -58,7 +58,7 @@ class Plesk
 			"HTTP_AUTH_LOGIN: {$login}",
 			"HTTP_AUTH_PASSWD: {$password}",
 			'HTTP_PRETTY_PRINT: TRUE',
-		    'Content-Type: text/xml; charset=UTF-8'
+			'Content-Type: text/xml; charset=UTF-8'
 		]);
 		return $this->curl;
 	}
@@ -477,6 +477,9 @@ class Plesk
 		$response = $this->parseResponse($responseText);
 		$result = json_decode(json_encode($response), true);
 		$result = $this->fixResult($result);
+		if (isset($result['system']) && isset($result['system']['error']) && $result['system']['status'] == 'error') {
+			throw new ApiRequestException('Plesk createSession('.$user.') returned Error #'.$result['system']['errcode'].' '.$result['system']['errtext']);
+		}
 		$result = $result[$packetName]['create_session']['result'];
 		if ($result['status'] == 'error') {
 			throw new ApiRequestException('Plesk createSession('.$user.') returned Error #'.$result['errcode'].' '.$result['errtext']);
