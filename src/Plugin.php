@@ -321,8 +321,10 @@ class Plugin
 			try {
 				$result = $plesk->updateClient($request);
 				myadmin_log(self::$module, 'info', 'updateClient('.json_encode($request).') Called got '.json_encode($result), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+				$event['success'] = true;
 			} catch (ApiRequestException $e) {
 				myadmin_log(self::$module, 'info', 'updateClient('.json_encode($request).') Caught exception: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+				$event['success'] = false;
 			}
 			$event->stopPropagation();
 		}
