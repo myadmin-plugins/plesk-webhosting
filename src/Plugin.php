@@ -87,7 +87,7 @@ class Plugin
 				$sharedIp = $result['ips']['ip_address'];
 			} else {
 				foreach ($result['ips'] as $idx => $ipData) {
-					if (trim($ipData['type']) == 'shared' && (!isset($sharedIp) || $ipData['is_default'])) {
+					if (trim($ipData['type']) == 'shared' && (!isset($sharedIp) || (isset($ipData['is_default']) && $ipData['is_default']))) {
 						$sharedIp = $ipData['ip_address'];
 					}
 				}
