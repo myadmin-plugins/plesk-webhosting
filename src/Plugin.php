@@ -341,15 +341,15 @@ class Plugin
 		if ($event['category'] == get_service_define('WEB_PLESK')) {
 			$event->stopPropagation();
 			$serviceClass = $event->getSubject();
-			myadmin_log(self::$module, 'info', 'Plesk Termination', __LINE__, __FILE__, self::$module, $serviceClass->getId());
 			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
 			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
+			myadmin_log(self::$module, 'info', $serverdata['website_name'].' Plesk Termination', __LINE__, __FILE__, self::$module, $serviceClass->getId());
 			function_requirements('get_webhosting_plesk_instance');
 			$plesk = get_webhosting_plesk_instance($serverdata);
-			if (!isset($extra[1])) {
+			/*if (!isset($extra[1])) {
 				return false;
 			}
-			list($userId, $subscriptoinId) = $extra;
+			list($userId, $subscriptoinId) = $extra;*/
 			/*
 			$request = array('id' => $data['site_id']);
 			try {
@@ -363,17 +363,17 @@ class Plugin
 			$request = ['owner-login' => $serviceClass->getUsername()];
 			try {
 				$result = $plesk->deleteSubscription($request);
-				myadmin_log(self::$module, 'info', 'deleteSubscription Called got '.json_encode($result), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+				myadmin_log(self::$module, 'info', $serverdata['website_name'].' deleteSubscription '.$serviceClass->getUsername().' Called got '.json_encode($result), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 			} catch (\Exception $e) {
-				myadmin_log('plesk', 'error', 'deleteSubscription id:'.$subscriptoinId.' Caught exception: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+				myadmin_log('plesk', 'error', $serverdata['website_name'].' deleteSubscription user '.$serviceClass->getUsername().' Caught exception: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 				echo 'Caught exception: '.$e->getMessage().PHP_EOL;
 			}
 			$request = ['login' => $serviceClass->getUsername()];
 			try {
 				$result = $plesk->deleteClient($request);
-				myadmin_log(self::$module, 'info', 'deleteClient Called got '.json_encode($result), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+				myadmin_log(self::$module, 'info', $serverdata['website_name'].' deleteClient '.$serviceClass->getUsername().' Called got '.json_encode($result), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 			} catch (\Exception $e) {
-				myadmin_log('plesk', 'error', 'deleteClient id:'.$userId.' Caught exception: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+				myadmin_log('plesk', 'error', $serverdata['website_name'].' deleteClient user:'.$serviceClass->getUsername().' Caught exception: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 				echo 'Caught exception: '.$e->getMessage().PHP_EOL;
 			}
 			return true;
