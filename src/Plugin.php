@@ -360,6 +360,9 @@ class Plugin
 			}
 			myadmin_log(self::$module, 'info', 'deleteSite Called got '.json_encode($result), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 			*/
+			if (trim($serviceClass->getUsername()) == '') {
+				return true;
+			}
 			$request = ['owner-login' => $serviceClass->getUsername()];
 			try {
 				$result = $plesk->deleteSubscription($request);
