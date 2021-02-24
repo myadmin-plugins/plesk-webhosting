@@ -300,7 +300,7 @@ class Plugin
 			} catch (ApiRequestException $e) {
 				echo 'Caught exception: '.$e->getMessage().PHP_EOL;
 			}
-			myadmin_log(self::$module, 'info', 'updateClient Called got '.json_encode($result), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+			myadmin_log(self::$module, 'info', 'updateClient('.json_encode($request).') Called got '.json_encode($result), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 			$event->stopPropagation();
 		}
 	}
