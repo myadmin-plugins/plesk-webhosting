@@ -15,22 +15,22 @@ function_requirements('get_webhosting_plesk_instance');
 $plesk = get_webhosting_plesk_instance((isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : false));
 
 try {
-	$data = $GLOBALS['tf']->accounts->read(2773);
-	$password = _randomstring(10);
-	$username = 'joeapitest';
-	echo "Calling createCustomer($username, $password)\n";
-	$xml = $plesk->createCustomer($username, $password, $data)->saveXML();
-	echo "Sending XML:\n{$xml}\n";
-	$response = $plesk->sendRequest($xml);
-	print_r($response);
-	$responseXml = $plesk->parseResponse($response);
-	//$plesk->checkResponse($responseXml);
+    $data = $GLOBALS['tf']->accounts->read(2773);
+    $password = _randomstring(10);
+    $username = 'joeapitest';
+    echo "Calling createCustomer($username, $password)\n";
+    $xml = $plesk->createCustomer($username, $password, $data)->saveXML();
+    echo "Sending XML:\n{$xml}\n";
+    $response = $plesk->sendRequest($xml);
+    print_r($response);
+    $responseXml = $plesk->parseResponse($response);
+    //$plesk->checkResponse($responseXml);
 } catch (ApiRequestException $e) {
-	echo $e;
-	die();
+    echo $e;
+    die();
 }
 
 // Explore the result
 foreach ($responseXml->xpath('/packet/customer/add/result') as $resultNode) {
-	echo 'Customer Added, Id: '.(string) $resultNode->id." Status:{$resultNode->status} GUID:{$resultNode->guid}\n";
+    echo 'Customer Added, Id: '.(string) $resultNode->id." Status:{$resultNode->status} GUID:{$resultNode->guid}\n";
 }

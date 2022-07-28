@@ -16,16 +16,16 @@ function_requirements('get_webhosting_plesk_instance');
 $plesk = get_webhosting_plesk_instance((isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : false));
 
 $request = [
-	'name' => Plesk::random_string(8).' '.Plesk::random_string(8),
-	'username' => 'detain'.strtolower(Plesk::random_string(5)),
-	'password' => Plesk::random_string(10).'1!'
+    'name' => Plesk::random_string(8).' '.Plesk::random_string(8),
+    'username' => 'detain'.strtolower(Plesk::random_string(5)),
+    'password' => Plesk::random_string(10).'1!'
 ];
 
 try {
-	$result = $plesk->createClient($request);
+    $result = $plesk->createClient($request);
 } catch (ApiRequestException $e) {
-	echo 'Exception Error: '.$e->getMessage();
-	print_r($e);
-	die();
+    echo 'Exception Error: '.$e->getMessage();
+    print_r($e);
+    die();
 }
 echo $plesk->varExport($result);

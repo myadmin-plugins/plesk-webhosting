@@ -15,15 +15,15 @@ function_requirements('get_webhosting_plesk_instance');
 $plesk = get_webhosting_plesk_instance((isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : false));
 
 try {
-	$field = $_SERVER['argv'][2];
-	$value = $_SERVER['argv'][3];
-	if (trim($field) == '' || trim($value) == '') {
-		die('this would delete all clients');
-	}
-	$result = $plesk->deleteClient([$field => $value]);
+    $field = $_SERVER['argv'][2];
+    $value = $_SERVER['argv'][3];
+    if (trim($field) == '' || trim($value) == '') {
+        die('this would delete all clients');
+    }
+    $result = $plesk->deleteClient([$field => $value]);
 } catch (ApiRequestException $e) {
-	echo 'Exception Error: '.$e->getMessage();
-	print_r($e);
-	die();
+    echo 'Exception Error: '.$e->getMessage();
+    print_r($e);
+    die();
 }
 print_r($result);

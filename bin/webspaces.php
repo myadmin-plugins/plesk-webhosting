@@ -15,9 +15,9 @@ function_requirements('get_webhosting_plesk_instance');
 $plesk = get_webhosting_plesk_instance((isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : false));
 
 try {
-	$response = $plesk->getWebspaces();
+    $response = $plesk->getWebspaces();
 } catch (ApiRequestException $e) {
-	echo 'Exception Error: '.$e->getMessage();
-	die();
+    echo 'Exception Error: '.$e->getMessage();
+    die();
 }
 print_r($response);

@@ -16,15 +16,15 @@ function_requirements('get_webhosting_plesk_instance');
 $plesk = get_webhosting_plesk_instance((isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : false));
 
 $request = [
-	'domain' => 'detain-qa-'.Plesk::random_string().'.com',
-	'subscription_id' => 1
+    'domain' => 'detain-qa-'.Plesk::random_string().'.com',
+    'subscription_id' => 1
 ];
 
 try {
-	$result = $plesk->createSite($request);
+    $result = $plesk->createSite($request);
 } catch (ApiRequestException $e) {
-	echo 'Exception Error: '.$e->getMessage();
-	print_r($e);
-	die();
+    echo 'Exception Error: '.$e->getMessage();
+    print_r($e);
+    die();
 }
 echo $plesk->varExport($result);
