@@ -109,7 +109,9 @@ class Plesk
     public function parseResponse($responseString)
     {
         try {
-            $xml = new \SimpleXMLElement($responseString);
+            libxml_use_internal_errors(true);
+            $xml = simplexml_load_string($responseString, \SimpleXMLElement::class, LIBXML_BIGLINES | LIBXML_COMPACT);
+            //$xml = new \SimpleXMLElement($responseString, LIBXML_BIGLINES | LIBXML_COMPACT);
         } catch (\Exception $e) {
             myadmin_log('plesk', 'error', 'Cannot parse xml response string:'.$responseString.' with message'.$e->getMessage(), __LINE__, __FILE__);
             throw new ApiRequestException('Cannot parse xml response string:'.$responseString.' with message'.$e->getMessage());
