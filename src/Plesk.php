@@ -1838,7 +1838,7 @@ class Plesk
             'username' => 'login'
         ];
         foreach ($params as $field => $value) {
-            $filter->appendChild($xmldoc->createElement((isset($mapping[$field]) ? $mapping[$field] : $field), $value));
+            $filter->appendChild($xmldoc->createElement(($mapping[$field] ?? $field), $value));
         }
         $responseText = $this->sendRequest($xmldoc->saveXML());
         $response = $this->parseResponse($responseText);

@@ -13,7 +13,7 @@ use Detain\MyAdminPlesk\ApiRequestException;
 use Detain\MyAdminPlesk\Plesk;
 
 function_requirements('get_webhosting_plesk_instance');
-$plesk = get_webhosting_plesk_instance((isset($_SERVER['argv'][1]) ? $_SERVER['argv'][1] : false));
+$plesk = get_webhosting_plesk_instance(($_SERVER['argv'][1] ?? false));
 
 $request = [
     'name' => Plesk::random_string(8).' '.Plesk::random_string(8),

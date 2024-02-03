@@ -19,7 +19,7 @@ function get_webhosting_plesk_instance($server = false)
     }
     $hash = $serverData[$settings['PREFIX'].'_key'];
     $ip = $serverData[$settings['PREFIX'].'_ip'];
-    list($pleskUser, $pleskPass) = explode(':', html_entity_decode($hash));
+    [$pleskUser, $pleskPass] = explode(':', html_entity_decode($hash));
     //myadmin_log('webhosting', 'debug', "Plesk($ip, $pleskUser, $pleskPass)", __LINE__, __FILE__, $module);
     return new \Detain\MyAdminPlesk\Plesk($ip, $pleskUser, $pleskPass);
 }
