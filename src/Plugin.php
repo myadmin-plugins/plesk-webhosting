@@ -61,7 +61,7 @@ class Plugin
             if (trim($hostname) == '') {
                 $hostname = $serviceClass->getId().'.server.com';
             }
-            $password = website_get_password($serviceClass->getId());
+            $password = website_get_password($serviceClass->getId(), $serviceClass->getCustid());
             if ($password == false) {
                 $password = generateRandomString(10, 2, 2, 2, 1);
                 $GLOBALS['tf']->history->add($settings['PREFIX'], 'password', $serviceClass->getId(), $password);
