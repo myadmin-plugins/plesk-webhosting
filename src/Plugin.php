@@ -147,7 +147,7 @@ class Plugin
                 $cantFix = false;
                 $passwordUpdated = false;
                 while ($cantFix == false && !isset($result['id'])) {
-                    if (mb_strpos($error, 'The password should') !== false) {
+                    if (mb_strpos($error, 'The password should') !== false || mb_strpos($error, 'password is not complex') !== false) {
                         // Error #2204 System user setting was failed. Error: The password should be  4 - 255 characters long and should not contain the username. Do not use quotes, spaces, and national alphabetic characters in the password.
                         $passwordUpdated = true;
                         $password = Plesk::randomString(16);
@@ -190,6 +190,10 @@ class Plugin
                     $accountId = $extra[0];
                 } else {
                     $event['success'] = false;
+                    getcurlpage('https://chat.is.cc/hooks/BAckHdSAoMsPieCof/CHQ3bKKo5Kh2HeHFJWDpxqBFyj2i7WZwmsLpLM7PmHK5D2fR', json_encode([
+                        'username' => 'Interesting Guy',
+                        'text' => 'Failed [Website '.$serviceClass->getId().'](https://my.interserver.net/admin/view_website?id='.$serviceClass->getId().') Activation Text:'.$error,
+                    ]), [CURLOPT_HTTPHEADER => ['Content-type: application/json']]);
                     $event->stopPropagation();
                     return;
                 }
