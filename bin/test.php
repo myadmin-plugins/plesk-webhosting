@@ -43,7 +43,7 @@
 * @author Joe Huss <detain@interserver.net>
 * @package MyAdmin
 * @category Scripts
-* @copyright 2019
+* @copyright 2025
 */
 
 include_once __DIR__.'/../../../../include/functions.inc.php';
