@@ -482,6 +482,9 @@ class Plesk
         if (isset($result['system']) && isset($result['system']['error']) && $result['system']['status'] == 'error') {
             throw new ApiRequestException('Plesk createSession('.$user.') returned Error #'.$result['system']['errcode'].' '.$result['system']['errtext']);
         }
+        if (!isset($result[$packetName])) {
+            throw new ApiRequestException('Plesk createSession('.$user.') returned Error '.json_encode($result));
+        }
         $result = $result[$packetName]['create_session']['result'];
         if ($result['status'] == 'error') {
             throw new ApiRequestException('Plesk createSession('.$user.') returned Error #'.$result['errcode'].' '.$result['errtext']);
