@@ -190,10 +190,7 @@ class Plugin
                     $accountId = $extra[0];
                 } else {
                     $event['success'] = false;
-                    getcurlpage('https://chat.is.cc/hooks/BAckHdSAoMsPieCof/CHQ3bKKo5Kh2HeHFJWDpxqBFyj2i7WZwmsLpLM7PmHK5D2fR', json_encode([
-                        'username' => 'Interesting Guy',
-                        'text' => 'Failed [Website '.$serviceClass->getId().'](https://my.interserver.net/admin/view_website?id='.$serviceClass->getId().') Activation Text:'.$error,
-                    ]), [CURLOPT_HTTPHEADER => ['Content-type: application/json']]);
+                    chatNotify('Failed [Website '.$serviceClass->getId().'](https://my.interserver.net/admin/view_website?id='.$serviceClass->getId().') Activation Text:'.$error, 'int-dev');
                     $event->stopPropagation();
                     return;
                 }
