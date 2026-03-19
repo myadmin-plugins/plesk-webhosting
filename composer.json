@@ -1,40 +1,50 @@
 {
 	"name": "detain/myadmin-plesk-webhosting",
 	"type": "myadmin-plugin",
-	"description": "Plesk Webhosting Class",
+	"description": "MyAdmin Plesk Webhosting Plugin - Provides Plesk control panel integration for automated webhosting provisioning, management, and lifecycle operations including account creation, suspension, and termination via the Plesk XML API.",
 	"keywords": [
 		"plesk",
-		"administration",
-		"license"
+		"webhosting",
+		"myadmin",
+		"control-panel",
+		"provisioning",
+		"api"
 	],
 	"license": "LGPL-2.1-only",
 	"authors": [
 		{
 			"name": "Joe Huss",
-			"homepage": "https:\/\/my.interserver.net\/"
+			"homepage": "https://my.interserver.net/"
 		}
 	],
 	"config": {
-		"bin-dir": "vendor\/bin",
-		"minimum-stability": "dev"
+		"bin-dir": "vendor/bin",
+		"minimum-stability": "dev",
+		"allow-plugins": {
+			"detain/myadmin-plugin-installer": true
+		}
 	},
 	"require": {
-		"php": ">=5.0.0",
+		"php": ">=8.2",
 		"ext-soap": "*",
-		"symfony/event-dispatcher": "^5.0@stable",
+		"symfony/event-dispatcher": "^5.0 || ^6.0 || ^7.0",
 		"detain/myadmin-plugin-installer": "dev-master"
-    },
+	},
 	"require-dev": {
-		"phpunit/phpunit": "*",
-		"phpunit/phpunit-mock-objects": "*",
-		"vlucas/phpdotenv": "*",
-		"codeclimate/php-test-reporter": "dev-master",
-		"satooshi/php-coveralls": "*",
-		"codacy/coverage": "dev-master"
+		"phpunit/phpunit": "^9.6"
 	},
 	"autoload": {
 		"psr-4": {
 			"Detain\\MyAdminPlesk\\": "src/"
 		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Detain\\MyAdminPlesk\\Tests\\": "tests/"
+		}
+	},
+	"scripts": {
+		"test": "phpunit",
+		"test-coverage": "phpunit --coverage-text"
 	}
 }
