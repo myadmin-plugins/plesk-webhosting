@@ -64,11 +64,11 @@ class Plugin
             $password = website_get_password($serviceClass->getId(), $serviceClass->getCustid());
             if ($password == false) {
                 $password = generateRandomString(10, 2, 2, 2, 1);
-                $GLOBALS['tf']->history->add($settings['PREFIX'], 'password', $serviceClass->getId(), $password);
+                \MyAdmin\App::history()->add($settings['PREFIX'], 'password', $serviceClass->getId(), $password);
             }
 
             $username = get_new_webhosting_username($serviceClass->getId(), $hostname, $serviceClass->getServer());
-            $data = $GLOBALS['tf']->accounts->read($serviceClass->getCustid());
+            $data = \MyAdmin\App::accounts()->read($serviceClass->getCustid());
             $debugCalls = false;
             if (!is_array($extra)) {
                 $extra = [];
@@ -178,7 +178,7 @@ class Plugin
                     }
                 }
                 if ($passwordUpdated == true) {
-                    $GLOBALS['tf']->history->add($settings['PREFIX'], 'password', $serviceClass->getId(), $request['password']);
+                    \MyAdmin\App::history()->add($settings['PREFIX'], 'password', $serviceClass->getId(), $request['password']);
                 }
             }
             request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'plesk', 'createClient', $request, $result, $serviceClass->getId());
@@ -400,7 +400,7 @@ class Plugin
                 $event['status'] = 'error';
                 $event['status_text'] = 'Error Code '.$result['faultcode'].': '.$result['fault'];
             } else {
-                $GLOBALS['tf']->history->add($settings['TABLE'], 'change_ip', $event['newip'], $serviceClass->getId(), $serviceClass->getCustid());
+                \MyAdmin\App::history()->add($settings['TABLE'], 'change_ip', $event['newip'], $serviceClass->getId(), $serviceClass->getCustid());
                 $serviceClass->set_ip($event['newip'])->save();
                 $event['status'] = 'ok';
                 $event['status_text'] = 'The IP Address has been changed.';
@@ -415,7 +415,7 @@ class Plugin
     public static function getMenu(GenericEvent $event)
     {
         $menu = $event->getSubject();
-        if ($GLOBALS['tf']->ima == 'admin') {
+        if (\MyAdmin\App::ima() == 'admin') {
             $menu->add_link(self::$module, 'choice=none.reusable_plesk', '/images/myadmin/to-do.png', _('ReUsable Plesk Licenses'));
             $menu->add_link(self::$module, 'choice=none.plesk_list', '/images/myadmin/to-do.png', _('Plesk Licenses Breakdown'));
             $menu->add_link(self::$module.'api', 'choice=none.plesk_licenses_list', '/images/whm/createacct.gif', _('List all Plesk Licenses'));

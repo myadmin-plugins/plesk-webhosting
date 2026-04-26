@@ -15,7 +15,7 @@ function_requirements('get_webhosting_plesk_instance');
 $plesk = get_webhosting_plesk_instance(($_SERVER['argv'][1] ?? false));
 
 try {
-    $data = $GLOBALS['tf']->accounts->read(2773);
+    $data = \MyAdmin\App::accounts()->read(2773);
     $password = _randomstring(10);
     $username = 'joeapitest';
     echo "Calling createCustomer($username, $password)\n";
