@@ -52,6 +52,7 @@ class Plugin
     {
         if ($event['category'] == get_service_define('WEB_PLESK')) {
             $serviceClass = $event->getSubject();
+            try {
             myadmin_log(self::$module, 'info', 'Plesk Activation', __LINE__, __FILE__, self::$module, $serviceClass->getId());
             $settings = get_module_settings(self::$module);
             $serverdata = get_service_master($serviceClass->getServer(), self::$module);
@@ -95,6 +96,8 @@ class Plugin
             if (!isset($sharedIp)) {
                 myadmin_log(self::$module, 'critical', 'Plesk Could not find any shared IP addresses', __LINE__, __FILE__, self::$module, $serviceClass->getId());
                 $event['success'] = false;
+                $event['status'] = 'error';
+                $event['status_text'] = 'Plesk Could not find any shared IP addresses';
                 $event->stopPropagation();
                 return;
             }
@@ -104,6 +107,8 @@ class Plugin
             } catch (ApiRequestException $e) {
                 myadmin_log(self::$module, 'info', 'listServicePlans Caught exception: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
                 $event['success'] = false;
+                $event['status'] = 'error';
+                $event['status_text'] = 'listServicePlans Caught exception: '.$e->getMessage();
                 $event->stopPropagation();
                 return;
             }
@@ -190,7 +195,9 @@ class Plugin
                     $accountId = $extra[0];
                 } else {
                     $event['success'] = false;
-                    chatNotify('Failed [Website '.$serviceClass->getId().'](https://my.interserver.net/admin/view_website?id='.$serviceClass->getId().') Activation Text:'.$error, 'int-dev');
+                    $event['status'] = 'error';
+                    $event['status_text'] = 'Activation Text:'.$error;
+                    //chatNotify('Failed [Website '.$serviceClass->getId().'](https://my.interserver.net/admin/view_website?id='.$serviceClass->getId().') Activation Text:'.$error, 'int-dev');
                     $event->stopPropagation();
                     return;
                 }
@@ -266,6 +273,8 @@ class Plugin
             if (!isset($result['id'])) {
                 myadmin_log(self::$module, 'info', 'createSubscription did not return the expected id information: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
                 $event['success'] = false;
+                $event['status'] = 'error';
+                $event['status_text'] = 'createSubscription did not return the expected id information: '.$e->getMessage();
                 $event->stopPropagation();
                 return;
             }
@@ -281,6 +290,13 @@ class Plugin
                 website_welcome_email($serviceClass->getId());
             }
             $event->stopPropagation();
+            } catch (\Throwable $e) {
+                myadmin_log(self::$module, 'error', 'Plesk activation threw an exception: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                $event['success'] = false;
+                $event['status'] = 'error';
+                $event['status_text'] = 'Exception during activation: '.$e->getMessage();
+                $event->stopPropagation();
+            }
         }
     }
 
@@ -292,16 +308,22 @@ class Plugin
     {
         if ($event['category'] == get_service_define('WEB_PLESK')) {
             $serviceClass = $event->getSubject();
-            $serverdata = get_service_master($serviceClass->getServer(), self::$module);
-            function_requirements('get_webhosting_plesk_instance');
-            $plesk = get_webhosting_plesk_instance($serverdata);
-            $request = ['username' => $serviceClass->getUsername(), 'status' => 0];
             try {
+                $serverdata = get_service_master($serviceClass->getServer(), self::$module);
+                function_requirements('get_webhosting_plesk_instance');
+                $plesk = get_webhosting_plesk_instance($serverdata);
+                $request = ['username' => $serviceClass->getUsername(), 'status' => 0];
                 $result = $plesk->updateClient($request);
-            } catch (ApiRequestException $e) {
+                myadmin_log(self::$module, 'info', 'updateClient('.json_encode($request).') Called got '.json_encode($result), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                $event['success'] = true;
+            } catch (\Throwable $e) {
+                myadmin_log(self::$module, 'error', 'Plesk reactivation updateClient exception: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
                 echo 'Caught exception: '.$e->getMessage().PHP_EOL;
+                $event['success'] = false;
+                $event['status'] = 'error';
+                $event['status_text'] = 'Exception during reactivation: '.$e->getMessage();
+
             }
-            myadmin_log(self::$module, 'info', 'updateClient('.json_encode($request).') Called got '.json_encode($result), __LINE__, __FILE__, self::$module, $serviceClass->getId());
             $event->stopPropagation();
         }
     }
@@ -314,18 +336,20 @@ class Plugin
     {
         if ($event['category'] == get_service_define('WEB_PLESK')) {
             $serviceClass = $event->getSubject();
-            myadmin_log(self::$module, 'info', 'Plesk Deactivation', __LINE__, __FILE__, self::$module, $serviceClass->getId());
-            $serverdata = get_service_master($serviceClass->getServer(), self::$module);
-            function_requirements('get_webhosting_plesk_instance');
-            $plesk = get_webhosting_plesk_instance($serverdata);
-            $request = ['username' => $serviceClass->getUsername(), 'status' => 1];
             try {
+                myadmin_log(self::$module, 'info', 'Plesk Deactivation', __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                $serverdata = get_service_master($serviceClass->getServer(), self::$module);
+                function_requirements('get_webhosting_plesk_instance');
+                $plesk = get_webhosting_plesk_instance($serverdata);
+                $request = ['username' => $serviceClass->getUsername(), 'status' => 1];
                 $result = $plesk->updateClient($request);
                 myadmin_log(self::$module, 'info', 'updateClient('.json_encode($request).') Called got '.json_encode($result), __LINE__, __FILE__, self::$module, $serviceClass->getId());
                 $event['success'] = true;
-            } catch (ApiRequestException $e) {
+            } catch (\Throwable $e) {
                 myadmin_log(self::$module, 'info', 'updateClient('.json_encode($request).') Caught exception: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
                 $event['success'] = false;
+                $event['status'] = 'error';
+                $event['status_text'] = 'Exception during deactivation - updateClient('.json_encode($request).') Caught exception: '.$e->getMessage();
             }
             $event->stopPropagation();
         }
@@ -342,6 +366,7 @@ class Plugin
         if ($event['category'] == get_service_define('WEB_PLESK')) {
             $event->stopPropagation();
             $serviceClass = $event->getSubject();
+            try {
             $extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
             $serverdata = get_service_master($serviceClass->getServer(), self::$module);
             myadmin_log(self::$module, 'info', $serverdata['website_name'].' Plesk Termination', __LINE__, __FILE__, self::$module, $serviceClass->getId());
@@ -381,6 +406,14 @@ class Plugin
                 echo 'Caught exception: '.$e->getMessage().PHP_EOL;
             }
             return true;
+            } catch (\Throwable $e) {
+                myadmin_log(self::$module, 'error', 'Plesk termination threw an exception: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                $event['success'] = false;
+                $event['status'] = 'error';
+                $event['status_text'] = 'Exception during termination: '.$e->getMessage();
+                $event->stopPropagation();
+                return false;
+            }
         }
     }
 
