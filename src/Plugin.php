@@ -425,7 +425,9 @@ class Plugin
         if ($event['category'] == get_service_define('WEB_PLESK')) {
             $serviceClass = $event->getSubject();
             $settings = get_module_settings(self::$module);
-            $plesk = new Plesk(FANTASTICO_USERNAME, FANTASTICO_PASSWORD);
+            $serverdata = get_service_master($serviceClass->getServer(), self::$module);
+            function_requirements('get_webhosting_plesk_instance');
+            $plesk = get_webhosting_plesk_instance($serverdata);
             myadmin_log(self::$module, 'info', 'IP Change - (OLD:'.$serviceClass->getIp().") (NEW:{$event['newip']})", __LINE__, __FILE__, self::$module, $serviceClass->getId());
             $result = $plesk->editIp($serviceClass->getIp(), $event['newip']);
             if (isset($result['faultcode'])) {
